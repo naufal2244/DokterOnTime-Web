@@ -5,8 +5,9 @@
 ## Cara penggunaan 
 1. Buat folder 'doclabWeb' di htdocs, clone repository ini di dalamnya
 2. Nyalakan **xampp**
-3. Ketikkan http://localhost/doclabWeb/
-4. **Ketikkan http://localhost/doclabWeb/admin** untuk masuk sebagai admin
+3. Buat database **clinic_appointment**, Impor file sql 
+4. Ketikkan http://localhost/doclabWeb/
+5. **Ketikkan http://localhost/doclabWeb/admin** untuk masuk sebagai admin
 
 ## Akun untuk login 
 **Bisa gunakan akun di bawah ini, tapi bisa registrasi baru juga kalau mau**

@@ -1,6 +1,7 @@
 <div id="preloader">
     <div class="loader"></div>
 </div>
+
 <!-- Vertical navbar -->
 <div class="navbar-sidebar">
     <div class="vertical-nav bg-white sidebar-shadow" id="sidebar">

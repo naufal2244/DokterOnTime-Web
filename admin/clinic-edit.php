@@ -80,15 +80,7 @@ $clinic_row = mysqli_fetch_assoc($result);
 					}
 				}
 			
-				if (empty($contact)) {
-					$errContact = $error_html['errContact'];
-					$classContact = $error_html['errClass'];
-				} else {
-					if (!preg_match($regrex['contact'], $contact)) {
-						$errContact = $error_html['invalidContact'];
-						$classContact = $error_html['errClass'];
-					}
-				}
+				
 			
 				if (empty($address)) {
 					$errAddress = $error_html['errAddress'];

@@ -101,15 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (empty($contact)) {
-        $errContact = $error_html['errContact'];
-        $classContact = $error_html['errClass'];
-    } else {
+    if (!empty($contact)) {
         if (!preg_match($regrex['contact'], $contact)) {
             $errContact = $error_html['invalidInt'];
             $classContact = $error_html['errClass'];
         }
     }
+    
 
     if (empty($_FILES['inputAvatar']['name'])) {
         $errImage = "Image is required";
@@ -308,11 +306,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="inputContactNumber">Contact Number</label>
-                                    <input type="text" name="inputContactNumber" class="form-control <?= $classContact ?>" id="inputContactNumber" placeholder="Enter Phone Number">
-                                    <?= $errContact ?>
-                                </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputContactNumber">Contact Number</label>
+                                <input type="tel" name="inputContactNumber" class="form-control <?= $classContact ?>" id="inputContactNumber" placeholder="Enter Phone Number" pattern="[0-9]*" inputmode="numeric">
+                                <?= $errContact ?>
+                            </div>
+
                                 <div class="form-group col-md-6">
                                     <label for="inputEmailAddress">Email Address</label>
                                     <input type="text" name="inputEmailAddress" class="form-control <?= $classEmail ?>" id="inputEmailAddress" placeholder="Enter Email Address">

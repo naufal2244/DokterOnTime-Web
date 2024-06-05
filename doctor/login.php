@@ -53,44 +53,36 @@ if (isset($_POST['loginbtn'])) {
     if (mysqli_num_rows($q) != 1) {
 		echo "<script>Swal.fire({title: 'Error!', text: 'Email & Password Not Exist', type: 'error', confirmButtonText: 'Try Again'})</script>";
 		exit();
-	} else {
-        $token = $r["doctor_token"];
 	}
-	
-	$inputPassword = $conn->real_escape_string(encrypt(md5($_POST['password']), $token));
+
+    $inputPassword = $_POST['password'];
+    $hashedPassword = $r['doctor_password'];
 
 	try {
-
-		$stmt = $conn->prepare("SELECT * FROM doctors WHERE doctor_email = ? AND doctor_password = ?");
-		$stmt->bind_param("ss", $inputEmail, $inputPassword);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		$row = $result->fetch_assoc();
-
-		if ($inputEmail == "" && empty($inputEmail)) {
+		if (empty($inputEmail)) {
 			echo "<script>Swal.fire({title: 'Error!', text: 'Please Enter a Email', type: 'error'}).then(function() { $('#inputEmail').focus(); });</script>";
 			exit();
 		}
 
-		if ($inputPassword == "" && empty($inputPassword)) {
+		if (empty($inputPassword)) {
 			echo "<script>Swal.fire({title: 'Error!', text: 'Please Enter a Password', type: 'error'}).then(function() { $('#inputPassword').focus(); });</script>";
 			exit();
 		}
 
-		if (mysqli_num_rows($result) != 1) {
-			echo "<script>Swal.fire({title: 'Error!', text: 'Email & Password Not Exist', type: 'error', confirmButtonText: 'Try Again'})</script>";
-			exit();
-		} else {
-			$_SESSION['DoctorRoleID'] = $row['doctor_id'];
-			$_SESSION['DoctorRoleEmail'] = $row['doctor_email'];
-			$_SESSION['DoctorRoleLoggedIn'] = 1;
-			header("Location: index.php");
-		}
+        if (!password_verify($inputPassword, $hashedPassword)) {
+            echo "<script>Swal.fire({title: 'Error!', text: 'Email & Password Not Exist', type: 'error', confirmButtonText: 'Try Again'})</script>";
+            exit();
+        } else {
+            $_SESSION['DoctorRoleID'] = $r['doctor_id'];
+            $_SESSION['DoctorRoleEmail'] = $r['doctor_email'];
+            $_SESSION['DoctorRoleLoggedIn'] = 1;
+            header("Location: index.php");
+        }
 	} catch (Exception $error) {
 		die('There was an error running the query ['.$conn->error.']');
 	}
 	
-	$stmt->close();
+	$check->close();
 	$conn->close();
 }
 ?>

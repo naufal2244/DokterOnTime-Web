@@ -6,10 +6,13 @@ include('./includes/session.inc.php');
 include(SELECT_HELPER);
 include(EMAIL_HELPER);
 
-$errFName = $errLName = $errSpec = $errYears = $errFee = $errSpoke = $errGender = $errEmail = $errContact = $errImage = "";
-$classFName = $classLName = $classSpec = $classYears = $classFee = $classSpoke = $classGender = $classEmail = $errContact = "";
+$errClinic = $errFName = $errLName = $errSpec = $errYears = $errFee = $errSpoke = $errGender = $errEmail = $errContact = $errImage = $errPassword = $errConfirmPassword = "";
+$classClinic = $classFName = $classLName = $classSpec = $classYears = $classFee = $classSpoke = $classGender = $classEmail = $classContact = $classPassword = $classConfirmPassword = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['inputClinic'])) {
+        $clinic_id = escape_input($_POST['inputClinic']);
+    }
     $fname       = escape_input($_POST['inputFirstName']);
     $lname       = escape_input($_POST['inputLastName']);
     if (isset($_POST['inputSpeciality'])) {
@@ -28,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     $email      = escape_input($_POST['inputEmailAddress']);
     $contact    = escape_input($_POST['inputContactNumber']);
+    $password   = escape_input($_POST['inputPassword']);
+    $confirm_password = escape_input($_POST['inputConfirmPassword']);
 
     if (empty($fname)) {
         $errFName = $error_html['errFirstName'];
@@ -52,6 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($speciality)) {
         $errSpec = $error_html['errSpec'];
         $classSpec = $error_html['errClass'];
+    }
+    
+    if (empty($clinic_id)) {
+        $errClinic = "Clinic is required";
+        $classClinic = $error_html['errClass'];
     }
 
     if (empty($years)) {
@@ -93,14 +103,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (empty($contact)) {
-        $errContact = $error_html['errContact'];
-        $classContact = $error_html['errClass'];
-    } else {
+    if (!empty($contact)) {
         if (!preg_match($regrex['contact'], $contact)) {
             $errContact = $error_html['invalidInt'];
             $classContact = $error_html['errClass'];
         }
+    }
+    
+    if (empty($password)) {
+        $errPassword = "Password is required";
+        $classPassword = "invalid";
+    } else if (strlen($password) < 6) {
+        $errPassword = "Password must be at least 6 characters long";
+        $classPassword = "invalid";
+    }
+
+    if (empty($confirm_password)) {
+        $errConfirmPassword = "Please confirm the password";
+        $classConfirmPassword = "invalid";
+    } else if ($password !== $confirm_password) {
+        $errConfirmPassword = "Passwords do not match";
+        $classConfirmPassword = "invalid";
     }
 
     if (empty($_FILES['inputAvatar']['name'])) {
@@ -133,10 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             top: 0;
         }
 
-        /* .imageupload .file-tab button {
-            display: none;
-        } */
-
         .imageupload .thumbnail {
             margin-bottom: 10px;
         }
@@ -161,13 +180,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <!-- Add Doctor -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
+                                        <label for="inputClinic">Clinic</label>
+                                        <select name="inputClinic" id="inputClinic" class="form-control selectpicker <?= $classClinic ?>" data-live-search="true">
+                                            <option value="" selected disabled>Choose</option>
+                                            <?php
+                                            $table_result = mysqli_query($conn, "SELECT * FROM clinics");
+                                            while ($table_row = mysqli_fetch_assoc($table_result)) {
+                                                echo '<option value="' . $table_row["clinic_id"] . '">'. $table_row["clinic_id"] .' '. $table_row["clinic_name"] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                        <?= $errClinic ?>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
                                         <label for="inputFirstName">First Name</label>
                                         <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Enter First Name">
                                         <?php echo $errFName; ?>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md6">
                                         <label for="inputLastName">Last Name/Surname</label>
-                                        <input type="text" name="inputLastName" class="form-control <?php echo $classFName ?>" id="inputLastName" placeholder="Enter Last Name">
+                                        <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Enter Last Name">
                                         <?php echo $errLName; ?>
                                     </div>
                                 </div>
@@ -196,6 +230,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <?= $errFee ?>
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputPassword">Password</label>
+                                        <input type="password" name="inputPassword" class="form-control <?= $classPassword ?>" id="inputPassword" placeholder="Enter Password">
+                                        <?= $errPassword ?>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputConfirmPassword">Confirm Password</label>
+                                        <input type="password" name="inputConfirmPassword" class="form-control <?= $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Confirm Password">
+                                        <?= $errConfirmPassword ?>
+                                    </div>
+                                </div>
                                 <!-- End Add Doctor -->
                             </div>
                         </div>
@@ -210,7 +256,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <span>Browse</span>
                                             <input type="file" name="inputAvatar" id="inputAvatar" accept="image/*" onchange="openFile(event)">
                                         </label>
-                                        <!-- <button type="button" class="btn btn-sm btn-primary">Remove</button> -->
                                     </div>
                                 </div>
                                 <script>
@@ -226,7 +271,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         reader.readAsDataURL(input.files[0]);
                                     };
                                 </script>
-
                             </div>
                         </div>
                     </div>
@@ -285,11 +329,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="inputContactNumber">Contact Number</label>
-                                    <input type="text" name="inputContactNumber" class="form-control <?= $classContact ?>" id="inputContactNumber" placeholder="Enter Phone Number">
-                                    <?= $errContact ?>
-                                </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputContactNumber">Contact Number</label>
+                                <input type="tel" name="inputContactNumber" class="form-control <?= $classContact ?>" id="inputContactNumber" placeholder="Enter Phone Number" pattern="[0-9]*" inputmode="numeric">
+                                <?= $errContact ?>
+                            </div>
+
                                 <div class="form-group col-md-6">
                                     <label for="inputEmailAddress">Email Address</label>
                                     <input type="text" name="inputEmailAddress" class="form-control <?= $classEmail ?>" id="inputEmailAddress" placeholder="Enter Email Address">
@@ -337,11 +382,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </html>
 <?php
 if (isset($_POST["savebtn"])) {
-    // ! prefer use empty() for each instead of function multi_empty()  *stackoverflow
-    if (multi_empty($errFName, $errLName, $errSpec, $errYears, $errFee, $errSpoke, $errGender, $errEmail, $errContact, $errImage)) {
+    if (multi_empty($errFName, $errLName, $errSpec, $errYears, $errFee, $errSpoke, $errGender, $errEmail, $errContact, $errImage, $errPassword, $errConfirmPassword)) {
 
         if (isset($_FILES["inputAvatar"]["name"])) {
-            $allowed =  array('gif', 'png', 'jpg', 'jpeg');
+            $allowed =  array('gif', 'png', 'jpg');
             $filename = $_FILES['inputAvatar']['name'];
             $ext = pathinfo($filename, PATHINFO_EXTENSION);
             if (!in_array($ext, $allowed)) {
@@ -349,8 +393,8 @@ if (isset($_POST["savebtn"])) {
                 exit();
             } else {
                 if (!empty($_FILES['inputAvatar']['name'])) {
-                    $folderpath = "../uploads/" . $clinic_row['clinic_id'] . "/doctor" . "/";
-                    $path = "../uploads/" . $clinic_row['clinic_id'] . "/doctor" . "/" . $_FILES['inputAvatar']['name'];
+                    $folderpath = "../uploads/" . $clinic_id . "/doctor" . "/";
+                    $path = "../uploads/" . $clinic_id . "/doctor" . "/" . $_FILES['inputAvatar']['name'];
                     $image = $_FILES['inputAvatar']['name'];
 
                     if (!file_exists($folderpath)) {
@@ -369,8 +413,11 @@ if (isset($_POST["savebtn"])) {
         $token = generateCode(6);
         $en_token = md5($token);
 
-        $stmt = $conn->prepare("INSERT INTO doctors (doctor_avatar, doctor_firstname, doctor_lastname, doctor_speciality, doctor_experience, doctor_desc, doctor_spoke, doctor_gender, doctor_dob, doctor_email, doctor_contact, consult_fee, date_created, clinic_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->bind_param("ssssissssssssi", $image, $fname, $lname, $speciality, $years, $desc, $spoke, $gender, $dob, $email, $contact, $fees, $date_created, $clinic_row['clinic_id']);
+        // Hash the password before saving it to the database
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $conn->prepare("INSERT INTO doctors (doctor_avatar, doctor_firstname, doctor_lastname, doctor_speciality, doctor_experience, doctor_desc, doctor_spoke, doctor_gender, doctor_dob, doctor_email, doctor_contact, consult_fee, date_created, clinic_id, doctor_password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssssisssssssiss", $image, $fname, $lname, $speciality, $years, $desc, $spoke, $gender, $dob, $email, $contact, $fees, $date_created, $clinic_id, $hashedPassword);
         if ($stmt->execute()) {
 
             $last_id = $conn->insert_id;

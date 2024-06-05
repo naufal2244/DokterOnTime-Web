@@ -215,6 +215,67 @@ if (isset($_POST["completebtn"])) {
 					</div>
 				</div>
 
+				<div class="modal fade" id="resep-teruskan" tabindex="-1" role="dialog">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h6 class="modal-title">Teruskan Resep ke Apoteker</h6>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<form action="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>" method="POST">
+								<?= display_error();?>
+								<div class="modal-body">
+								<div class="row">
+									<div class="form-group col-6">
+										<label>Nama Obat</label>
+										<select name="inputTreatment" id="inputTreatment" class="form-control">
+											<?php
+												$treatresult = mysqli_query($conn, "SELECT * FROM treatment_type WHERE doctor_id = '" . $doctor_row['doctor_id'] . "'");
+												while($treatrow = mysqli_fetch_assoc($treatresult)) {
+													echo '<option value='.$treatrow['treatment_name'].'>'.$treatrow['treatment_name'].'</option>';
+												}
+											?>
+										</select>
+									</div>
+									<div class="form-group col-6">
+										<label>Dosis</label>
+										<select name="inputTreatment" id="inputTreatment" class="form-control">
+											<?php
+												$treatresult = mysqli_query($conn, "SELECT * FROM treatment_type WHERE doctor_id = '" . $doctor_row['doctor_id'] . "'");
+												while($treatrow = mysqli_fetch_assoc($treatresult)) {
+													echo '<option value='.$treatrow['treatment_name'].'>'.$treatrow['treatment_name'].'</option>';
+												}
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+								<div class="form-group col-6">
+										<label>Frekuensi Minum</label>
+										<select name="inputTreatment" id="inputTreatment" class="form-control">
+											<?php
+												$treatresult = mysqli_query($conn, "SELECT * FROM treatment_type WHERE doctor_id = '" . $doctor_row['doctor_id'] . "'");
+												while($treatrow = mysqli_fetch_assoc($treatresult)) {
+													echo '<option value='.$treatrow['treatment_name'].'>'.$treatrow['treatment_name'].'</option>';
+												}
+											?>
+										</select>
+									</div>
+								</div>
+									
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									<button type="submit" name="prescriptionbtn" class="btn btn-primary">Save</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
 				<div class="modal fade" id="prescription" tabindex="-1" role="dialog">
 					<div class="modal-dialog modal-lg" role="document">
 						<div class="modal-content">
@@ -314,10 +375,22 @@ if (isset($_POST["completebtn"])) {
 					<div class="nav nav-pills mr-auto">
 						<a class="nav-item text-sm-center nav-link active" data-toggle="pill" href="#tab1">Prescription Info</a>
 						<a class="nav-item text-sm-center nav-link" data-toggle="pill" href="#tab3">Appointment Record</a>
+						<div class="dropdown mr-1">
+							<button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+							Action
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+							<a class="dropdown-item" data-toggle="modal"  href="#resep-teruskan">Teruskan Resep</a>
+							
+							<a class="dropdown-item" href="#">Another action</a>
+							
+							</div>
+						</div>
 					</div>
 					<div class=" nav nav-pills ml-auto">
 						<a class="nav-item btn btn-sm btn-link" data-toggle="modal" href="#prescription">Add Prescription</a>
 						<a class="nav-item btn btn-sm btn-link" data-toggle="modal" href="#followup">Add Appointment</a>
+						
 						<button class="nav-item btn btn-sm btn-success" data-toggle="modal" href="#complete">Case Complete</button>
 					</div>
 				</nav>

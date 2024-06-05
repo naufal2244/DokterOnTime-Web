@@ -7,6 +7,10 @@
             <a href="<?php echo $_SERVER["REQUEST_URI"];?>"><?php echo $CURRENT_PAGE;?></a>
         </li>
     </ul>
+
+
+
+    
     <ul class="nav ml-auto">
         <li class="nav-item mr-2">
             <button class="btn btn-sm btn-expand" id="full-view"><i class="fa fa-expand"></i></button>

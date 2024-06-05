@@ -8,6 +8,18 @@
 3. Ketikkan http://localhost/doclabWeb/
 4. **Ketikkan http://localhost/doclabWeb/admin** untuk masuk sebagai admin
 
+## Akun untuk login 
+**Bisa gunakan akun di bawah ini, tapi bisa registrasi baru juga kalau mau**
+
+1. **Admin** -> Terisi otomatis
+2. **klinik**
+   username: walter@example.com
+   password: Clinic_!12345678
+   
+6. **Dokter**
+   username: walter@example.com
+   password: Clinic_!12345678
+
 
 
 ## Dokumentasi Lengkapnya baca di bawah sini hehe. 

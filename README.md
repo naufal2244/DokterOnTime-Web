@@ -1,6 +1,29 @@
-# Web-Based Clinic Appointment System
+# DokterOnTime - WEB 
 
-**Notes** : *for patient, no web based support only available at mobile based. Please checkout [here - Mobile-Based Clinic Appointment System](https://github.com/yh-ong/Mobile-Based-Clinic-Appointment-System)*
+**Notes** : *Repository ini hanya untuk tampilan selain pasien, untuk pasien akan menggunakan tampilan mobile. Kunjungi [https://github.com/naufal2244/DokterOnTime-Mobile]*
+
+## Cara penggunaan 
+1. Buat folder 'doclabWeb' di htdocs, clone repository ini di dalamnya
+2. Nyalakan **xampp**
+3. Buat database **clinic_appointment**, Impor file sql 
+4. Ketikkan http://localhost/doclabWeb/
+5. **Ketikkan http://localhost/doclabWeb/admin** untuk masuk sebagai admin
+
+## Akun untuk login 
+**Bisa gunakan akun di bawah ini, tapi bisa registrasi baru juga kalau mau**
+
+1. **Admin** -> Terisi otomatis
+2. **klinik**
+   username: walter@example.com
+   password: Clinic_!12345678
+   
+6. **Dokter**
+   username: walter@example.com
+   password: Clinic_!12345678
+
+
+
+## Dokumentasi Lengkapnya baca di bawah sini hehe. 
 
 [TOC]
 

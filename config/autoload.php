@@ -1,7 +1,7 @@
 <?php
 include('../config/config.php');
 include('../config/database.php');
-include('security.php');
+include('../config/security.php');
 include('../config/validator.php');
 
 define('CSS_PATH', '../config/path_css.php');

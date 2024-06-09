@@ -103,12 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (!empty($contact)) {
-        if (!preg_match($regrex['contact'], $contact)) {
-            $errContact = $error_html['invalidInt'];
-            $classContact = $error_html['errClass'];
-        }
-    }
+  
     
     if (empty($password)) {
         $errPassword = "Password is required";

@@ -3,6 +3,17 @@ include('../config/autoload.php');
 include('./includes/path.inc.php');
 include('./includes/session.inc.php');
 
+if (isset($_SESSION['doctor_id']) && isset($_SESSION['clinic_id'])) {
+    $doctor_id = $_SESSION['doctor_id'];
+    $clinic_id = $_SESSION['clinic_id'];
+
+    
+} else {
+    die("Error: Doctor not logged in.");
+}
+
+
+
 if (isset($_GET["id"]) && !empty($_GET["id"])) {
     $encrypted_id = $_GET["id"];
    
@@ -130,8 +141,8 @@ if (isset($_POST['teruskan_resep'])) {
 
 
          // Masukkan data ke tabel resep
-         $stmt = $conn->prepare("INSERT INTO resep (status_pembuatan, dosis, nama_obat, patient_id) VALUES (?, ?, ?, ?)");
-         $stmt->bind_param("issi", $statusPembuatan, $inputDosage, $nama_obat_id, $patient_id); // Tambahkan $patient_id di sini
+         $stmt = $conn->prepare("INSERT INTO resep (status_pembuatan, dosis, nama_obat, patient_id, clinic_id) VALUES (?, ?, ?, ?, ?)");
+         $stmt->bind_param("issii", $statusPembuatan, $inputDosage, $nama_obat_id, $patient_id, $clinic_id); // Tambahkan $patient_id di sini
          if ($stmt->execute()) {
             $success = true;
         }

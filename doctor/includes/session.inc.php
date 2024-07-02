@@ -14,6 +14,12 @@ $stmt->execute();
 $doctor_result = $stmt->get_result();
 $doctor_row = $doctor_result->fetch_assoc();
 
+// Menyimpan doctor_id dan clinic_id dalam sesi
+$_SESSION['doctor_id'] = $doctor_row['doctor_id'];
+$_SESSION['clinic_id'] = $doctor_row['clinic_id'];
+
+
+
 $token = $doctor_row["doctor_token"];
 
 $pt_row = mysqli_num_rows(mysqli_query($conn,"SELECT * FROM appointment INNER JOIN patients ON appointment.patient_id = patients.patient_id WHERE doctor_id = '".$doctor_row['doctor_id']."' AND status = 1"));

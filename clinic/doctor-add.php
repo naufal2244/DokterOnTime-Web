@@ -103,12 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (!empty($contact)) {
-        if (!preg_match($regrex['contact'], $contact)) {
-            $errContact = $error_html['invalidInt'];
-            $classContact = $error_html['errClass'];
-        }
-    }
+  
     
     if (empty($password)) {
         $errPassword = "Password is required";
@@ -446,6 +441,15 @@ if (isset($_POST["savebtn"])) {
                 </script>';
             } else {
                 echo 'Something Wrong';
+            }
+            // Tambahkan entri untuk tabel doctor_availabilities
+            for ($day_id = 1; $day_id <= 7; $day_id++) {
+                for ($session_id = 1; $session_id <= 65; $session_id++) {
+                    $stmt_availabilities = $conn->prepare("INSERT INTO doctor_availabilities (doctor_id, day_id, session_id, available) VALUES (?, ?, ?, ?)");
+                    $default_available = 0; // FALSE
+                    $stmt_availabilities->bind_param("iiii", $last_id, $day_id, $session_id, $default_available);
+                    $stmt_availabilities->execute();
+                }
             }
         } else {
             echo 'Something Wrong';

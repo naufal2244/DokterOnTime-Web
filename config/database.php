@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $hostname = "localhost";
 $username = "root";
@@ -9,9 +11,9 @@ $database = "clinic_appointment";
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
-	$conn = new mysqli($hostname, $username, $password, $database);
-	$conn->set_charset("utf8mb4");
+    $conn = new mysqli($hostname, $username, $password, $database);
+    $conn->set_charset("utf8mb4");
 } catch (Exception $e) {
-	error_log($e->getMessage());
-	exit('Error connecting to database');
+    error_log($e->getMessage());
+    exit('Error connecting to database');
 }

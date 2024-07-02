@@ -3,39 +3,9 @@ include('../config/autoload.php');
 include('./includes/path.inc.php');
 include('./includes/session.inc.php');
 
-if (isset($_GET["id"]) && !empty($_GET["id"])) {
-    $encrypted_id = $_GET["id"];
-   
-
-    $app_id = decrypt_url($encrypted_id);
-
-    if ($app_id) {
-        $app_id = $conn->real_escape_string($app_id); // Menghindari SQL Injection
-
-        $result = $conn->query("SELECT * FROM appointment LEFT JOIN patients ON appointment.patient_id = patients.patient_id WHERE appointment.app_id = '$app_id'");
-        
-        if ($result) {
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-               
-                
-                $patient_id = $row["patient_id"];
-
-                $patient_age = date('Y') - date('Y', strtotime($row['patient_dob']));
-                
-                // Proses selanjutnya
-            } else {
-                die("Error: Appointment not found.");
-            }
-        } else {
-            die("Error: " . $conn->error);
-        }
-    } else {
-        die("Error: Decryption failed.");
-    }
-} else {
-    die("Error: Invalid ID");
-}
+$app_id = decrypt_url($_GET["id"]);
+$result = $conn->query("SELECT * FROM appointment LEFT JOIN patients ON appointment.patient_id = patients.patient_id WHERE appointment.app_id = $app_id");
+$row = $result->fetch_assoc();
 
 $patient_id = $row["patient_id"];
 $patient_age = date('Y') - date('Y', strtotime($row['patient_dob']));
@@ -104,52 +74,7 @@ if (isset($_POST['appointmentbtn'])) {
         header('Location: '.$_SERVER['REQUEST_URI']);
     }
 }
-
-if (isset($_POST['teruskan_resep'])) {
-    $nama_obat = escape_input($_POST['nama_obat']);
-    $inputDosage = escape_input($_POST['inputDosage']);
-    $statusPembuatan = 0; // Default value is false (not ready yet)
-
-    if (empty($nama_obat)) {
-        array_push($errors, "Nama obat tidak boleh kosong");
-    }
-
-    if (empty($inputDosage)) {
-        array_push($errors, "Dosis tidak boleh kosong");
-    }
-
-    if (count($errors) == 0) {
-       // Ambil ID nama_obat dari tabel obat berdasarkan nama obat
-       $stmt = $conn->prepare("SELECT id_obat FROM obat WHERE nama_obat = ?");
-       $stmt->bind_param("s", $nama_obat);
-       $stmt->execute();
-       $result = $stmt->get_result();
-       if ($result->num_rows > 0) {
-        $obat = $result->fetch_assoc();
-        $nama_obat_id = $obat['id_obat'];
-
-
-         // Masukkan data ke tabel resep
-         $stmt = $conn->prepare("INSERT INTO resep (status_pembuatan, dosis, nama_obat, patient_id) VALUES (?, ?, ?, ?)");
-         $stmt->bind_param("issi", $statusPembuatan, $inputDosage, $nama_obat_id, $patient_id); // Tambahkan $patient_id di sini
-         if ($stmt->execute()) {
-            $success = true;
-        }
-        
-
-       
-    } else {
-        array_push($errors, "Nama obat tidak ditemukan.");
-    }
-    $stmt->close();
-    }
-}
-
-$apperrors = array();
-
-
- ?>
-
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

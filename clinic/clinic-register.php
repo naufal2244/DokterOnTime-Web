@@ -2,27 +2,103 @@
 require_once('../config/autoload.php');
 require_once('./includes/path.inc.php');
 include('../helper/select_helper.php');
+ob_start(); // Mulai output buffering
 
-if ($_SESSION["loggedin"] != 1)
+// Cek login
+if ($_SESSION["loggedin"] != 1) {
     header("Location: register.php");
+    exit();
+}
 
 $sess_email = $_SESSION["sess_clinicadminemail"];
 $result1 = mysqli_query($conn, "SELECT * FROM clinic_manager WHERE clinicadmin_email = '" . $sess_email . "' ");
 $row1 = mysqli_fetch_assoc($result1);
 $clinic_id = $row1["clinic_id"];
 
+
 $result = mysqli_query($conn, "SELECT * FROM clinics WHERE clinic_id = '" . $clinic_id . "' ");
 $row = mysqli_fetch_assoc($result);
-ob_start();
+
+// Tangani POST request setelah semua pemrosesan di atas
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $status = "0";
+    $clinic_name = escape_input($_POST["inputClinicName"]);
+
+    $weekopen = escape_input($_POST["inputOpensHourWeek"]);
+    $weekclose = escape_input($_POST["inputCloseHourWeek"]);
+    $satopen = escape_input($_POST["inputOpensHourSat"]);
+    $satclose = escape_input($_POST["inputCloseHourSat"]);
+    $sunopen = escape_input($_POST["inputOpensHourSun"]);
+    $sunclose = escape_input($_POST["inputCloseHourSun"]);
+
+    $contact = escape_input($_POST["inputContact"]);
+    $email = escape_input($_POST["inputEmailAddress"]);
+    $url = escape_input($_POST["inputURL"]);
+    $address = escape_input($_POST["inputAddress"]);
+    $city = escape_input($_POST["inputCity"]);
+
+    if (!empty($_POST['inputState'])) {
+        $state = $_POST['inputState'];
+    } else {
+        $state = "";
+    }
+    $zipcode = escape_input($_POST["inputZipCode"]);
+
+    // Check Email Valid
+    $clinicstmt = $conn->prepare("SELECT * FROM clinics WHERE clinic_email = ?");
+    $clinicstmt->bind_param("s", $email);
+    $clinicstmt->execute();
+    $clinicresult = $clinicstmt->get_result();
+
+    if ($clinicresult->num_rows != 0) {
+        echo "<script>Swal.fire({title: 'Error!', text: 'Email Already Exist', type: 'error', confirmButtonText: 'Try Again'})</script>";
+        exit();
+    }
+
+    $updatestmt = $conn->prepare("UPDATE clinics SET clinic_name = ?, clinic_email = ?, clinic_url = ?, clinic_contact = ?, clinic_address = ?, clinic_city = ?, clinic_state = ?, clinic_zipcode = ?, clinic_status = ? WHERE clinic_id = ?");
+    $updatestmt->bind_param("ssssssssss", $clinic_name, $email, $url, $contact, $address, $city, $state, $zipcode, $status, $clinic_id);
+
+    if ($updatestmt->execute()) {
+        // Insert or update business hours for Monday to Friday
+        for ($day_id = 1; $day_id <= 5; $day_id++) {
+            $businessstmt = $conn->prepare("INSERT INTO business_hour (clinic_id, days_id, open_time, close_time) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE open_time = VALUES(open_time), close_time = VALUES(close_time)");
+            $businessstmt->bind_param("iiss", $clinic_id, $day_id, $weekopen, $weekclose);
+            $businessstmt->execute();
+        }
+
+        // Insert or update business hours for Saturday
+        $day_id = 6;
+        $businessstmt = $conn->prepare("INSERT INTO business_hour (clinic_id, days_id, open_time, close_time) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE open_time = VALUES(open_time), close_time = VALUES(close_time)");
+        $businessstmt->bind_param("iiss", $clinic_id, $day_id, $satopen, $satclose);
+        $businessstmt->execute();
+
+        // Insert or update business hours for Sunday
+        $day_id = 7;
+        $businessstmt = $conn->prepare("INSERT INTO business_hour (clinic_id, days_id, open_time, close_time) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE open_time = VALUES(open_time), close_time = VALUES(close_time)");
+        $businessstmt->bind_param("iiss", $clinic_id, $day_id, $sunopen, $sunclose);
+        $businessstmt->execute();
+
+        ob_end_clean(); // Pastikan buffer output kosong sebelum header
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "Error: " . $updatestmt->error;
+    }
+
+    $clinicstmt->close();
+    $businessstmt->close();
+    $updatestmt->close();
+    mysqli_close($conn);
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <?php include CSS_PATH; ?>
     <link rel="stylesheet" href="../assets/css/clinic/style.css">
 </head>
-
 <body>
     <div class="container">
         <div class="title text-center mt-5">
@@ -30,6 +106,7 @@ ob_start();
         </div>
         <form name="registerForm" id="registerForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
             <ul class="timeline mb-5" id="timeline">
+                <!-- Timeline Steps -->
                 <li class="li">
                     <div class="timestamp">
                         <span class="frame">Step 1</span>
@@ -54,14 +131,6 @@ ob_start();
                         <h4>Location</h4>
                     </div>
                 </li>
-                <!-- <li class="li">
-                    <div class="timestamp">
-                        <span class="frame">Step 4</span>
-                    </div>
-                    <div class="status">
-                        <h4>Picture</h4>
-                    </div>
-                </li> -->
             </ul>
 
             <div class="register-wrap">
@@ -70,13 +139,13 @@ ob_start();
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputClinicName">Clinic Name</label>
-                            <input type="text" name="inputClinicName" class="form-control input" id="inputClinicName" placeholder="Enter Name" value="<?php echo $row["clinic_name"]; ?>">
+                            <input type="text" name="inputClinicName" class="form-control input" id="inputClinicName" placeholder="Enter Name">
                         </div>
                     </div>
                     <label for="inputBusinessHour">Business Hour</label>
                     <div class="mb-3">
                         <small class="text-muted">When you're closed on a certain day, just leave the hours blank.</small>
-                        <small class="text-muted">Remember: 12PM is midday, 12AM is midnight</small>
+                        
                     </div>
                     <div class="form-group row">
                         <label for="inputBusinessHourWeek" class="col-sm-2 col-form-label text-right">Monday - Friday</label>
@@ -96,7 +165,6 @@ ob_start();
                             <input type="text" class="form-control timepicker" name="inputCloseHourSat">
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <label for="inputBusinessHourSun" class="col-sm-2 col-form-label text-right">Sunday</label>
                         <div class="col-sm-4">
@@ -113,17 +181,17 @@ ob_start();
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputContact">Contact Number</label>
-                            <input type="text" name="inputContact" class="form-control input" id="inputContact" placeholder="Enter Phone Number" value="<?php echo $row["clinic_contact"]; ?>">
+                            <input type="text" name="inputContact" class="form-control input" id="inputContact" placeholder="Enter Phone Number">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputEmailAddress">Email Address*</label>
-                            <input type="text" name="inputEmailAddress" class="form-control input" id="inputEmailAddress" placeholder="Enter Email Address" value="<?php echo $row["clinic_email"]; ?>">
+                            <input type="text" name="inputEmailAddress" class="form-control input" id="inputEmailAddress" placeholder="Enter Email Address">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputURL">URL Link</label>
-                            <input type="text" name="inputURL" class="form-control input" id="inputURL" placeholder="Enter URL" value="<?php echo $row["clinic_url"]; ?>">
+                            <input type="text" name="inputURL" class="form-control input" id="inputURL" placeholder="Enter URL">
                         </div>
                     </div>
                 </div>
@@ -132,12 +200,12 @@ ob_start();
                 <div class="tab">
                     <div class="form-group">
                         <label for="inputAddress">Address</label>
-                        <input type="text" name="inputAddress" class="form-control input" id="inputAddress" onfocus="geolocate()" oninput="map_marker()" placeholder="1234 Main St" value="<?php echo $row["clinic_address"]; ?>">
+                        <input type="text" name="inputAddress" class="form-control input" id="inputAddress" onfocus="geolocate()" oninput="map_marker()" placeholder="1234 Main St">
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputCity">City</label>
-                            <input type="text" name="inputCity" class="form-control input" id="inputCity" oninput="map_marker()" value="<?php echo $row["clinic_city"]; ?>">
+                            <input type="text" name="inputCity" class="form-control input" id="inputCity" oninput="map_marker()">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputState">State</label>
@@ -150,12 +218,9 @@ ob_start();
                         </div>
                         <div class="form-group col-md-2">
                             <label for="inputZipCode">Zip Code</label>
-                            <input type="text" name="inputZipCode" class="form-control input" id="inputZipCode" oninput="map_marker()" value="<?php echo $row["clinic_zipcode"]; ?>">
+                            <input type="text" name="inputZipCode" class="form-control input" id="inputZipCode" oninput="map_marker()">
                         </div>
                     </div>
-                    <!-- <div class="form-group">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8143925.994012329!2d104.27361250804562!3d4.312032342074196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3034d3975f6730af%3A0x745969328211cd8!2sMalaysia!5e0!3m2!1sen!2smy!4v1564231608574!5m2!1sen!2smy" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
-                    </div> -->
                     <div class="form-group map-container">
                         <script>
                         function map_marker()
@@ -167,31 +232,12 @@ ob_start();
                                 var zipcode = document.getElementById("inputZipCode").value;
                                 var address = ""+city+" "+state+" "+country+"";
                                 var q = encodeURIComponent(address);
-                                //var url = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyAGx-OjyNn10KsJ_OsE7cl2_qxg6mNBZyI&q="+city+","+state+"+"+country+"';
                                 document.getElementById("map").innerHTML = "<iframe width='100%' height='450' frameborder='0' style='border:0' src='https://www.google.com/maps/embed/v1/place?key=AIzaSyAGx-OjyNn10KsJ_OsE7cl2_qxg6mNBZyI&q="+street+","+city+","+state+","+zipcode+"+Malaysia' allowfullscreen></iframe>";
                             }
                         </script>
                         <div id="map"></div>
                     </div>
                 </div>
-
-                <!-- <div class="tab">
-                    <div class="input-group mb-3">
-                        <div class="custom-file">
-                            <input type="file" name="inputImageUpload" class="custom-file-input" id="inputImageUpload[]" multiple/>
-                            <label class="custom-file-label" for="inputImageUpload">Choose file</label>
-                        </div>
-                        <div class="input-group-prepend">
-                            <button type="submit" name="uploadbtn" class="btn btn-primary btn-sm px-4" id="inputGroupFileImage">Upload</button>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div id="preview"></div>
-                    </div>
-
-                </div>
-                <small>* Compulsory</small> -->
             </div>
 
             <div class="mt-3">
@@ -209,7 +255,7 @@ ob_start();
     <?php include JS_PATH; ?>
     <script>
         $('#upload').change(function() {
-            $('#preview').htm("");
+            $('#preview').html("");
             var totalFile = document.getElementById("inputGroupFileImage").files.length;
 
             for (var i=0;i<totalFile;i++) {
@@ -294,20 +340,12 @@ ob_start();
     <script>
         $(function () {
             $('.timepicker').datetimepicker({
-                format: 'LT'
+                format: 'HH:mm'
             });
         });
     </script>
 
     <script>
-    // src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAGx-OjyNn10KsJ_OsE7cl2_qxg6mNBZyI&q=Space+Needle,Seattle+WA"
-    // This example displays an address form, using the autocomplete feature
-    // of the Google Places API to help users fill in the information.
-
-    // This example requires the Places library. Include the libraries=places
-    // parameter when you first load the API. For example:
-    // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
     var placeSearch, autocomplete;
     var componentForm = {
         street_number: 'short_name',
@@ -373,61 +411,4 @@ ob_start();
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfDjL3bKUl1fLdby_vhWimMejbVecejpc&libraries=places&callback=initAutocomplete" async defer></script>
 
 </body>
-
 </html>
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $status = "0";
-    $clinic_name = escape_input($_POST["inputClinicName"]);
-
-    $weekopen = escape_input($_POST["inputOpensHourWeek"]);
-    $weekclose = escape_input($_POST["inputCloseHourWeek"]);
-    $satopen = escape_input($_POST["inputOpensHourSat"]);
-    $satclose = escape_input($_POST["inputCloseHourSat"]);
-    $sunopen = escape_input($_POST["inputOpensHourSun"]);
-    $sunclose = escape_input($_POST["inputCloseHourSun"]);
-
-    $contact = escape_input($_POST["inputContact"]);
-    $email = escape_input($_POST["inputEmailAddress"]);
-    $url = escape_input($_POST["inputURL"]);
-    $address = escape_input($_POST["inputAddress"]);
-    $city = escape_input($_POST["inputCity"]);
-
-    if (!empty($_POST['inputState'])) {
-        $state = $_POST['inputState'];
-    } else {
-        $state = "";
-    }
-    $zipcode = escape_input($_POST["inputZipCode"]);
-
-    // Check Email Valid
-    $clinicstmt = $conn->prepare("SELECT * FROM clinics WHERE clinic_email = ?");
-    $clinicstmt->bind_param("s", $email);
-    $clinicresult = $clinicstmt->get_result();
-
-    $businessstmt = $conn->prepare("UPDATE business_hour SET open_week = ?, close_week = ?, open_sat = ?, close_sat = ?, open_sun = ?, close_sun = ? WHERE clinic_id = ?");
-    $businessstmt->bind_param("sssssss", $weekopen, $weekclose, $satopen, $satclose, $sunopen, $sunclose, $clinic_id);
-    $businessstmt->execute();
-    
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-
-    if ($clinicresult->num_rows != 0) {
-        echo "<script>Swal.fire({title: 'Error!', text: 'Email Already Exist', type: 'error', confirmButtonText: 'Try Again'})</script>";
-        exit();
-    }
-
-    $updatestmt = $conn->prepare("UPDATE clinics SET clinic_name = ?, clinic_email = ?, clinic_url = ?, clinic_contact = ?, clinic_address = ?, clinic_city = ?, clinic_state = ?, clinic_zipcode = ?, clinic_status = ? WHERE clinic_id = ?");
-    $updatestmt->bind_param("ssssssssss", $clinic_name, $email, $url, $contact, $address, $city, $state, $zipcode, $status, $clinic_id);
-
-    if ($updatestmt->execute()) {
-        header("Location: index.php");
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-    }
-
-    ob_end_flush();
-    mysqli_close($conn);
-}
-?>

@@ -42,44 +42,70 @@ include('../helper/select_helper.php');
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-body">
-                        <h6><i class="far fa-clock fa-fw mr-1 mb-2"></i>Opening Hours</h6>
-                        <?php
-                        $hour_result = mysqli_query($conn,"SELECT * FROM business_hour WHERE clinic_id = ".$clinic_row["clinic_id"]." ");
-                        while ($hour_row = mysqli_fetch_assoc($hour_result)) {
-                            ?>
-                            <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Monday - Friday</span></p>
-                            <p class="col-xs-8">
-                                <?php if($hour_row["open_week"] == "" && $hour_row["close_week"] == "") {
-                                    echo "Closed";
-                                } else {
-                                    echo $hour_row['open_week'].' -- '.$hour_row['close_week'];
-                                }
-                                ?>
-                            </p>
-                            <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Saturday</span></p>
-                            <p class="col-xs-8">
-                                <?php if($hour_row["open_sat"] == "" && $hour_row["close_sat"] == "") {
-                                    echo "Closed";
-                                } else {
-                                    echo $hour_row['open_sat'].' -- '.$hour_row['close_sat'];
-                                }
-                                ?>
-                            </p>
-                            <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Sunday</span></p>
-                            <p class="col-xs-8">
-                                <?php if($hour_row["open_sun"] == "" && $hour_row["close_sun"] == "") {
-                                    echo "Closed";
-                                } else {
-                                    echo $hour_row['open_sun'].' -- '.$hour_row['close_sun'];
-                                }
-                                ?>
-                            </p>
-                            <?php
-                        }
-                        ?>
-                    </div>
-                </div>
+    <div class="card-body">
+        <h6><i class="far fa-clock fa-fw mr-1 mb-2"></i>Opening Hours</h6>
+        <?php
+        $hour_result = mysqli_query($conn,"SELECT * FROM business_hour WHERE clinic_id = ".$clinic_row["clinic_id"]." ");
+        $business_hours = [];
+        while ($hour_row = mysqli_fetch_assoc($hour_result)) {
+            $business_hours[$hour_row['days_id']] = $hour_row;
+        }
+        ?>
+
+        <!-- Monday - Friday -->
+        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Monday - Friday</span></p>
+        <p class="col-xs-8">
+            <?php 
+            $weekdays = array_filter($business_hours, function($hour_row) {
+                return $hour_row['days_id'] >= 1 && $hour_row['days_id'] <= 5;
+            });
+
+            if (!empty($weekdays)) {
+                $open_times = array_column($weekdays, 'open_time');
+                $close_times = array_column($weekdays, 'close_time');
+
+                $unique_open_times = array_unique($open_times);
+                $unique_close_times = array_unique($close_times);
+
+                if (count($unique_open_times) === 1 && count($unique_close_times) === 1) {
+                    echo $unique_open_times[0] . ' -- ' . $unique_close_times[0];
+                } else {
+                    echo implode('<br>', array_map(function($row) {
+                        return $row['open_time'] . ' -- ' . $row['close_time'];
+                    }, $weekdays));
+                }
+            } else {
+                echo "Closed";
+            }
+            ?>
+        </p>
+
+        <!-- Saturday -->
+        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Saturday</span></p>
+        <p class="col-xs-8">
+            <?php 
+            if (isset($business_hours[6]) && $business_hours[6]['open_time'] != "" && $business_hours[6]['close_time'] != "") {
+                echo $business_hours[6]['open_time'] . ' -- ' . $business_hours[6]['close_time'];
+            } else {
+                echo "Closed";
+            }
+            ?>
+        </p>
+
+        <!-- Sunday -->
+        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Sunday</span></p>
+        <p class="col-xs-8">
+            <?php 
+            if (isset($business_hours[7]) && $business_hours[7]['open_time'] != "" && $business_hours[7]['close_time'] != "") {
+                echo $business_hours[7]['open_time'] . ' -- ' . $business_hours[7]['close_time'];
+            } else {
+                echo "Closed";
+            }
+            ?>
+        </p>
+    </div>
+</div>
+
             </div>
             
             <div class="col-6">

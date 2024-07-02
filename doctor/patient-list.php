@@ -19,6 +19,7 @@ include('./includes/session.inc.php');
 			<div class="col-12">
 				<div class="card">
 					<div class="card-body">
+
 						<!-- Datatable -->
 						<?php
 						function headerTable()
@@ -68,6 +69,7 @@ include('./includes/session.inc.php');
 			</div>
 		</div>
 		<!-- End Page Content -->
+
 	</div>
 
 	<?php include JS_PATH; ?>

@@ -24,6 +24,10 @@
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'appointment.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="appointment.php" class="nav-link" ><i class="fas fa-calendar-check mr-3 fa-fw"></i>Appointment</a>
                 </li>
+                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'atur-jadwal.php') !== FALSE) {echo 'mm-active';} ?>">
+                    <a href="atur-jadwal.php" class="nav-link" ><i class="far fa-calendar mr-3 fa-fw"></i>Atur Jadwal</a>
+                    
+                </li>
                 <li class="nav-item <?php if (preg_match('/(schedule)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
                     <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fa fa-user-clock mr-3 fa-fw"></i>Schedule</a>
                     <ul class="side-collapse">

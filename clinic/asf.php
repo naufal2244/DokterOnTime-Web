@@ -59,9 +59,18 @@ $close_times[1] = $weekdays['close_time'];
 
     <!-- CSS untuk menonaktifkan pilihan menit -->
     <style>
-  
+    /* Nonaktifkan pilihan menit */
+    input[type="time"]::-webkit-datetime-edit-ampm-field,
+    input[type="time"]::-webkit-datetime-edit-minute-field {
+        display: none;
+    }
+    input[type="time"]::-webkit-inner-spin-button {
+        display: none;
+    }
+    input[type="time"]::-webkit-clear-button {
+        display: none;
+    }
 </style>
-
 
 
 </head>
@@ -280,33 +289,32 @@ $close_times[1] = $weekdays['close_time'];
 							<div class="form-group row">
     <label for="inputBusinessHourWeek" class="col-sm-2 col-form-label"><?= $days[1]; ?></label>
     <div class="col-sm-3">
-        <input type="time" class="form-control timepicker" name="inputOpensHourWeek" value="<?= $open_times[1]; ?>" min="08:00" max="23:00" step="3600">
+        <input type="time" class="form-control timepicker" name="inputOpensHourWeek" value="<?= $open_times[1]; ?>" min="08:00" max="23:00">
     </div><span>--</span>
     <div class="col-sm-3">
-        <input type="time" class="form-control timepicker" name="inputCloseHourWeek" value="<?= $close_times[1]; ?>" min="08:00" max="23:00" step="3600">
+        <input type="time" class="form-control timepicker" name="inputCloseHourWeek" value="<?= $close_times[1]; ?>" min="08:00" max="23:00">
     </div>
 </div>
 
 <div class="form-group row">
     <label for="inputBusinessHourSat" class="col-sm-2 col-form-label"><?= $days[6]; ?></label>
     <div class="col-sm-3">
-        <input type="time" class="form-control timepicker" name="inputOpensHourSat" value="<?= $open_times[6]; ?>" min="08:00" max="23:00" step="3600">
+        <input type="time" class="form-control timepicker" name="inputOpensHourSat" value="<?= $open_times[6]; ?>" min="08:00" max="23:00">
     </div><span>--</span>
     <div class="col-sm-3">
-        <input type="time" class="form-control timepicker" name="inputCloseHourSat" value="<?= $close_times[6]; ?>" min="08:00" max="23:00" step="3600">
+        <input type="time" class="form-control timepicker" name="inputCloseHourSat" value="<?= $close_times[6]; ?>" min="08:00" max="23:00">
     </div>
 </div>
 
 <div class="form-group row">
     <label for="inputBusinessHourSun" class="col-sm-2 col-form-label"><?= $days[7]; ?></label>
     <div class="col-sm-3">
-        <input type="time" class="form-control timepicker" name="inputOpensHourSun" value="<?= $open_times[7]; ?>" min="08:00" max="23:00" step="3600">
+        <input type="time" class="form-control timepicker" name="inputOpensHourSun" value="<?= $open_times[7]; ?>" min="08:00" max="23:00">
     </div><span>--</span>
     <div class="col-sm-3">
-        <input type="time" class="form-control timepicker" name="inputCloseHourSun" value="<?= $close_times[7]; ?>" min="08:00" max="23:00" step="3600">
+        <input type="time" class="form-control timepicker" name="inputCloseHourSun" value="<?= $close_times[7]; ?>" min="08:00" max="23:00">
     </div>
 </div>
-
 
 
 
@@ -459,9 +467,6 @@ $close_times[1] = $weekdays['close_time'];
     document.addEventListener('DOMContentLoaded', function() {
         const timeInputs = document.querySelectorAll('input[type="time"]');
         timeInputs.forEach(input => {
-            // Set initial value to the nearest hour if needed
-            setInitialTime(input);
-
             input.addEventListener('input', function() {
                 validateTimeInput(input);
             });
@@ -486,16 +491,7 @@ $close_times[1] = $weekdays['close_time'];
         }
         input.reportValidity();
     }
-
-    function setInitialTime(input) {
-        const value = input.value;
-        const [hour, minute] = value.split(':').map(Number);
-        if (minute !== 0) {
-            input.value = `${String(hour).padStart(2, '0')}:00`;
-        }
-    }
 </script>
-
 
 
 

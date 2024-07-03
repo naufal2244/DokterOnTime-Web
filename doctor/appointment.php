@@ -18,33 +18,33 @@ include('./includes/session.inc.php');
 		}
 
 		.status-belum-periksa {
-			background-color: gray;
-			color: white;
+			background-color: #d3d3d3;
+			color: black;
 		}
 
 		.status-sedang-periksa {
-			background-color: yellow;
+			background-color: #ffd700;
 			color: black;
 		}
 
 		.status-sudah-periksa {
-			background-color: green;
-			color: white;
+			background-color: #32cd32;
+			color: black;
 		}
 
 		.status-tidak-hadir {
-			background-color: red;
-			color: white;
+			background-color: #FF4500;
+			color: black;
 		}
 
 		.btn-diagnosa {
 			display: inline-block;
-			background-color: blue;
+			background-color: #007bff;
 			color: white;
 			padding: 6px 12px;
 			text-decoration: none;
 			border-radius: 5px;
-			border: 2px solid blue;
+			border: 2px solid;
 		}
 
 		.btn-diagnosa i {
@@ -75,15 +75,16 @@ include('./includes/session.inc.php');
 					<div class="card-body">
 						<!-- Dropdown Pilih Sesi -->
 						<div class="form-group row">
-							<label for="session" class="col-sm-2 col-form-label">Pilih Sesi :</label>
-							<div class="col-sm-10">
-								<select id="session" class="form-control">
+							<label for="session" class="col-form-label" style="margin-left: 20px;">Pilih Sesi :</label>
+							<div>
+								<select id="session" class="form-control form-control-sm ml-2">
 									<option value="1">Sesi 1 (08.00-09.00)</option>
 									<option value="2">Sesi 2 (09.00-10.00)</option>
 									<option value="3">Sesi 3 (10.00-11.00)</option>
 								</select>
 							</div>
 						</div>
+
 						<!-- Datatable -->
 						<?php
 						function headerTable()
@@ -133,7 +134,7 @@ include('./includes/session.inc.php');
 											<td><?= htmlspecialchars($patient['waktu_periksa']) ?></td>
 											<td><span class="status-label <?= statusClass($patient['status_periksa']) ?>"><?= htmlspecialchars($patient['status_periksa']) ?></span></td>
 											<td>
-												<a href="#" style="display: inline-block; background-color: blue; color: white; padding: 6px 12px; text-decoration: none; border-radius: 5px; border: 2px solid blue;">
+												<a href="#" class="btn btn-diagnosa">
 													<i class="fas fa-stethoscope" style="margin-right: 5px;"></i> Mulai Diagnosa
 												</a>
 											</td>

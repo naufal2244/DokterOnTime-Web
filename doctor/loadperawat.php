@@ -34,7 +34,7 @@ if (isset($_POST['date']) && isset($_POST['session'])) {
     }
 
     // Query untuk mengambil data janji_temu berdasarkan sesi
-    $query = "SELECT nama_lengkap, nomor_antrian, session_id, status_periksa 
+    $query = "SELECT nama_lengkap, nomor_antrian, session_id 
               FROM janji_temu 
               WHERE tanggal_janji = :date AND session_id IN (" . implode(',', $subSessions) . ")
               ORDER BY session_id ASC";
@@ -44,7 +44,7 @@ if (isset($_POST['date']) && isset($_POST['session'])) {
     $appointments = $stmt->fetchAll();
 
     if (empty($appointments)) {
-        echo '<tr><td colspan="5" class="text-center">Tidak Ada Janji Temu</td></tr>';
+        echo '<tr><td colspan="4" class="text-center">Tidak Ada Janji Temu</td></tr>';
     } else {
         foreach ($appointments as $appointment) {
             $startTime = 8 + floor(($appointment['session_id'] - 1) / 3);
@@ -63,41 +63,8 @@ if (isset($_POST['date']) && isset($_POST['session'])) {
             echo '<td>' . htmlspecialchars($appointment['nama_lengkap']) . '</td>';
             echo '<td>' . $formattedAntrian . '</td>';
             echo '<td>' . sprintf('%02d:%02d - %02d:%02d', $startTime, $minuteOffset, $endTimeHour, $endTimeMinute) . '</td>';
-            echo '<td><span class="status-label ' . statusClass($appointment['status_periksa']) . '">' . statusText($appointment['status_periksa']) . '</span></td>';
-            echo '<td><a href="#" class="btn btn-diagnosa"><i class="fas fa-stethoscope" style="margin-right: 5px;"></i> Mulai Diagnosa</a></td>';
+            echo '<td class="text-center"><input type="checkbox" class="status-checkbox"></td>';
             echo '</tr>';
         }
-    }
-}
-
-function statusClass($status)
-{
-    switch ($status) {
-        case "0":
-            return "status-belum-periksa";
-        case "1":
-            return "status-sedang-periksa";
-        case "2":
-            return "status-sudah-periksa";
-        case "3":
-            return "status-tidak-hadir";
-        default:
-            return "";
-    }
-}
-
-function statusText($status)
-{
-    switch ($status) {
-        case "0":
-            return "Belum Periksa";
-        case "1":
-            return "Sedang Periksa";
-        case "2":
-            return "Sudah Periksa";
-        case "3":
-            return "Tidak Hadir";
-        default:
-            return "";
     }
 }

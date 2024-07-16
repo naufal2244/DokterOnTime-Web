@@ -7,8 +7,9 @@ include("../config/database.php");
 $doctorId = $_GET['doctorId'];
 $dayId = $_GET['dayId'];
 $timeBlockId = $_GET['timeBlockId'];
+$selectedDate = $_GET['selectedDate']; // Tambahkan ini
 
-if (!isset($doctorId) || !isset($dayId) || !isset($timeBlockId)) {
+if (!isset($doctorId) || !isset($dayId) || !isset($timeBlockId) || !isset($selectedDate)) {
     echo json_encode([]);
     exit();
 }
@@ -16,10 +17,13 @@ if (!isset($doctorId) || !isset($dayId) || !isset($timeBlockId)) {
 $query = "SELECT s.session_id, da.available, jt.status_periksa 
           FROM doctor_availabilities da
           JOIN sessions s ON da.session_id = s.session_id 
-          LEFT JOIN janji_temu jt ON s.session_id = jt.session_id AND jt.tanggal_janji = CURDATE()
+          LEFT JOIN janji_temu jt ON s.session_id = jt.session_id AND jt.tanggal_janji = '$selectedDate'
           WHERE da.doctor_id = $doctorId 
           AND da.day_id = $dayId 
           AND s.time_block_id = $timeBlockId";
+
+// Log query untuk debugging
+error_log("Query: $query");
 
 $result = mysqli_query($conn, $query);
 
@@ -31,6 +35,9 @@ if($numrow > 0) {
         $session_id = $row['session_id'];
         $available = $row['available'];
         $status_periksa = $row['status_periksa'];
+        
+        // Logging
+        error_log("session_id: $session_id, available: $available, status_periksa: $status_periksa");
         
         // Check if the session should be available or not
         $isAvailable = ($available == '1' && ($status_periksa === null || $status_periksa == '2' || $status_periksa == '3')) ? 1 : 0;

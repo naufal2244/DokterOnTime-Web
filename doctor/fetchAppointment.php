@@ -102,7 +102,6 @@ function statusText($status)
     }
 }
 
-
 if (isset($_POST['date']) && isset($_POST['session']) && isset($_POST['doctorId'])) {
     $date = $_POST['date'];
     $session = $_POST['session'];

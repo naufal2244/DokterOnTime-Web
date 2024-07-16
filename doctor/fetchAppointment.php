@@ -64,7 +64,7 @@ if (isset($_POST['date']) && isset($_POST['session'])) {
             echo '<td>' . $formattedAntrian . '</td>';
             echo '<td>' . sprintf('%02d:%02d - %02d:%02d', $startTime, $minuteOffset, $endTimeHour, $endTimeMinute) . '</td>';
             echo '<td><span class="status-label ' . statusClass($appointment['status_periksa']) . '">' . statusText($appointment['status_periksa']) . '</span></td>';
-            echo '<td><a href="#" class="btn btn-diagnosa"><i class="fas fa-stethoscope" style="margin-right: 5px;"></i> Mulai Diagnosa</a></td>';
+            echo '<td><a href="diagnosa.php" class="btn btn-diagnosa"><i class="fas fa-stethoscope" style="margin-right: 5px;"></i> Mulai Diagnosa</a></td>';
             echo '</tr>';
         }
     }

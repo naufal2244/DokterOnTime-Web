@@ -87,8 +87,6 @@ try {
 } catch (Exception $e) {
     echo json_encode(array('error' => $e->getMessage()));
     exit;
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> 2dddc91575ee78a359ad11f6c75ce46235aa769f
+

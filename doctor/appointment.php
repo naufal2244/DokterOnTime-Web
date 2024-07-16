@@ -10,7 +10,6 @@ include('./includes/session.inc.php');
 <head>
 	<?php include CSS_PATH; ?>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<style>
 		.status-label {
@@ -18,7 +17,7 @@ include('./includes/session.inc.php');
 			border-radius: 5px;
 			display: inline-block;
 			margin: 2px 0;
-			width: 120px;
+			width: 150px;
 			/* Atur lebar tetap */
 			text-align: center;
 			/* Pusatkan teks */
@@ -66,8 +65,13 @@ include('./includes/session.inc.php');
 		.bootstrap-datetimepicker-widget table th {
 			text-align: center;
 		}
-	</style>
 
+		.no-appointments {
+			text-align: center;
+			font-size: 1.2em;
+			color: #777;
+		}
+	</style>
 </head>
 
 <body>
@@ -144,29 +148,28 @@ include('./includes/session.inc.php');
 			}).on('dp.change', function(event) {
 				var formatted = event.date.format('YYYY-MM-DD');
 				$("#selectedDate").val(formatted);
-				loadData(formatted, $('#session').val(), <?= $doctor_row['doctor_id'] ?>);
+				loadData(formatted, $('#session').val());
 			});
 
 			$('#session').change(function() {
 				var selectedDate = $('#selectedDate').val();
 				if (selectedDate) {
-					loadData(selectedDate, $(this).val(), <?= $doctor_row['doctor_id'] ?>);
+					loadData(selectedDate, $(this).val());
 				}
 			});
 
 			// Load data for today's date on page load
 			var today = moment().format('YYYY-MM-DD');
 			$("#selectedDate").val(today);
-			loadData(today, $('#session').val(), <?= $doctor_row['doctor_id'] ?>);
+			loadData(today, $('#session').val());
 
-			function loadData(date, session, doctorId) {
+			function loadData(date, session) {
 				$.ajax({
 					type: "POST",
 					url: 'fetchAppointment.php',
 					data: {
 						date: date,
-						session: session,
-						doctorId: doctorId
+						session: session
 					},
 					dataType: "html",
 					success: function(response) {

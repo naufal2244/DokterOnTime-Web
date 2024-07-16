@@ -66,6 +66,13 @@ switch ($_SERVER["SCRIPT_NAME"]) {
         $CURRENT_PATH = "";
         $PAGE_TITLE = "Clinic | $BRAND_NAME";
         break;
+
+    //perawat
+    case '/'.$PATH.'/perawat.php':
+        $CURRENT_PAGE = "Perawat";
+        $CURRENT_PATH = "";
+        $PAGE_TITLE = "Perawat | $BRAND_NAME";
+        break;
     
     // Appointment
     case '/'.$PATH.'/appointment.php':

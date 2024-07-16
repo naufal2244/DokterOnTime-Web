@@ -21,6 +21,9 @@
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'patient-list.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="patient-list.php" class="nav-link" ><i class="fas fa-user-injured mr-3 fa-fw"></i>Patients</a>
                 </li>
+                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'perawat.php') !== FALSE) {echo 'mm-active';} ?>">
+                    <a href="perawat.php" class="nav-link"><i class="fas fa-user-md mr-3 fa-fw"></i>Perawat</a>
+                </li>
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'appointment.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="appointment.php" class="nav-link" ><i class="fas fa-calendar-check mr-3 fa-fw"></i>Appointment</a>
                 </li>

@@ -1,3 +1,4 @@
+// Inside fetchAppointment.php
 <?php
 
 include('../config/autoload.php');
@@ -23,53 +24,7 @@ try {
     exit;
 }
 
-if (isset($_POST['date']) && isset($_POST['session'])) {
-    $date = $_POST['date'];
-    $session = $_POST['session'];
-
-    // Hitung sub-sesi berdasarkan sesi utama
-    $subSessions = [];
-    for ($i = 1; $i <= 3; $i++) {
-        $subSessions[] = ($session - 1) * 3 + $i;
-    }
-
-    // Query untuk mengambil data janji_temu berdasarkan sesi
-    $query = "SELECT nama_lengkap, nomor_antrian, session_id, status_periksa 
-              FROM janji_temu 
-              WHERE tanggal_janji = :date AND session_id IN (" . implode(',', $subSessions) . ")
-              ORDER BY session_id ASC";
-
-    $stmt = $pdo->prepare($query);
-    $stmt->execute(['date' => $date]);
-    $appointments = $stmt->fetchAll();
-
-    if (empty($appointments)) {
-        echo '<tr><td colspan="5" class="text-center">Tidak Ada Janji Temu</td></tr>';
-    } else {
-        foreach ($appointments as $appointment) {
-            $startTime = 8 + floor(($appointment['session_id'] - 1) / 3);
-            $minuteOffset = (($appointment['session_id'] - 1) % 3) * 20;
-            $endTimeHour = $startTime;
-            $endTimeMinute = $minuteOffset + 20;
-            if ($endTimeMinute >= 60) {
-                $endTimeHour += 1;
-                $endTimeMinute -= 60;
-            }
-
-            // Format nomor antrian dengan 4 angka dari depan dan 3 angka dari belakang
-            $formattedAntrian = substr($appointment['nomor_antrian'], 0, 4) . '-' . substr($appointment['nomor_antrian'], -3);
-
-            echo '<tr>';
-            echo '<td>' . htmlspecialchars($appointment['nama_lengkap']) . '</td>';
-            echo '<td>' . $formattedAntrian . '</td>';
-            echo '<td>' . sprintf('%02d:%02d - %02d:%02d', $startTime, $minuteOffset, $endTimeHour, $endTimeMinute) . '</td>';
-            echo '<td><span class="status-label ' . statusClass($appointment['status_periksa']) . '">' . statusText($appointment['status_periksa']) . '</span></td>';
-            echo '<td><a href="#" class="btn btn-diagnosa"><i class="fas fa-stethoscope" style="margin-right: 5px;"></i> Mulai Diagnosa</a></td>';
-            echo '</tr>';
-        }
-    }
-}
-
+// Fungsi untuk mendapatkan kelas status
 function statusClass($status)
 {
     switch ($status) {
@@ -86,6 +41,7 @@ function statusClass($status)
     }
 }
 
+// Fungsi untuk mendapatkan teks status
 function statusText($status)
 {
     switch ($status) {
@@ -101,7 +57,6 @@ function statusText($status)
             return "";
     }
 }
-<<<<<<< HEAD
 
 if (isset($_POST['date']) && isset($_POST['session']) && isset($_POST['doctorId'])) {
     $date = $_POST['date'];
@@ -143,11 +98,15 @@ if (isset($_POST['date']) && isset($_POST['session']) && isset($_POST['doctorId'
             echo '<td>' . $formattedAntrian . '</td>';
             echo '<td>' . sprintf('%02d:%02d - %02d:%02d', $startTime, $minuteOffset, $endTimeHour, $endTimeMinute) . '</td>';
             echo '<td><span class="status-label ' . statusClass($appointment['status_periksa']) . '">' . statusText($appointment['status_periksa']) . '</span></td>';
-            echo '<td><a href="diagnosa.php?id_janji_temu=' . $appointment['id_janji_temu'] . '" class="btn btn-diagnosa"><i class="fas fa-stethoscope" style="margin-right: 5px;"></i> Mulai Diagnosa</a></td>';
-
+            echo '<td>
+                    <form action="diagnosa.php" method="POST" style="display: inline;">
+                        <input type="hidden" name="id_janji_temu" value="' . $appointment['id_janji_temu'] . '">
+                        <input type="hidden" name="action" value="start">
+                        <button type="submit" class="btn btn-diagnosa"><i class="fas fa-stethoscope" style="margin-right: 5px;"></i> Mulai Diagnosa</button>
+                    </form>
+                  </td>';
             echo '</tr>';
         }
     }
 }
-=======
->>>>>>> 6f1bfda257d06cc6537a363643442bbde80c1cc1
+?>

@@ -17,8 +17,8 @@ $cssItem = array(
     'metisMenu.min.css',
     'sweetalert2.min.css',
     'typography.css',
-    'default.css',
-    'clinic/login.css'
+    'default_copy.css',
+    'clinic/login_copy.css'
 );
 
 foreach ($cssItem as $cssPath) {

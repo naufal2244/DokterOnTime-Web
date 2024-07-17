@@ -28,13 +28,20 @@ try {
     exit;
 }
 
-// Debug code to print GET parameters
-echo '<pre>';
-print_r($_GET);
-echo '</pre>';
+// Handle starting the diagnosis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'start') {
+    $id_janji_temu = $_POST['id_janji_temu'];
+    $query = "UPDATE janji_temu SET status_periksa = 1 WHERE id_janji_temu = :id_janji_temu";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['id_janji_temu' => $id_janji_temu]);
+
+    // Redirect to the diagnosis page with the appointment ID
+    header("Location: diagnosa.php?id_janji_temu=$id_janji_temu");
+    exit;
+}
 
 // Ambil id_janji_temu dari URL
-$id_janji_temu = isset($_GET['id_janji_temu']) ? $_GET['id_janji_temu'] : null;
+$id_janji_temu = isset($_GET['id_janji_temu']) ? $_GET['id_janji_temu'] : (isset($_POST['id_janji_temu']) ? $_POST['id_janji_temu'] : null);
 
 // Jika id_janji_temu tidak ada, redirect ke halaman lain atau tampilkan pesan error
 if (!$id_janji_temu) {
@@ -138,33 +145,30 @@ $tindakLanjutStmt = $pdo->prepare($tindakLanjutQuery);
 $tindakLanjutStmt->execute();
 $tindakLanjutList = $tindakLanjutStmt->fetchAll();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Handle saving the diagnosis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
     $diagnosis = isset($_POST['diagnosis']) ? $_POST['diagnosis'] : [];
     $followUp = isset($_POST['followUp']) ? $_POST['followUp'] : [];
     $medications = isset($_POST['medications']) ? $_POST['medications'] : [];
     $suggestions = isset($_POST['suggestions']) ? $_POST['suggestions'] : '';
 
-    // Insert data into riwayat_medis
     $riwayatQuery = "INSERT INTO riwayat_medis (id_janji_temu, saran_dokter) VALUES (:id_janji_temu, :saran_dokter)";
     $riwayatStmt = $pdo->prepare($riwayatQuery);
     $riwayatStmt->execute(['id_janji_temu' => $id_janji_temu, 'saran_dokter' => $suggestions]);
     $riwayatId = $pdo->lastInsertId();
 
-    // Insert data into diagnosis_pasien
     foreach ($diagnosis as $diag) {
         $diagQuery = "INSERT INTO diagnosis_pasien (id_riwayat_medis, diagnosis_id) VALUES (:id_riwayat_medis, :diagnosis_id)";
         $diagStmt = $pdo->prepare($diagQuery);
         $diagStmt->execute(['id_riwayat_medis' => $riwayatId, 'diagnosis_id' => $diag]);
     }
 
-    // Insert data into tindak_lanjut_pasien
     foreach ($followUp as $follow) {
         $followQuery = "INSERT INTO tindak_lanjut_pasien (id_riwayat_medis, id_tindak_lanjut) VALUES (:id_riwayat_medis, :id_tindak_lanjut)";
         $followStmt = $pdo->prepare($followQuery);
         $followStmt->execute(['id_riwayat_medis' => $riwayatId, 'id_tindak_lanjut' => $follow]);
     }
 
-    // Insert data into obat_pasien
     foreach ($medications as $medication) {
         $id_obat = isset($medication['name']) ? $medication['name'] : null;
         $id_dosis = isset($medication['dose']) ? $medication['dose'] : null;
@@ -186,6 +190,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
         }
     }
+
+    // Update status_periksa to 2
+    $updateStatusQuery = "UPDATE janji_temu SET status_periksa = 2 WHERE id_janji_temu = :id_janji_temu";
+    $updateStatusStmt = $pdo->prepare($updateStatusQuery);
+    $updateStatusStmt->execute(['id_janji_temu' => $id_janji_temu]);
 
     echo "<script>alert('Data berhasil disimpan!'); window.location.href='appointment.php';</script>";
     exit;
@@ -405,31 +414,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include HEADER; ?>
 
         <div class="container mt-4">
-            <div class="row">
-                <div class="col-lg-5 col-md-6" style="border: 1px solid #000;">
-                    <div class="patient-info text-center">
-                        <div class="info-item-profile">
-                            <i class="fas fa-user fa-3x rounded-circle"></i>
-                            <span class="d-block mt-2"><?php echo htmlspecialchars($appointment['nama_lengkap']); ?></span>
-                        </div>
-                        <div class="info-item" style="text-align: center;">
-                            <i class="fas fa-birthday-cake rounded-circle"></i>
-                            <span class="d-block mt-2"> <?php echo calculateAge($appointment['tanggal_lahir']); ?> tahun</span>
-                        </div>
-                        <div class="info-item" style="text-align: center;">
-                            <i class="fas fa-ruler-vertical rounded-circle"></i>
-                            <span class="d-block mt-2"><?php echo htmlspecialchars($appointment['tinggi_badan']); ?> cm</span>
-                        </div>
-                        <div class="info-item" style="text-align: center;">
-                            <i class="fas fa-weight rounded-circle"></i>
-                            <span class="d-block mt-2"><?php echo htmlspecialchars($appointment['berat_badan']); ?> kg</span>
-                        </div>
-                        <div class="info-item" style="text-align: center;">
-                            <i class="fas fa-tachometer-alt rounded-circle"></i>
-                            <span class="d-block mt-2"><?php echo htmlspecialchars($appointment['tensi']); ?> mmHg</span>
-                        </div>
-
-                    </div>
+        <div class="row">
+    <div class="col-lg-5 col-md-6" style="border: 1px solid #000;">
+        <div class="patient-info text-center">
+            <div class="info-item-profile">
+                <i class="fas fa-user fa-3x rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['nama_lengkap'] !== null ? htmlspecialchars($appointment['nama_lengkap']) : '-'; ?></span>
+            </div>
+            <div class="info-item" style="text-align: center;">
+                <i class="fas fa-birthday-cake rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['tanggal_lahir'] !== null ? calculateAge($appointment['tanggal_lahir']) . ' tahun' : '-'; ?></span>
+            </div>
+            <div class="info-item" style="text-align: center;">
+                <i class="fas fa-ruler-vertical rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['tinggi_badan'] !== null ? htmlspecialchars($appointment['tinggi_badan']) . ' cm' : '-'; ?></span>
+            </div>
+            <div class="info-item" style="text-align: center;">
+                <i class="fas fa-weight rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['berat_badan'] !== null ? htmlspecialchars($appointment['berat_badan']) . ' kg' : '-'; ?></span>
+            </div>
+            <div class="info-item" style="text-align: center;">
+                <i class="fas fa-tachometer-alt rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['tensi'] !== null ? htmlspecialchars($appointment['tensi']) . ' mmHg' : '-'; ?></span>
+            </div>
+        </div>
                 </div>
 
                 <div class="col-lg-7 col-md-6">
@@ -530,6 +538,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <form id="diagnosis-form" method="POST">
+        <input type="hidden" name="id_janji_temu" value="<?php echo $id_janji_temu; ?>">
+        <input type="hidden" name="status_periksa" value="2">
             <div class="section-content">
                 <div class="section-title">Diagnosa</div>
                 <div class="form-group row">
@@ -586,17 +596,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="section-content" id="medication-section">
                 <div class="section-title">Obat</div>
                 <div class="medication-fields">
-                    <div class="remove-btn">
-                        <i class="fas fa-trash-alt" style="color: #E4003A;"></i>
-                    </div>
-
-                    <div class="form-group row">
+                <div class="form-group row">
     <div class="col-md-6">
         <label>Nama Obat</label>
         <div class="dropdown">
-            <input type="text" class="form-control dropdown-toggle" id="dropdownNamaObat"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                placeholder="Pilih Obat" autocomplete="off">
+            <input type="text" class="form-control dropdown-toggle" id="dropdownNamaObat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="Pilih Obat" autocomplete="off">
             <div class="dropdown-menu w-100" aria-labelledby="dropdownNamaObat">
                 <div id="obatList">
                     <?php
@@ -609,14 +613,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </div>
-        <input type="hidden" name="medications[0][name]" value="">
     </div>
     <div class="col-md-6">
         <label>Dosis</label>
         <div class="dropdown">
-            <input type="text" class="form-control dropdown-toggle" id="dropdownDosis"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                placeholder="Pilih Dosis" autocomplete="off">
+            <input type="text" class="form-control dropdown-toggle" id="dropdownDosis" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="Pilih Dosis" autocomplete="off">
             <div class="dropdown-menu w-100" aria-labelledby="dropdownDosis">
                 <div id="dosisList">
                     <?php
@@ -629,17 +630,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </div>
-        <input type="hidden" name="medications[0][dose]" value="">
     </div>
 </div>
-
 <div class="form-group row">
     <div class="col-md-6">
         <label>Frekuensi</label>
         <div class="dropdown">
-            <input type="text" class="form-control dropdown-toggle" id="dropdownFrekuensi"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                placeholder="Pilih Frekuensi" autocomplete="off">
+            <input type="text" class="form-control dropdown-toggle" id="dropdownFrekuensi" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="Pilih Frekuensi" autocomplete="off">
             <div class="dropdown-menu w-100" aria-labelledby="dropdownFrekuensi">
                 <div id="frekuensiList">
                     <?php
@@ -652,9 +649,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </div>
-        <input type="hidden" name="medications[0][frequency]" value="">
     </div>
-
     <div class="col-md-6">
         <label>Periode Konsumsi</label>
         <div class="input-group">
@@ -667,13 +662,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-                </div>
+
+
+    </div>
             </div>
             <button type="button" class="btn btn-primary add-more-btn" id="add-more">Tambah</button>
 
             <div class="form-group row justify-content-center">
                 <div class="col-md-4">
-                    <button type="submit" class="btn btn-success save-btn btn-block">Simpan</button>
+                    <button type="submit" class="btn btn-success save-btn btn-block" style="background-color: #87e7ae;">Simpan</button>
                 </div>
             </div>
         </form>
@@ -685,25 +682,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
-        var medicationIndex = 1;
+       $(document).ready(function () {
+    let medicationIndex = 0;
 
-$('#add-more').click(function () {
-    var medicationFields = $('.medication-fields:first').clone();
-    medicationFields.find('input').val(''); // Clear the values of cloned inputs
-    medicationFields.find('input').each(function() {
-        var name = $(this).attr('name');
-        var newName = name.replace(/\[\d+\]/, '[' + medicationIndex + ']');
-        $(this).attr('name', newName);
+    $('#add-more').click(function () {
+        medicationIndex++;
+        var medicationFields = $('.medication-fields:first').clone();
+        medicationFields.find('input').val('');
+        medicationFields.find('input[type=hidden]').remove();
+        medicationFields.find('input[name^="medications["]').each(function () {
+            var name = $(this).attr('name');
+            var newName = name.replace(/\[\d+\]/, '[' + medicationIndex + ']');
+            $(this).attr('name', newName);
+        });
+        $('#medication-section').append(medicationFields);
+        $('#medication-section').append($('#add-more'));
     });
-    $('#medication-section').append(medicationFields);
-    $('#medication-section').append($('#add-more')); // Re-append the "Tambah" button to the end
-    medicationIndex++;
-});
 
-// Remove medication fields
-$(document).on('click', '.remove-btn', function () {
-    $(this).closest('.medication-fields').remove();
-});
+    // Remove medication fields
+    $(document).on('click', '.remove-btn', function () {
+        $(this).closest('.medication-fields').remove();
+    });
 
 
             // Dropdown item click for Diagnosis
@@ -763,14 +762,15 @@ $(document).on('click', '.remove-btn', function () {
                 $('#followUpList a').show(); // Show all items
             });
 
-              // Dropdown item click for Nama Obat
+            // Dropdown item click for Nama Obat
     $(document).on('click', '#obatList .dropdown-item', function (e) {
         e.preventDefault();
         var selectedItem = $(this).text();
         var dropdownToggle = $(this).closest('.dropdown').find('.dropdown-toggle');
-        dropdownToggle.val(selectedItem); // Set the value of the input to the selected item
-        dropdownToggle.dropdown('toggle'); // Close the dropdown
-        dropdownToggle.closest('.form-group').find('input[type=hidden]').val($(this).data('id'));
+        dropdownToggle.val(selectedItem);
+        dropdownToggle.dropdown('toggle');
+        dropdownToggle.closest('.form-group').find('input[name*="[name]"]').remove();
+        dropdownToggle.closest('.form-group').append('<input type="hidden" name="medications[' + medicationIndex + '][name]" value="' + $(this).data('id') + '">');
     });
 
             // Search functionality for Nama Obat
@@ -788,14 +788,16 @@ $(document).on('click', '.remove-btn', function () {
             });
 
             // Dropdown item click for Dosis
-            $(document).on('click', '#dosisList .dropdown-item', function (e) {
-                e.preventDefault();
-                var selectedItem = $(this).text();
-                var dropdownToggle = $(this).closest('.dropdown').find('.dropdown-toggle');
-                dropdownToggle.val(selectedItem); // Set the value of the input to the selected item
-                dropdownToggle.dropdown('toggle'); // Close the dropdown
-                dropdownToggle.closest('.form-group').append('<input type="hidden" name="medications[][dose]" value="' + $(this).data('id') + '">');
-            });
+    $(document).on('click', '#dosisList .dropdown-item', function (e) {
+        e.preventDefault();
+        var selectedItem = $(this).text();
+        var dropdownToggle = $(this).closest('.dropdown').find('.dropdown-toggle');
+        dropdownToggle.val(selectedItem);
+        dropdownToggle.dropdown('toggle');
+        dropdownToggle.closest('.form-group').find('input[name*="[dose]"]').remove();
+        dropdownToggle.closest('.form-group').append('<input type="hidden" name="medications[' + medicationIndex + '][dose]" value="' + $(this).data('id') + '">');
+    });
+
 
             // Search functionality for Dosis
             $('#dropdownDosis').on('keyup', function () {
@@ -811,16 +813,16 @@ $(document).on('click', '.remove-btn', function () {
                 $('#dosisList a').show(); // Show all items
             });
 
-            // Dropdown item click for Frekuensi
-            $(document).on('click', '#frekuensiList .dropdown-item', function (e) {
-                e.preventDefault();
-                var selectedItem = $(this).text();
-                var dropdownToggle = $(this).closest('.dropdown').find('.dropdown-toggle');
-                dropdownToggle.val(selectedItem); // Set the value of the input to the selected item
-                dropdownToggle.dropdown('toggle'); // Close the dropdown
-                dropdownToggle.closest('.form-group').append('<input type="hidden" name="medications[][frequency]" value="' + $(this).data('id') + '">');
-            });
-
+             // Dropdown item click for Frekuensi
+    $(document).on('click', '#frekuensiList .dropdown-item', function (e) {
+        e.preventDefault();
+        var selectedItem = $(this).text();
+        var dropdownToggle = $(this).closest('.dropdown').find('.dropdown-toggle');
+        dropdownToggle.val(selectedItem);
+        dropdownToggle.dropdown('toggle');
+        dropdownToggle.closest('.form-group').find('input[name*="[frequency]"]').remove();
+        dropdownToggle.closest('.form-group').append('<input type="hidden" name="medications[' + medicationIndex + '][frequency]" value="' + $(this).data('id') + '">');
+    });
             // Search functionality for Frekuensi
             $('#dropdownFrekuensi').on('keyup', function () {
                 var value = $(this).val().toLowerCase();
@@ -838,7 +840,54 @@ $(document).on('click', '.remove-btn', function () {
             // Remove button click functionality (if needed)
             $(document).on('click', '.remove-btn .fas', function () {
                 $(this).closest('.medication-fields').remove();
+                
             });
+
+
+
+
+            // Search functionalities for each dropdown
+    $('#dropdownNamaObat').on('keyup', function () {
+        var value = $(this).val().toLowerCase();
+        $('#obatList a').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+    $('#dropdownDosis').on('keyup', function () {
+        var value = $(this).val().toLowerCase();
+        $('#dosisList a').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+    $('#dropdownFrekuensi').on('keyup', function () {
+        var value = $(this).val().toLowerCase();
+        $('#frekuensiList a').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+    // Open dropdown on focus and show all items for Nama Obat
+    $('#dropdownNamaObat').on('focus', function () {
+        $(this).dropdown('toggle');
+        $('#obatList a').show(); // Show all items
+    });
+
+    $('#dropdownDosis').on('focus', function () {
+        $(this).dropdown('toggle');
+        $('#dosisList a').show(); // Show all items
+    });
+
+    $('#dropdownFrekuensi').on('focus', function () {
+        $(this).dropdown('toggle');
+        $('#frekuensiList a').show(); // Show all items
+    });
+
+    // Remove button click functionality (if needed)
+    $(document).on('click', '.remove-btn .fas', function () {
+        $(this).closest('.medication-fields').remove();
+    });
         });
     </script>
 </body>

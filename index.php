@@ -13,228 +13,228 @@
 	<link href="https://fonts.googleapis.com/css?family=Lato|Poppins&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 	<style>
-		html {
-			scroll-behavior: smooth;
-		}
+	html {
+    scroll-behavior: smooth;
+}
 
-		h2,
-		h3,
-		h4,
-		h5,
-		h6 {
-			font-weight: 700;
-		}
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+}
 
-		body {
-			/* font-family: 'Open Sans', sans-serif; */
-			font-family: 'Lato', sans-serif;
-			/* font-family: 'Poppins', sans-serif; */
-		}
+body {
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: 'Lato', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
+}
 
-		/* .wrapper {
-			background: #fff;
+/* .wrapper {
+    background: #fff;
     margin-bottom: 270px;
     box-shadow: 0px 25px 10px -15px rgba(0,0,0,0.08); 
-		} */
+} */
 
-		.navbar {
-			padding-top: 2rem;
-		}
+.navbar {
+    padding-top: 2rem;
+}
 
-		.navbar .nav-item {
-			margin: 0 .75rem 0;
-		}
+.navbar .nav-item {
+    margin: 0 .75rem 0;
+}
 
-		.navbar-brand a {
-			box-shadow: 0px 25px 10px -15px rgba(0, 0, 0, 0.08);
-		}
+.navbar-brand a {
+    box-shadow: 0px 25px 10px -15px rgba(0, 0, 0, 0.08);
+}
 
-		.nav-dropdown {
-			border-radius: 10px;
-			border: 0;
-			padding: 0 1.2rem;
-			background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);
-			box-shadow: 0px 25px 10px -10px rgba(0, 0, 0, 0.08);
-		}
+.nav-dropdown {
+    border-radius: 10px;
+    border: 0;
+    padding: 0 1.2rem;
+    background: linear-gradient(to right, #87e7ae 0%, #87e7ae 100%);
+    box-shadow: 0px 25px 10px -10px rgba(0, 0, 0, 0.08);
+}
 
-		.nav-dropdown a.dropdown-link {
-			color: #f5f5f5 !important;
-		}
+.nav-dropdown a.dropdown-link {
+    color: #f5f5f5 !important;
+}
 
-		.btn-primary {
-			color: #fff;
-			background: linear-gradient(to right, #8914fe 0%, #8063f5 100%) !important;
-			border-color: #6F42C2 !important;
-		}
+.btn-primary {
+    color: #fff;
+    background: linear-gradient(to right, #87e7ae 0%, #87e7ae 100%) !important;
+    border-color: #87e7ae !important;
+}
 
-		.btn-primary:hover {
-			color: #fff;
-			background-color: #906BD4 !important;
-			border-color: #906BD4 !important;
-			-webkit-box-shadow: none;
-			box-shadow: none;
-		}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #87e7ae !important;
+    border-color: #87e7ae !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
-		.btn-primary:focus {
-			box-shadow: 0 0 0 0.2rem rgba(111, 66, 194, .5) !important;
-		}
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(135, 231, 174, .5) !important;
+}
 
-		.jumbotron {
-			/* padding: 18rem 0; */
-			padding: 20% 0;
-			background: url('./assets/img/background.jpg');
-			background-repeat: no-repeat;
-			background-position: 100% 10%;
-		}
+.jumbotron {
+    /* padding: 18rem 0; */
+    padding: 20% 0;
+    background: url('./assets/img/background.jpg');
+    background-repeat: no-repeat;
+    background-position: 100% 10%;
+}
 
-		.jumbotron-title {
-			font-size: 3rem;
-			text-transform: capitalize;
-		}
+.jumbotron-title {
+    font-size: 3rem;
+    text-transform: capitalize;
+}
 
-		section {
-			padding: 3rem 0 6rem;
-		}
+section {
+    padding: 3rem 0 6rem;
+}
 
-		.section-title {
-			margin-bottom: 6rem;
-		}
+.section-title {
+    margin-bottom: 6rem;
+}
 
-		section img {
-			margin-bottom: 2rem;
-		}
+section img {
+    margin-bottom: 2rem;
+}
 
-		.feature-section {
-			background: url('./assets/img/getty_patient_care.jpg');
-			background-position: 0% 100%;
-			background-size: 600px;
-			background-repeat: no-repeat;
-		}
+.feature-section {
+    background: url('./assets/img/getty_patient_care.jpg');
+    background-position: 0% 100%;
+    background-size: 600px;
+    background-repeat: no-repeat;
+}
 
-		.feature-section .card {
-			border-radius: 10px;
-			box-shadow: 0px 25px 10px -15px rgba(0, 0, 0, 0.08);
-			transition: .4s;
-		}
+.feature-section .card {
+    border-radius: 10px;
+    box-shadow: 0px 25px 10px -15px rgba(0, 0, 0, 0.08);
+    transition: .4s;
+}
 
-		.feature-section .card:hover {
-			transform: scale(1.1);
-			box-shadow: 0px 25px 10px -15px rgba(0, 0, 0, 0.08);
-		}
+.feature-section .card:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 25px 10px -15px rgba(0, 0, 0, 0.08);
+}
 
-		.footer {
-			width: 100%;
-			height: auto;
-			color: #333;
-			bottom: 0px;
-			left: 0px;
-			padding: 45px 0 40px;
-		}
+.footer {
+    width: 100%;
+    height: auto;
+    color: #333;
+    bottom: 0px;
+    left: 0px;
+    padding: 45px 0 40px;
+}
 
-		.footer a {
-			color: #333;
-		}
+.footer a {
+    color: #333;
+}
 
-		.footer a:hover {
-			color: purple;
-			text-decoration: none;
-		}
+.footer a:hover {
+    color: #87e7ae;
+    text-decoration: none;
+}
 
-		.footer ul li {
-			margin: .8rem 0;
-		}
+.footer ul li {
+    margin: .8rem 0;
+}
 
-		.upper-footer {
-			border-bottom: #f8f8f9;
-			width: 100%;
-		}
+.upper-footer {
+    border-bottom: #f8f8f9;
+    width: 100%;
+}
 
-		.bottom-footer {
-			margin-top: 10px;
-		}
+.bottom-footer {
+    margin-top: 10px;
+}
 
-		.footer ul {
-			list-style-type: none;
-		}
+.footer ul {
+    list-style-type: none;
+}
 
-		.footer ul li {
-			margin-left: -40px;
-		}
+.footer ul li {
+    margin-left: -40px;
+}
 
-		.footer-link {
-			text-align: right;
-		}
+.footer-link {
+    text-align: right;
+}
 
-		.bottom-footer-link {
-			margin: 0 5px;
-		}
+.bottom-footer-link {
+    margin: 0 5px;
+}
 
-		.top-button {
-			position: absolute;
-			right: 30px;
-		}
+.top-button {
+    position: absolute;
+    right: 30px;
+}
 
-		.top-scroll {
-			padding: 10px 16px;
-			background-color: #f2f2f2;
-			border-radius: 5px;
-			font-size: 20px;
-			transition: .3s;
-		}
+.top-scroll {
+    padding: 10px 16px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    font-size: 20px;
+    transition: .3s;
+}
 
-		.top-scroll:hover {
-			background-color: #dfdddd;
-		}
+.top-scroll:hover {
+    background-color: #dfdddd;
+}
 
-		img.banner {
-			width: 380px !important;
-			height: 450px !important;
-		}
+img.banner {
+    width: 380px !important;
+    height: 450px !important;
+}
 
-
-		/*
+/*
 FOR ANIMATION
 */
 
-		.slideanim {
-			visibility: hidden;
-		}
+.slideanim {
+    visibility: hidden;
+}
 
-		.slide {
-			/* The name of the animation */
-			animation-name: slide;
-			-webkit-animation-name: slide;
-			/* The duration of the animation */
-			animation-duration: 1s;
-			-webkit-animation-duration: 1s;
-			/* Make the element visible */
-			visibility: visible;
-		}
+.slide {
+    /* The name of the animation */
+    animation-name: slide;
+    -webkit-animation-name: slide;
+    /* The duration of the animation */
+    animation-duration: 1s;
+    -webkit-animation-duration: 1s;
+    /* Make the element visible */
+    visibility: visible;
+}
 
-		/* Go from 0% to 100% opacity (see-through) and specify the percentage from when to slide in the element along the Y-axis */
-		@keyframes slide {
-			0% {
-				opacity: 0;
-				transform: translateY(70%);
-			}
+/* Go from 0% to 100% opacity (see-through) and specify the percentage from when to slide in the element along the Y-axis */
+@keyframes slide {
+    0% {
+        opacity: 0;
+        transform: translateY(70%);
+    }
 
-			100% {
-				opacity: 1;
-				transform: translateY(0%);
-			}
-		}
+    100% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}
 
-		@-webkit-keyframes slide {
-			0% {
-				opacity: 0;
-				-webkit-transform: translateY(70%);
-			}
+@-webkit-keyframes slide {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(70%);
+    }
 
-			100% {
-				opacity: 1;
-				-webkit-transform: translateY(0%);
-			}
-		}
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0%);
+    }
+}
+
 	</style>
 </head>
 

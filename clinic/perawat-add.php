@@ -30,12 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $confirm_password = escape_input($_POST['inputConfirmPassword']);
     $fname = escape_input($_POST['inputFirstName']);
     $lname = escape_input($_POST['inputLastName']);
-    $clinic_id = $_SESSION['clinic_id'] ?? null; // Mengambil clinic_id dari sesi
-
-    if (is_null($clinic_id)) {
-        echo '<script>alert("Clinic ID is not set in session. Please login again.");</script>';
-        exit();
-    }
+    $doctor_id = escape_input($_POST['doctorSelect']); // Mengambil doctor_id dari form
 
     if (empty($fname)) {
         $errFName = $error_html['errFirstName'];
@@ -86,8 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errEmail) && empty($errPassword) && empty($errConfirmPassword) && empty($errFName) && empty($errLName)) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $conn->prepare("INSERT INTO apoteker (apoteker_email, apoteker_password, nama_depan, nama_belakang, clinic_id) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssi", $email, $hashedPassword, $fname, $lname, $clinic_id);
+        $stmt = $conn->prepare("INSERT INTO perawat (alamat_email, password, nama_depan, nama_belakang, doctor_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $email, $hashedPassword, $fname, $lname, $doctor_id);
         if ($stmt->execute()) {
             $success = true; // Set success flag to true
         } else {
@@ -96,6 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->close();
     }
 }
+
+// Fetch doctors' data to populate the dropdown
+$stmt2 = $conn->prepare("SELECT doctor_id, doctor_firstname, doctor_lastname FROM doctors");
+$stmt2->execute();
+$doctors = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt2->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -109,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include NAVIGATION; ?>
     <div class="page-content" id="content">
         <?php include HEADER; ?>
-        <h4>Tambah Apoteker</h4>
+       <h4>Tambah Perawat</h4>
         <!-- Page content -->
         <div class="row">
             <div class="col-12">
@@ -117,22 +118,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="d-flex">
                         <div class="card col-md-12">
                             <div class="card-body">
-                                <!-- Add Apoteker -->
+                                <!-- Add Perawat -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputFirstName">First Name</label>
+                                        <label for="doctorSelect">Dokter yang Didampingi</label>
+                                        <select name="doctorSelect" class="form-control <?php echo $classEmail ?>" id="doctorSelect">
+                                            <?php foreach ($doctors as $doctor): ?>
+                                                <option value="<?php echo $doctor['doctor_id']; ?>">
+                                                    <?php echo $doctor['doctor_id'] . ' - ' . $doctor['doctor_firstname'] . ' ' . $doctor['doctor_lastname']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <?php echo $errEmail; ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputFirstName">Nama Depan</label>
                                         <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Enter First Name">
                                         <?php echo $errFName; ?>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputLastName">Last Name/Surname</label>
+                                        <label for="inputLastName">Nama Belakang</label>
                                         <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Enter Last Name">
                                         <?php echo $errLName; ?>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputEmailAddress">Email Address</label>
+                                        <label for="inputEmailAddress">Alamat Email</label>
                                         <input type="text" name="inputEmailAddress" class="form-control <?php echo $classEmail ?>" id="inputEmailAddress" placeholder="Enter Email Address">
                                         <?php echo $errEmail; ?>
                                     </div>
@@ -149,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <?php echo $errConfirmPassword ?>
                                     </div>
                                 </div>
-                                <!-- End Add Apoteker -->
+                                <!-- End Add Perawat -->
                             </div>
                         </div>
                     </div>
@@ -159,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <button type="reset" class="btn btn-outline-secondary btn-block">Clear</button>
                         </div>
                         <div class="col-6">
-                            <button type="submit" class="btn btn-primary btn-block" name="savebtn">Add Apoteker</button>
+                            <button type="submit" class="btn btn-primary btn-block" name="savebtn">Add Perawat</button>
                         </div>
                     </div>
                 </form>
@@ -172,12 +187,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php if ($success): ?>
     <script>
         Swal.fire({
-            title: "Great!",
-            text: "New Apoteker Added!",
+            title: "Berhasil!",
+            text: "Perawat Baru Ditambahkan!",
             icon: "success"
         }).then((result) => {
             if (result.value) {
-                window.location.href = "apoteker-list.php";
+                window.location.href = "perawat-list.php";
             }
         });
     </script>

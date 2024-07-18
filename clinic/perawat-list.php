@@ -23,7 +23,7 @@ include('./includes/session.inc.php');
                         <?php
                         function headerTable()
                         {
-                            $header = array("Nama Klinik", "Apoteker Email", "Nama Lengkap");
+                            $header = array("Nama Dokter", "Perawat Email", "Nama Perawat");
                             $arrlen = count($header);
                             for ($i = 0; $i < $arrlen; $i++) {
                                 echo "<th>" . $header[$i] . "</th>" . PHP_EOL;
@@ -40,17 +40,17 @@ include('./includes/session.inc.php');
                                 <tbody>
                                     <?php
                                     $table_result = mysqli_query($conn, "SELECT 
-                                        c.clinic_name, 
-                                        a.apoteker_email, 
-                                        CONCAT(a.nama_depan, ' ', a.nama_belakang) AS apoteker_name
-                                    FROM apoteker a
-                                    JOIN clinics c ON a.clinic_id = c.clinic_id");
+                                        CONCAT(d.doctor_firstname, ' ', d.doctor_lastname) AS doctor_name, 
+                                        p.alamat_email, 
+                                        CONCAT(p.nama_depan, ' ', p.nama_belakang) AS nurse_name
+                                    FROM perawat p
+                                    JOIN doctors d ON p.doctor_id = d.doctor_id");
 
                                     while ($table_row = mysqli_fetch_assoc($table_result)) {
                                         ?><tr>
-                                            <td><?= htmlspecialchars($table_row["clinic_name"]); ?></td>
-                                            <td><?= htmlspecialchars($table_row["apoteker_email"]); ?></td>
-                                            <td><?= htmlspecialchars($table_row["apoteker_name"]); ?></td>
+                                            <td><?= htmlspecialchars($table_row["doctor_name"]); ?></td>
+                                            <td><?= htmlspecialchars($table_row["alamat_email"]); ?></td>
+                                            <td><?= htmlspecialchars($table_row["nurse_name"]); ?></td>
                                         </tr>
                                     <?php
                                     }

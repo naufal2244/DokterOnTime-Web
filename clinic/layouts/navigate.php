@@ -48,6 +48,15 @@
                     </ul>
                 </li>
 
+
+                <li class="nav-item <?php if (preg_match('/(perawat)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
+                        <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-pills mr-3 fa-fw"></i>Perawat</a>
+                    <ul class="side-collapse">
+                        <a href="perawat-list.php" class="nav-link"><i class="fas fa-users mr-3 fa-fw"></i>Daftar Perawat</a>
+                        <a href="perawat-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Perawat</a>
+                    </ul>
+                </li>
+
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'appointment.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="appointment.php" class="nav-link" ><i class="fas fa-calendar-check mr-3 fa-fw"></i>Appointment</a>
                 </li>

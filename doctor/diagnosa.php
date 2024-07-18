@@ -29,9 +29,21 @@ try {
 }
 
 
+// Handle starting the diagnosis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'start') {
+    $id_janji_temu = $_POST['id_janji_temu'];
+    $query = "UPDATE janji_temu SET status_periksa = 1 WHERE id_janji_temu = :id_janji_temu";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['id_janji_temu' => $id_janji_temu]);
+
+    // Redirect to the diagnosis page with the appointment ID
+    header("Location: diagnosa.php?id_janji_temu=$id_janji_temu");
+    exit;
+}
+
 
 // Ambil id_janji_temu dari URL
-$id_janji_temu = isset($_GET['id_janji_temu']) ? $_GET['id_janji_temu'] : null;
+$id_janji_temu = isset($_GET['id_janji_temu']) ? $_GET['id_janji_temu'] : (isset($_POST['id_janji_temu']) ? $_POST['id_janji_temu'] : null);
 
 // Jika id_janji_temu tidak ada, redirect ke halaman lain atau tampilkan pesan error
 if (!$id_janji_temu) {
@@ -135,7 +147,8 @@ $tindakLanjutStmt = $pdo->prepare($tindakLanjutQuery);
 $tindakLanjutStmt->execute();
 $tindakLanjutList = $tindakLanjutStmt->fetchAll();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Handle saving the diagnosis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
     $diagnosis = isset($_POST['diagnosis']) ? $_POST['diagnosis'] : [];
     $followUp = isset($_POST['followUp']) ? $_POST['followUp'] : [];
     $medications = isset($_POST['medications']) ? $_POST['medications'] : [];
@@ -187,6 +200,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+
+    // Update status_periksa to 2
+    $updateStatusQuery = "UPDATE janji_temu SET status_periksa = 2 WHERE id_janji_temu = :id_janji_temu";
+    $updateStatusStmt = $pdo->prepare($updateStatusQuery);
+    $updateStatusStmt->execute(['id_janji_temu' => $id_janji_temu]);
 
     echo "<script>alert('Data berhasil disimpan!'); window.location.href='appointment.php';</script>";
     exit;
@@ -410,31 +428,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include HEADER; ?>
 
         <div class="container mt-4">
-            <div class="row">
-                <div class="col-lg-5 col-md-6" style="border: 1px solid #000;">
-                    <div class="patient-info text-center">
-                        <div class="info-item-profile">
-                            <i class="fas fa-user fa-3x rounded-circle"></i>
-                            <span class="d-block mt-2"><?php echo htmlspecialchars($appointment['nama_lengkap']); ?></span>
-                        </div>
-                        <div class="info-item" style="text-align: center;">
-                            <i class="fas fa-birthday-cake rounded-circle"></i>
-                            <span class="d-block mt-2"> <?php echo calculateAge($appointment['tanggal_lahir']); ?> tahun</span>
-                        </div>
-                        <div class="info-item" style="text-align: center;">
-                            <i class="fas fa-ruler-vertical rounded-circle"></i>
-                            <span class="d-block mt-2"><?php echo htmlspecialchars($appointment['tinggi_badan']); ?> cm</span>
-                        </div>
-                        <div class="info-item" style="text-align: center;">
-                            <i class="fas fa-weight rounded-circle"></i>
-                            <span class="d-block mt-2"><?php echo htmlspecialchars($appointment['berat_badan']); ?> kg</span>
-                        </div>
-                        <div class="info-item" style="text-align: center;">
-                            <i class="fas fa-tachometer-alt rounded-circle"></i>
-                            <span class="d-block mt-2"><?php echo htmlspecialchars($appointment['tensi']); ?> </span>
-                        </div>
 
-                    </div>
+        <div class="row">
+    <div class="col-lg-5 col-md-6" style="border: 1px solid #000;">
+        <div class="patient-info text-center">
+            <div class="info-item-profile">
+                <i class="fas fa-user fa-3x rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['nama_lengkap'] !== null ? htmlspecialchars($appointment['nama_lengkap']) : '-'; ?></span>
+            </div>
+            <div class="info-item" style="text-align: center;">
+                <i class="fas fa-birthday-cake rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['tanggal_lahir'] !== null ? calculateAge($appointment['tanggal_lahir']) . ' tahun' : '-'; ?></span>
+            </div>
+            <div class="info-item" style="text-align: center;">
+                <i class="fas fa-ruler-vertical rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['tinggi_badan'] !== null ? htmlspecialchars($appointment['tinggi_badan']) . ' cm' : '-'; ?></span>
+            </div>
+            <div class="info-item" style="text-align: center;">
+                <i class="fas fa-weight rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['berat_badan'] !== null ? htmlspecialchars($appointment['berat_badan']) . ' kg' : '-'; ?></span>
+            </div>
+            <div class="info-item" style="text-align: center;">
+                <i class="fas fa-tachometer-alt rounded-circle"></i>
+                <span class="d-block mt-2"><?php echo $appointment['tensi'] !== null ? htmlspecialchars($appointment['tensi']) . ' mmHg' : '-'; ?></span>
+            </div>
+        </div>
+
                 </div>
 
                 <div class="col-lg-7 col-md-6">
@@ -535,6 +554,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <form id="diagnosis-form" method="POST">
+        <input type="hidden" name="id_janji_temu" value="<?php echo $id_janji_temu; ?>">
+        <input type="hidden" name="status_periksa" value="2">
             <div class="section-content">
                 <div class="section-title">Diagnosa</div>
                 <div class="form-group row">
@@ -665,7 +686,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="form-group row justify-content-center">
                 <div class="col-md-4">
-                    <button type="submit" class="btn btn-success save-btn btn-block">Simpan</button>
+                    <button type="submit" class="btn btn-success save-btn btn-block" style="background-color: #87e7ae;">Simpan</button>
                 </div>
             </div>
         </form>

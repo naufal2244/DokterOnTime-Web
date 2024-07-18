@@ -6,7 +6,7 @@ include('./includes/path.inc.php');
 <html>
 <head>
 	<?php include CSS_PATH; ?>
-	<link rel="stylesheet" href="../assets/css/clinic/login.css">
+	<link rel="stylesheet" href="../assets/css/clinic/login_copy.css">
 </head>
 <body>
 	<div class="container">

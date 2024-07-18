@@ -270,7 +270,7 @@ FOR ANIMATION
 								<a class="dropdown-item" href="#patient">Pasien</a>
 								<a class="dropdown-item" href="clinic/login.php">Klinik</a>
 								<a class="dropdown-item" href="doctor/login.php">Dokter</a>
-								<a class="dropdown-item" href="doctor/login.php">Apoteker</a>
+								<a class="dropdown-item" href="pharmacist/login.php">Apoteker</a>
 								<a class="dropdown-item" href="doctor/login.php">Perawat</a>
 							</div>
 						</li>

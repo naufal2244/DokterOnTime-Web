@@ -1,145 +1,145 @@
 <?php
-// Clinic
+// Klinik
 $HOME_PAGE = "index.php";
-$BRAND_NAME = "Clinic ME";
+$BRAND_NAME = "DokterOnTime";
 $PATH = "doclab/doctor";
 
 switch ($_SERVER["SCRIPT_NAME"]) {
-    case '/'.$PATH.'/login.php':
-        $CURRENT_PAGE = "Login";
-        $CURRENT_PATH = "Login";
-        $PAGE_TITLE = "Login | $BRAND_NAME";
-        break;
-    
-    // Patient
-    case '/'.$PATH.'/patient-list.php':
-        $CURRENT_PAGE = "Patient List";
-        $CURRENT_PATH = "Patient List";
-        $PAGE_TITLE = "Patient | $BRAND_NAME";
-        break;
-    
-    case '/'.$PATH.'/patient-add.php':
-        $CURRENT_PAGE = "Add Patient";
-        $CURRENT_PATH = "Add Patient";
-        $PAGE_TITLE = "Patient | $BRAND_NAME";
-        break;
-    
-    case '/'.$PATH.'/patient-view.php':
-        $CURRENT_PAGE = "Patient Profile";
-        $CURRENT_PATH = "View Patient";
-        $PAGE_TITLE = "Patient | $BRAND_NAME";
-        break;
-    
-    // Doctor
-    case '/'.$PATH.'/doctor.php':
-        $CURRENT_PAGE = "Doctor Profile";
-        $CURRENT_PATH = "Doctor";
-        $PAGE_TITLE = "Doctor | $BRAND_NAME";
-        break;
-    case '/'.$PATH.'/doctor-edit.php':
-        $CURRENT_PAGE = "Edit Profile";
-        $CURRENT_PATH = "Doctor";
-        $PAGE_TITLE = "Doctor | $BRAND_NAME";
+    case '/' . $PATH . '/login.php':
+        $CURRENT_PAGE = "Masuk";
+        $CURRENT_PATH = "Masuk";
+        $PAGE_TITLE = "Masuk | $BRAND_NAME";
         break;
 
-    // Clinic
-    case '/'.$PATH.'/clinic-list.php':
-        $CURRENT_PAGE = "Clinic List";
-        $CURRENT_PATH = "";
-        $PAGE_TITLE = "Clinic | $BRAND_NAME";
-        break;
-    
-    case '/'.$PATH.'/clinic-add.php':
-        $CURRENT_PAGE = "Add Clinic";
-        $CURRENT_PATH = "";
-        $PAGE_TITLE = "Clinic | $BRAND_NAME";
-        break;
-    
-    case '/'.$PATH.'/clinic-view.php':
-        $CURRENT_PAGE = "View Clinic";
-        $CURRENT_PATH = "";
-        $PAGE_TITLE = "Clinic | $BRAND_NAME";
-        break;
-    
-    case '/'.$PATH.'/clinic.php':
-        $CURRENT_PAGE = "Clinic";
-        $CURRENT_PATH = "";
-        $PAGE_TITLE = "Clinic | $BRAND_NAME";
+        // Pasien
+    case '/' . $PATH . '/patient-list.php':
+        $CURRENT_PAGE = "Daftar Pasien";
+        $CURRENT_PATH = "Daftar Pasien";
+        $PAGE_TITLE = "Pasien | $BRAND_NAME";
         break;
 
-    //perawat
-    case '/'.$PATH.'/perawat.php':
+    case '/' . $PATH . '/patient-add.php':
+        $CURRENT_PAGE = "Tambah Pasien";
+        $CURRENT_PATH = "Tambah Pasien";
+        $PAGE_TITLE = "Pasien | $BRAND_NAME";
+        break;
+
+    case '/' . $PATH . '/patient-view.php':
+        $CURRENT_PAGE = "Profil Pasien";
+        $CURRENT_PATH = "Lihat Pasien";
+        $PAGE_TITLE = "Pasien | $BRAND_NAME";
+        break;
+
+        // Dokter
+    case '/' . $PATH . '/doctor.php':
+        $CURRENT_PAGE = "Profil Dokter";
+        $CURRENT_PATH = "Dokter";
+        $PAGE_TITLE = "Dokter | $BRAND_NAME";
+        break;
+    case '/' . $PATH . '/doctor-edit.php':
+        $CURRENT_PAGE = "Edit Profil";
+        $CURRENT_PATH = "Dokter";
+        $PAGE_TITLE = "Dokter | $BRAND_NAME";
+        break;
+
+        // Klinik
+    case '/' . $PATH . '/clinic-list.php':
+        $CURRENT_PAGE = "Daftar Klinik";
+        $CURRENT_PATH = "";
+        $PAGE_TITLE = "Klinik | $BRAND_NAME";
+        break;
+
+    case '/' . $PATH . '/clinic-add.php':
+        $CURRENT_PAGE = "Tambah Klinik";
+        $CURRENT_PATH = "";
+        $PAGE_TITLE = "Klinik | $BRAND_NAME";
+        break;
+
+    case '/' . $PATH . '/clinic-view.php':
+        $CURRENT_PAGE = "Lihat Klinik";
+        $CURRENT_PATH = "";
+        $PAGE_TITLE = "Klinik | $BRAND_NAME";
+        break;
+
+    case '/' . $PATH . '/clinic.php':
+        $CURRENT_PAGE = "Klinik";
+        $CURRENT_PATH = "";
+        $PAGE_TITLE = "Klinik | $BRAND_NAME";
+        break;
+
+        // Perawat
+    case '/' . $PATH . '/perawat.php':
         $CURRENT_PAGE = "Perawat";
         $CURRENT_PATH = "";
         $PAGE_TITLE = "Perawat | $BRAND_NAME";
         break;
-    
-    // Appointment
-    case '/'.$PATH.'/appointment.php':
-        $CURRENT_PAGE = "Appointment";
+
+        // Janji
+    case '/' . $PATH . '/appointment.php':
+        $CURRENT_PAGE = "Janji";
         $CURRENT_PATH = "";
-        $PAGE_TITLE = "Appointment | $BRAND_NAME";
+        $PAGE_TITLE = "Janji | $BRAND_NAME";
         break;
 
-    // Schedule
-    case '/'.$PATH.'/schedule.php':
-        $CURRENT_PAGE = "Schedule";
-        $CURRENT_PATH = "Schedule";
-        $PAGE_TITLE = "Schedule | $BRAND_NAME";
-        break;
-    
-    case '/'.$PATH.'/speciality.php':
-        $CURRENT_PAGE = "Speciality";
-        $CURRENT_PATH = "";
-        $PAGE_TITLE = "Speciality | $BRAND_NAME";
-        break;
-    
-    case '/'.$PATH.'/language.php':
-        $CURRENT_PAGE = "Language";
-        $CURRENT_PATH = "Language";
-        $PAGE_TITLE = "Language | $BRAND_NAME";
+        // Jadwal
+    case '/' . $PATH . '/schedule.php':
+        $CURRENT_PAGE = "Jadwal";
+        $CURRENT_PATH = "Jadwal";
+        $PAGE_TITLE = "Jadwal | $BRAND_NAME";
         break;
 
-    case '/'.$PATH.'/treatment.php':
-        $CURRENT_PAGE = "Treatment";
-        $CURRENT_PATH = "Treatment";
-        $PAGE_TITLE = "Treatment | $BRAND_NAME";
+    case '/' . $PATH . '/speciality.php':
+        $CURRENT_PAGE = "Spesialisasi";
+        $CURRENT_PATH = "";
+        $PAGE_TITLE = "Spesialisasi | $BRAND_NAME";
         break;
-    
-    case '/'.$PATH.'/report.php':
-        $CURRENT_PAGE = "Report";
-        $CURRENT_PATH = "Report";
-        $PAGE_TITLE = "Report | $BRAND_NAME";
+
+    case '/' . $PATH . '/language.php':
+        $CURRENT_PAGE = "Bahasa";
+        $CURRENT_PATH = "Bahasa";
+        $PAGE_TITLE = "Bahasa | $BRAND_NAME";
         break;
-    
-    case '/'.$PATH.'/review.php':
-        $CURRENT_PAGE = "Review";
-        $CURRENT_PATH = "Review";
-        $PAGE_TITLE = "Review | $BRAND_NAME";
+
+    case '/' . $PATH . '/treatment.php':
+        $CURRENT_PAGE = "Perawatan";
+        $CURRENT_PATH = "Perawatan";
+        $PAGE_TITLE = "Perawatan | $BRAND_NAME";
         break;
-    
-    case '/'.$PATH.'/password.php':
-        $CURRENT_PAGE = "Reset Password";
-        $CURRENT_PATH = "Reset Password";
-        $PAGE_TITLE = "Reset Password | $BRAND_NAME";
+
+    case '/' . $PATH . '/report.php':
+        $CURRENT_PAGE = "Laporan";
+        $CURRENT_PATH = "Laporan";
+        $PAGE_TITLE = "Laporan | $BRAND_NAME";
         break;
-    
-    case '/'.$PATH.'/reset.php':
-        $CURRENT_PAGE = "Reset Password";
-        $CURRENT_PATH = "Reset Password";
-        $PAGE_TITLE = "Reset Password | $BRAND_NAME";
+
+    case '/' . $PATH . '/review.php':
+        $CURRENT_PAGE = "Ulasan";
+        $CURRENT_PATH = "Ulasan";
+        $PAGE_TITLE = "Ulasan | $BRAND_NAME";
         break;
-    
-    case '/'.$PATH.'/activate.php':
-        $CURRENT_PAGE = "Activate Doctor Account";
-        $CURRENT_PATH = "Activate Doctor Account";
-        $PAGE_TITLE = "Activate Doctor Account | $BRAND_NAME";
+
+    case '/' . $PATH . '/password.php':
+        $CURRENT_PAGE = "Reset Kata Sandi";
+        $CURRENT_PATH = "Reset Kata Sandi";
+        $PAGE_TITLE = "Reset Kata Sandi | $BRAND_NAME";
         break;
-    
-    // Index Page
+
+    case '/' . $PATH . '/reset.php':
+        $CURRENT_PAGE = "Reset Kata Sandi";
+        $CURRENT_PATH = "Reset Kata Sandi";
+        $PAGE_TITLE = "Reset Kata Sandi | $BRAND_NAME";
+        break;
+
+    case '/' . $PATH . '/activate.php':
+        $CURRENT_PAGE = "Aktivasi Akun Dokter";
+        $CURRENT_PATH = "Aktivasi Akun Dokter";
+        $PAGE_TITLE = "Aktivasi Akun Dokter | $BRAND_NAME";
+        break;
+
+        // Halaman Utama
     default:
-        $CURRENT_PAGE = "Dashboard";
-        $PAGE_TITLE = "Home | $BRAND_NAME";
+        $CURRENT_PAGE = "Beranda";
+        $PAGE_TITLE = "Beranda | $BRAND_NAME";
         break;
 }
 

@@ -1,7 +1,17 @@
 <?php
-require_once ('../config/autoload.php');
-include ('includes/path.inc.php');
-include ('includes/session.inc.php');
+require_once('../config/autoload.php');
+include('includes/path.inc.php');
+include('includes/session.inc.php');
+
+// Mendapatkan data apoteker dari database
+$apoteker_id = $_SESSION['ApotekerRoleID'];
+$sql_apoteker = "SELECT nama_depan, nama_belakang FROM apoteker WHERE id_apoteker = ?";
+$stmt_apoteker = $conn->prepare($sql_apoteker);
+$stmt_apoteker->bind_param('i', $apoteker_id);
+$stmt_apoteker->execute();
+$result_apoteker = $stmt_apoteker->get_result();
+$apoteker_row = $result_apoteker->fetch_assoc();
+$stmt_apoteker->close();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$id_resep = $_POST['id_resep'];
@@ -44,6 +54,8 @@ function fetchResepData($conn)
 	return $data;
 }
 
+$resepData = fetchResepData($conn);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,10 +84,9 @@ function fetchResepData($conn)
 				<div class="card-body">
 					<div class="d-flex bd-highlight">
 						<div class="flex-fill bd-highlight">
-							<p class="text-muted text-center">Pharmacist Info</p>
-							<h5 class="font-weight-bold text-center"> Agung</h5>
+							<p class="text-muted text-center">Informasi Apoteker</p>
+							<h5 class="font-weight-bold text-center"><?php echo $apoteker_row["nama_depan"] . ' ' . $apoteker_row["nama_belakang"]; ?></h5>
 						</div>
-
 					</div>
 				</div>
 			</div>
@@ -86,46 +97,39 @@ function fetchResepData($conn)
 			<div class="card">
 				<div class="card-body">
 					<!-- Datatable -->
-					<?php
-					function headerTable()
-					{
-						$header = array("ID", "Status Pembuatan", "Dosis", "Nama Obat", "Nama Patient", "Action");
-						foreach ($header as $head) {
-							echo "<th>" . $head . "</th>" . PHP_EOL;
-						}
-					}
-
-					$resepData = fetchResepData($conn);
-					?>
-
 					<div class="col-md-12 mb-3">
 						<h4 class="font-weight-bold text-center">Daftar Resep</h4>
 					</div>
-
 
 					<div class="data-tables">
 						<table id="datatable" class="table table-responsive-lg nowrap">
 							<thead>
 								<tr>
-									<?php headerTable(); ?>
+									<th>No</th>
+									<th>Status Pembuatan</th>
+									<th>Dosis</th>
+									<th>Nama Obat</th>
+									<th>Nama Pasien</th>
+									<th>Aksi</th>
 								</tr>
 							</thead>
 							<tbody id="responsecontainer">
 								<?php
+								$no = 1; // Inisialisasi variabel counter
 								foreach ($resepData as $row) {
 									$status_pembuatan = $row['status_pembuatan'] == 1 ? 'sudah selesai' : 'belum selesai';
 									$status_color = $row['status_pembuatan'] == 1 ? 'text-success' : 'text-danger'; // Define color based on status
-								
+
 									echo "<tr>";
-									echo "<td>{$row['id_resep']}</td>";
+									echo "<td>{$no}</td>"; // Tampilkan nomor urut
 									echo "<td class='{$status_color}'>{$status_pembuatan}</td>"; // Apply color class
 									echo "<td>{$row['dosis']}</td>";
 									echo "<td>{$row['nama_obat']}</td>";
 									echo "<td>{$row['patient_name']}</td>";
-									echo "<td><button class='btn btn-primary' onclick='openStatusModal({$row['id_resep']}, {$row['status_pembuatan']})'>Action</button></td>";
+									echo "<td><button class='btn btn-primary' onclick='openStatusModal({$row['id_resep']}, {$row['status_pembuatan']})'>Aksi</button></td>";
 									echo "</tr>";
+									$no++; // Increment counter
 								}
-
 								?>
 							</tbody>
 						</table>
@@ -135,15 +139,15 @@ function fetchResepData($conn)
 			</div>
 			<!-- End Card Content -->
 		</div>
+
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel"
-		aria-hidden="true">
+	<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="statusModalLabel">Change Status</h5>
+					<h5 class="modal-title" id="statusModalLabel">Ubah Status</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -158,7 +162,7 @@ function fetchResepData($conn)
 								<option value="1">Sudah Selesai</option>
 							</select>
 						</div>
-						<button type="submit" class="btn btn-primary">Save changes</button>
+						<button type="submit" class="btn btn-primary">Simpan Perubahan</button>
 					</form>
 				</div>
 			</div>
@@ -174,7 +178,7 @@ function fetchResepData($conn)
 			$('#statusModal').modal('show');
 		}
 
-		document.getElementById('statusForm').addEventListener('submit', function (event) {
+		document.getElementById('statusForm').addEventListener('submit', function(event) {
 			event.preventDefault();
 
 			const formData = new FormData(this);
@@ -182,16 +186,16 @@ function fetchResepData($conn)
 			const status_pembuatan = formData.get('status_pembuatan');
 
 			fetch('', {
-				method: 'POST',
-				body: formData
-			})
+					method: 'POST',
+					body: formData
+				})
 				.then(response => response.text())
 				.then(data => {
 					if (data == 'success') {
 						$('#statusModal').modal('hide');
 						location.reload(); // Reload the page to see changes
 					} else {
-						alert('Failed to update status');
+						alert('Gagal memperbarui status');
 					}
 				})
 				.catch(error => {

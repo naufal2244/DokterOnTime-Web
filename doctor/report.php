@@ -35,20 +35,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						<form name="report_frm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 							<?php echo display_error(); ?>
 							<div class="form-group row">
-								<label for="inputDateFrom" class="col-sm-3 col-form-label text-right">From Date</label>
+								<label for="inputDateFrom" class="col-sm-3 col-form-label text-right">Dari Tanggal</label>
 								<div class="col-sm-6">
 									<input type="text" name="inputDateFrom" class="form-control form-control-sm" id="datefrom">
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="inputDateTo" class="col-sm-3 col-form-label text-right">To Date</label>
+								<label for="inputDateTo" class="col-sm-3 col-form-label text-right">Sampai Tanggal</label>
 								<div class="col-sm-6">
 									<input type="text" name="inputDateTo" class="form-control form-control-sm" id="dateto">
 								</div>
 							</div>
 							<div class="d-flex justify-content-md-center pt-3">
-								<button type="clear" class="btn btn-light btn-sm px-5 mr-2" name="clearbtn">Clear</button>
-								<button type="submit" class="btn btn-primary btn-sm px-5" name="generatebtn">Generate</button>
+								<button type="clear" class="btn btn-light btn-sm px-5 mr-2" name="clearbtn">Bersihkan</button>
+								<button type="submit" class="btn btn-primary btn-sm px-5" name="generatebtn">Buat Laporan</button>
 							</div>
 						</form>
 					</div>
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	</div>
 	<?php include JS_PATH; ?>
 	<script>
-		function print() {
+		function cetak() {
 			var w = window.open('', '', 'left=0,top=0,width=800,height=600,toolbar=0,scrollbars=0,status=0');
 			var html = $("#printContent").html();
 

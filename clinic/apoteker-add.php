@@ -52,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $classLName = $error_html['errClass'];
     } else {
         if (!preg_match($regrex['text'], $lname)) {
-            $errFName = $error_html['invalidText'];
-            $classFName = $error_html['errClass'];
+            $errLName = $error_html['invalidText'];
+            $classLName = $error_html['errClass'];
         }
     }
 
@@ -64,6 +64,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errEmail = $error_html['invalidEmail'];
             $classEmail = $error_html['errClass'];
+        } else {
+            // Check if email already exists
+            $check_email = $conn->prepare("SELECT * FROM apoteker WHERE apoteker_email = ?");
+            $check_email->bind_param("s", $email);
+            $check_email->execute();
+            $result = $check_email->get_result();
+            if ($result->num_rows > 0) {
+                $errEmail = "Email already exists";
+                $classEmail = "invalid";
+            }
+            $check_email->close();
         }
     }
 
@@ -91,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->execute()) {
             $success = true; // Set success flag to true
         } else {
-            echo 'Something Wrong';
+            echo 'Something went wrong: ' . $stmt->error; // Show error message
         }
         $stmt->close();
     }
@@ -103,6 +114,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <?php include CSS_PATH; ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .invalid-feedback {
+            color: red;
+        }
+
+        .input-group-btn {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -122,31 +143,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group col-md-6">
                                         <label for="inputFirstName">First Name</label>
                                         <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Enter First Name">
-                                        <?php echo $errFName; ?>
+                                        <div class="invalid-feedback"><?php echo $errFName; ?></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="inputLastName">Last Name/Surname</label>
                                         <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Enter Last Name">
-                                        <?php echo $errLName; ?>
+                                        <div class="invalid-feedback"><?php echo $errLName; ?></div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="inputEmailAddress">Email Address</label>
                                         <input type="text" name="inputEmailAddress" class="form-control <?php echo $classEmail ?>" id="inputEmailAddress" placeholder="Enter Email Address">
-                                        <?php echo $errEmail; ?>
+                                        <div class="invalid-feedback"><?php echo $errEmail; ?></div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="inputPassword">Password</label>
-                                        <input type="password" name="inputPassword" class="form-control <?php echo $classPassword ?>" id="inputPassword" placeholder="Enter Password">
-                                        <?php echo $errPassword ?>
+                                        <div class="input-group">
+                                            <input type="password" name="inputPassword" class="form-control <?php echo $classPassword ?>" id="inputPassword" placeholder="Enter Password">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-outline-secondary" onclick="togglePasswordVisibility('inputPassword')">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                            <div class="invalid-feedback"><?php echo $errPassword; ?></div>
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="inputConfirmPassword">Confirm Password</label>
-                                        <input type="password" name="inputConfirmPassword" class="form-control <?php echo $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Confirm Password">
-                                        <?php echo $errConfirmPassword ?>
+                                        <div class="input-group">
+                                            <input type="password" name="inputConfirmPassword" class="form-control <?php echo $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Confirm Password">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-outline-secondary" onclick="togglePasswordVisibility('inputConfirmPassword')">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                            <div class="invalid-feedback"><?php echo $errConfirmPassword; ?></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- End Add Apoteker -->
@@ -169,19 +204,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <?php include JS_PATH; ?>
 
-    <?php if ($success): ?>
-    <script>
-        Swal.fire({
-            title: "Great!",
-            text: "New Apoteker Added!",
-            icon: "success"
-        }).then((result) => {
-            if (result.value) {
-                window.location.href = "apoteker-list.php";
-            }
-        });
-    </script>
+    <?php if ($success) : ?>
+        <script>
+            Swal.fire({
+                title: "Great!",
+                text: "New Apoteker Added!",
+                icon: "success"
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = "apoteker-list.php";
+                }
+            });
+        </script>
+    <?php elseif (!empty($errEmail) && $errEmail == "Email already exists") : ?>
+        <script>
+            Swal.fire({
+                title: "Error!",
+                text: "Email already exists.",
+                icon: "error"
+            });
+        </script>
     <?php endif; ?>
+
+    <script>
+        function togglePasswordVisibility(id) {
+            var input = document.getElementById(id);
+            var icon = input.nextElementSibling.querySelector('i');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 
 </html>

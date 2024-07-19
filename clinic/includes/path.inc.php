@@ -1,7 +1,7 @@
 <?php
 // Clinic
 $HOME_PAGE = "index.php";
-$BRAND_NAME = "Clinic ME";
+$BRAND_NAME = "DokterOnTime";
 $PATH = "doclab/clinic";
 
 switch ($_SERVER["SCRIPT_NAME"]) {
@@ -131,7 +131,7 @@ switch ($_SERVER["SCRIPT_NAME"]) {
     
     // Index Page
     default:
-        $CURRENT_PAGE = "Dashboard";
+        $CURRENT_PAGE = "Beranda";
         $PAGE_TITLE = "Home | $BRAND_NAME";
         break;
 }

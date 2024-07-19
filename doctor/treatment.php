@@ -85,15 +85,15 @@ if (isset($_POST['deletebtn'])) {
 					<div class="card-body">
 						<form class="inline-form" action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
 							<div class="form-group row">
-								<label for="inputTreatment" class="col-sm-3 col-form-label text-right">Treatment Type</label>
+								<label for="inputTreatment" class="col-sm-3 col-form-label text-right">Jenis Perawatan</label>
 								<div class="col-sm-6">
 									<input type="text" name="inputTreatment" id="inputTreatment" class="form-control form-control-sm <?= $className ?>">
 									<?= $errName ?>
 								</div>
 							</div>
 							<div class="d-flex justify-content-md-center pt-2">
-								<button type="reset" class="btn btn-light btn-sm px-5 mr-2" name="clearbtn">Clear</button>
-								<button type="submit" class="btn btn-primary btn-sm px-5" name="submitbtn">Add</button>
+								<button type="reset" class="btn btn-light btn-sm px-5 mr-2" name="clearbtn">Bersihkan</button>
+								<button type="submit" class="btn btn-primary btn-sm px-5" name="submitbtn">Tambah</button>
 							</div>
 						</form>
 					</div>
@@ -105,22 +105,22 @@ if (isset($_POST['deletebtn'])) {
 					<div class="card-body">
 						<table class="table">
 							<thead>
-								<th>Treatment Type</th>
-								<th>Action</th>
+								<th>Jenis Perawatan</th>
+								<th>Aksi</th>
 							</thead>
 							<tbody>
 							<?php
 							$tresult = $conn->query("SELECT * FROM treatment_type WHERE doctor_id = '" . $doctor_row['doctor_id'] . "' ");
 							if ($tresult->num_rows == 0) {
-								echo '<tr><td colspan="3">No Record Found</td></tr>';
+								echo '<tr><td colspan="3">Tidak ada data</td></tr>';
 							} else {
 								while ($trow = $tresult->fetch_assoc()) {
 									?>
 									<tr>
 										<td><?= $trow['treatment_name'] ?></td>
 										<td>
-											<a class="btn btn-sm btn-outline-success" data-toggle="modal" href="#edit<?= $trow['treatment_id'] ?>">Edit</a>
-											<a class="btn btn-sm btn-outline-danger" data-toggle="modal" href="#delete<?= $trow['treatment_id'] ?>">Delete</a>
+											<a class="btn btn-sm btn-outline-success" data-toggle="modal" href="#edit<?= $trow['treatment_id'] ?>">Ubah</a>
+											<a class="btn btn-sm btn-outline-danger" data-toggle="modal" href="#delete<?= $trow['treatment_id'] ?>">Hapus</a>
 										</td>
 									</tr>
 
@@ -128,7 +128,7 @@ if (isset($_POST['deletebtn'])) {
 										<div class="modal-dialog" role="document">
 											<div class="modal-content">
 												<div class="modal-header" style="border:none;">
-													<h5 class="modal-title" id="deleteModalLabel">Edit</h5>
+													<h5 class="modal-title" id="deleteModalLabel">Ubah</h5>
 													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 														<span aria-hidden="true">&times;</span>
 													</button>
@@ -142,8 +142,8 @@ if (isset($_POST['deletebtn'])) {
 														</div>
 													</div>
 													<div class="modal-footer" style="border:none;">
-														<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-														<button type="submit" name="editbtn" class="btn btn-sm btn-primary">Save</button>
+														<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
+														<button type="submit" name="editbtn" class="btn btn-sm btn-primary">Simpan</button>
 													</div>
 												</form>
 											</div>
@@ -162,11 +162,11 @@ if (isset($_POST['deletebtn'])) {
 												<form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
 													<div class="modal-body">
 														<input type="hidden" name="treatmentID" value="<?= $trow['treatment_id'] ?>">
-														Are you sure want to delete <strong><?= $trow['treatment_name'] ?></strong> ?
+														Apakah Anda yakin ingin menghapus <strong><?= $trow['treatment_name'] ?></strong> ?
 													</div>
 													<div class="modal-footer" style="border:none;">
-														<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-														<button type="submit" name="deletebtn" class="btn btn-sm btn-danger">Delete</button>
+														<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
+														<button type="submit" name="deletebtn" class="btn btn-sm btn-danger">Hapus</button>
 													</div>
 												</form>
 											</div>

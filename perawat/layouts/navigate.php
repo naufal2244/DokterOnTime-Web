@@ -13,14 +13,14 @@
                 <!-- Upper -->
                 <p class="sidebar-heading px-3 pb-1 mb-0">Main</p>
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'index.php') !== FALSE) {echo 'mm-active';} ?>">
-                    <a href="index.php" class="nav-link"><i class="fas fa-tachometer-alt mr-3 fa-fw"></i>Dashboard</a>
+                    <a href="index.php" class="nav-link"><i class="fas fa-tachometer-alt mr-3 fa-fw"></i>Beranda</a>
                 </li>
-                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'doctor.php') !== FALSE) {echo 'mm-active';} ?>">
+                <!-- <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'doctor.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="doctor.php" class="nav-link"><i class="fas fa-stethoscope mr-3 fa-fw"></i>Profile</a>
                 </li>
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'patient-list.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="patient-list.php" class="nav-link" ><i class="fas fa-user-injured mr-3 fa-fw"></i>Obat</a>
-                </li>
+                </li> -->
            
             </ul>
         </div>

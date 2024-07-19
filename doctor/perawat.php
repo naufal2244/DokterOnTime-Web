@@ -104,7 +104,6 @@ include('./includes/session.inc.php');
                                     <?php for ($i = 1; $i <= 15; $i++) : ?>
                                         <option value="<?= $i ?>">Sesi <?= $i ?> (<?= sprintf('%02d:00 - %02d:00', 8 + $i - 1, 9 + $i - 1) ?>)</option>
                                     <?php endfor; ?>
-                                    <option value="16">Sesi 16 (22:00 - 23:00)</option>
                                 </select>
                             </div>
                         </div>

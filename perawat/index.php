@@ -1,8 +1,14 @@
 <?php
-
+session_start();
 require_once('../config/autoload.php');
 include('./includes/path.inc.php');
 include('./includes/session.inc.php');
+
+// Periksa apakah perawat sudah login
+if (!isset($_SESSION['PerawatRoleLoggedIn']) || $_SESSION['PerawatRoleLoggedIn'] != 1) {
+    header("Location: login_perawat.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -104,7 +110,6 @@ include('./includes/session.inc.php');
                                     <?php for ($i = 1; $i <= 15; $i++) : ?>
                                         <option value="<?= $i ?>">Sesi <?= $i ?> (<?= sprintf('%02d:00 - %02d:00', 8 + $i - 1, 9 + $i - 1) ?>)</option>
                                     <?php endfor; ?>
-                                    <option value="16">Sesi 16 (22:00 - 23:00)</option>
                                 </select>
                             </div>
                         </div>

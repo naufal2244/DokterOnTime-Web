@@ -30,7 +30,7 @@ require_once('./includes/session.inc.php');
                         <?php
                         function headerTable()
                         {
-                            $header = array("App ID #", "Patient", "App Date", "Time", "Treatment Type", "Confirmation", "Action");
+                            $header = array("ID Janji #", "Pasien", "Tanggal Janji", "Waktu", "Jenis Perawatan", "Konfirmasi", "Aksi");
                             $arrlen = count($header);
                             for ($i = 0; $i < $arrlen; $i++) {
                                 echo "<th>" . $header[$i] . "</th>" . PHP_EOL;

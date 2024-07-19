@@ -2,6 +2,7 @@
 require_once('../config/autoload.php');
 include('includes/path.inc.php');
 include('includes/session.inc.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

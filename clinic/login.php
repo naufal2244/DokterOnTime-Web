@@ -15,34 +15,34 @@ include('./includes/path.inc.php');
         <div class="login-wrap mx-auto">
             <div class="login-head">
                 <h4><?php echo $BRAND_NAME; ?></h4>
-                <p>Hello there, Sign into your Account!</p>
+                <p>Halo, Masuk ke Akun Anda!</p>
+                <p>Klinik</p>
             </div>
             <div class="login-body">
                 <form name="login_form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="text" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <label for="inputEmail">Alamat Email</label>
+                        <input type="text" name="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Masukkan email">
+                        <small id="emailHelp" class="form-text text-muted">Kami tidak akan membagikan email Anda kepada siapapun.</small>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        <label for="inputPassword">Kata Sandi</label>
+                        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Kata Sandi">
                     </div>
                     <div class="mb-3">
-                        <a href="forgot.php">Forgot Password?</a>
+                        <a href="forgot.php">Lupa Kata Sandi?</a>
                     </div>
-                    <button type="submit" name="login_btn" class="btn btn-primary btn-block button">Log In</button>
+                    <button type="submit" name="login_btn" class="btn btn-primary btn-block button">Masuk</button>
                 </form>
             </div>
             <div class="login-footer">
-                <p class="text-muted">Don't have an account? <a href="register.php">Sign up</a></p>
+                <p class="text-muted">Belum punya akun? <a href="register.php">Daftar</a></p>
             </div>
         </div>
     </div>
 </body>
 <?php include JS_PATH; ?>
 </html>
-
 <?php
 if (isset($_POST['login_btn']))
 {
@@ -54,9 +54,9 @@ if (isset($_POST['login_btn']))
     $q = $check->get_result();
     $r = $q->fetch_assoc();
     if (mysqli_num_rows($q) != 1) {
-        echo "<script>Swal.fire({title: 'Error!', text: 'Email & Password Not Exist', type: 'error', confirmButtonText: 'Try Again'})</script>";
-		exit();
-	} else {
+        echo "<script>Swal.fire({title: 'Error!', text: 'Email & Password Tidak Ditemukan', type: 'error', confirmButtonText: 'Coba Lagi'})</script>";
+        exit();
+    } else {
         $token = $r["clinicadmin_token"];
     }
     
@@ -69,18 +69,18 @@ if (isset($_POST['login_btn']))
     $row = $result->fetch_assoc();
 
     if ($inputEmail == "" && empty($inputEmail)) {
-        echo "<script>Swal.fire({title: 'Error!', text: 'Please Enter a Email', type: 'error'}).then(function() { $('#inputEmail').focus(); });</script>";
+        echo "<script>Swal.fire({title: 'Error!', text: 'Silakan Masukkan Email', type: 'error'}).then(function() { $('#inputEmail').focus(); });</script>";
         exit();
     }
 
     if ($inputPassword == "" && empty($inputPassword)) {
-        echo "<script>Swal.fire({title: 'Error!', text: 'Please Enter a Password', type: 'error'}).then(function() { $('#inputPassword').focus(); });</script>";
+        echo "<script>Swal.fire({title: 'Error!', text: 'Silakan Masukkan Kata Sandi', type: 'error'}).then(function() { $('#inputPassword').focus(); });</script>";
         exit();
     }
 
     if ($result->num_rows != 1)
     {
-        echo "<script>Swal.fire({title: 'Error!', text: 'Email & Password Not Exist', type: 'error', confirmButtonText: 'Try Again'})</script>";
+        echo "<script>Swal.fire({title: 'Error!', text: 'Email & Password Tidak Ditemukan', type: 'error', confirmButtonText: 'Coba Lagi'})</script>";
         exit();
     }
     else {

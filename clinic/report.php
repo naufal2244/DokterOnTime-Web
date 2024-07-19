@@ -6,20 +6,19 @@ require_once('./includes/session.inc.php');
 $errors = array();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$datefrom = $conn->real_escape_string($_POST['inputDateFrom']);
-	$dateto = $conn->real_escape_string($_POST['inputDateTo']);
+	$tanggal_dari = $conn->real_escape_string($_POST['inputTanggalDari']);
+	$tanggal_sampai = $conn->real_escape_string($_POST['inputTanggalSampai']);
 
-	if (empty($datefrom)) {
-		array_push($errors, "Date From is required");
+	if (empty($tanggal_dari)) {
+		array_push($errors, "Tanggal Dari harus diisi");
 	}
-	if (empty($dateto)) {
-		array_push($errors, "Date Until is required");
+	if (empty($tanggal_sampai)) {
+		array_push($errors, "Tanggal Sampai harus diisi");
 	}
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
 	<?php include CSS_PATH; ?>
 </head>
@@ -35,20 +34,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						<form name="report_frm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 							<?php echo display_error(); ?>
 							<div class="form-group row">
-								<label for="inputDateFrom" class="col-sm-3 col-form-label text-right">From Date</label>
+								<label for="inputTanggalDari" class="col-sm-3 col-form-label text-right">Dari Tanggal</label>
 								<div class="col-sm-6">
-									<input type="text" name="inputDateFrom" class="form-control form-control-sm" id="datefrom">
+									<input type="text" name="inputTanggalDari" class="form-control form-control-sm" id="tanggal_dari">
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="inputDateTo" class="col-sm-3 col-form-label text-right">To Date</label>
+								<label for="inputTanggalSampai" class="col-sm-3 col-form-label text-right">Sampai Tanggal</label>
 								<div class="col-sm-6">
-									<input type="text" name="inputDateTo" class="form-control form-control-sm" id="dateto">
+									<input type="text" name="inputTanggalSampai" class="form-control form-control-sm" id="tanggal_sampai">
 								</div>
 							</div>
 							<div class="d-flex justify-content-md-center pt-3">
-								<button type="clear" class="btn btn-light btn-sm px-5 mr-2" name="clearbtn">Clear</button>
-								<button type="submit" class="btn btn-primary btn-sm px-5" name="generatebtn">Generate</button>
+								<button type="clear" class="btn btn-light btn-sm px-5 mr-2" name="clearbtn">Bersihkan</button>
+								<button type="submit" class="btn btn-primary btn-sm px-5" name="generatebtn">Buat Laporan</button>
 							</div>
 						</form>
 					</div>
@@ -73,19 +72,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	</script>
 	<script type="text/javascript">
 		$(function() {
-			$('#datefrom').datetimepicker({
+			$('#tanggal_dari').datetimepicker({
 				format: 'YYYY-MM-DD',
 			});
-			$('#dateto').datetimepicker({
+			$('#tanggal_sampai').datetimepicker({
 				format: 'YYYY-MM-DD',
 				useCurrent: false,
 			});
 
-			$('#datefrom').on('dp.change', function(e) {
-				$('#dateto').data('DateTimePicker').minDate(e.date);
+			$('#tanggal_dari').on('dp.change', function(e) {
+				$('#tanggal_sampai').data('DateTimePicker').minDate(e.date);
 			});
-			$('#dateto').on('dp.change', function(e) {
-				$('#datefrom').data('DateTimePicker').maxDate(e.date);
+			$('#tanggal_sampai').on('dp.change', function(e) {
+				$('#tanggal_dari').data('DateTimePicker').maxDate(e.date);
 			});
 
 		});
@@ -95,8 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$.ajax({
 				type: "POST",
 				data: {
-					datefrom: from,
-					dateto: to,
+					tanggal_dari: from,
+					tanggal_sampai: to,
 				},
 				url: 'loadReport.php',
 				dateType: "html",
@@ -110,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	 if (isset($_POST['generatebtn'])) {
 		if (count($errors) == 0) {
 			?><script>
-				loadData('<?=$datefrom?>', '<?= $dateto ?>')
+				loadData('<?=$tanggal_dari?>', '<?= $tanggal_sampai ?>')
 			</script>
 			<?php
 		}

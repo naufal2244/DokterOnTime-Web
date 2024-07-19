@@ -6,13 +6,13 @@ require_once('./includes/session.inc.php');
 $errors = array();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $title = escape_input($_POST['inputTitle']);
-    $content = escape_input($_POST['inputContent']);
+    $title = escape_input($_POST['inputJudul']);
+    $content = escape_input($_POST['inputIsi']);
 
     if (empty($title)) {
-        array_push($errors, "Title is required");
+        array_push($errors, "Judul diperlukan");
     }if (empty($content)) {
-        array_push($errors, "Content is required");
+        array_push($errors, "Isi konten diperlukan");
     }
 
     if (count($errors) == 0) {
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <?php include CSS_PATH; ?>
@@ -46,13 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <form name="announce_frm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                             <?php echo display_error(); ?>
                             <div class="form-group">
-                                <!-- <label for="inputTitle">Title</label> -->
-                                <input type="text" name="inputTitle" class="form-control form-control-sm" id="inputTitle" placeholder="Title">
+                                <!-- <label for="inputTitle">Judul</label> -->
+                                <input type="text" name="inputJudul" class="form-control form-control-sm" id="inputJudul" placeholder="Judul">
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control" name="inputContent" id="inputContent" rows="3" placeholder="New Announcement"></textarea>
+                                <textarea class="form-control" name="inputIsi" id="inputIsi" rows="3" placeholder="Pengumuman Baru"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-sm px-5 pull-right" name="postbtn">Post</button>
+                            <button type="submit" class="btn btn-primary btn-sm px-5 pull-right" name="postbtn">Posting</button>
                         </form>
                     </div>
                 </div>
@@ -70,30 +70,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $diff->d -= $diff->w * 7;
 
             $string = array(
-                'y' => 'year',
-                'm' => 'month',
-                'w' => 'week',
-                'd' => 'day',
-                'h' => 'hour',
-                'i' => 'minute',
-                's' => 'second',
+                'y' => 'tahun',
+                'm' => 'bulan',
+                'w' => 'minggu',
+                'd' => 'hari',
+                'h' => 'jam',
+                'i' => 'menit',
+                's' => 'detik',
             );
             foreach ($string as $k => &$v) {
                 if ($diff->$k) {
-                    $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+                    $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? '' : '');
                 } else {
                     unset($string[$k]);
                 }
             }
 
             if (!$full) $string = array_slice($string, 0, 1);
-            return $string ? implode(', ', $string) . ' ago' : 'just now';
+            return $string ? implode(', ', $string) . ' yang lalu' : 'saat ini';
         }
 
         $table_result = mysqli_query($conn, "SELECT * FROM announcement WHERE clinic_id = " . $clinic_row['clinic_id'] . "");
         $count = mysqli_num_rows($table_result);
         if ($count == 0) {
-            print '<div class="card text-center"><div class="card-body"><h6>No Results Available</h6></div></div>';
+            print '<div class="card text-center"><div class="card-body"><h6>Tidak Ada Hasil</h6></div></div>';
         } else {
             while ($table_row = mysqli_fetch_assoc($table_result)) {
                 echo '<div class="card">

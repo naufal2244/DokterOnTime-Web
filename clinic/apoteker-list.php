@@ -23,7 +23,7 @@ include('./includes/session.inc.php');
                         <?php
                         function headerTable()
                         {
-                            $header = array("Nama Klinik", "Apoteker Email", "Nama Lengkap");
+                            $header = array("Nama Klinik", "Email Apoteker", "Nama Lengkap");
                             $arrlen = count($header);
                             for ($i = 0; $i < $arrlen; $i++) {
                                 echo "<th>" . $header[$i] . "</th>" . PHP_EOL;
@@ -56,11 +56,11 @@ include('./includes/session.inc.php');
                                     }
                                     ?>
                                 </tbody>
-                                <tfoot>
+                                <!-- <tfoot>
                                     <tr>
                                         <?php headerTable(); ?>
                                     </tr>
-                                </tfoot>
+                                </tfoot> -->
                             </table>
                         </div>
                         <!-- End Datatable -->

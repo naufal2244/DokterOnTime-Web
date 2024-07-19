@@ -56,11 +56,11 @@ include('./includes/session.inc.php');
 									}
 									?>
 								</tbody>
-								<tfoot>
+								<!-- <tfoot>
 									<tr>
 										<?php headerTable(); ?>
 									</tr>
-								</tfoot>
+								</tfoot> -->
 							</table>
 						</div>
 						<!-- Akhir tabel data -->

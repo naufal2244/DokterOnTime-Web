@@ -80,7 +80,7 @@ if (isset($_POST['login_btn']))
 
     if ($result->num_rows != 1)
     {
-        echo "<script>Swal.fire({title: 'Error!', text: 'Email & Password Tidak Ditemukan', type: 'error', confirmButtonText: 'Coba Lagi'})</script>";
+        echo "<script>Swal.fire({title: 'Error!', text: 'Email & Kata Sandi Tidak Ditemukan', type: 'error', confirmButtonText: 'Coba Lagi'})</script>";
         exit();
     }
     else {

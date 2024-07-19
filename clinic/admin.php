@@ -11,20 +11,21 @@ if (isset($_POST["savebtn"])) {
     $email      = escape_input($_POST['inputEmailAddress']);
     $contact    = escape_input($_POST['inputContactNumber']);
 
+
     if (empty($name)) {
-        array_push($errors, "Name is required");
+        array_push($errors, "Nama Harus Diisi");
     }
 
     if (empty($email)) {
-        array_push($errors, "Email Address is required");
+        array_push($errors, "Alamat Email Harus Diisi");
     } else {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            array_push($errors, "Invalid email format");
+            array_push($errors, "Format Email Tidak Valid");
         }
     }
 
     if (empty($contact)) {
-        array_push($errors, "Contact Number is required");
+        array_push($errors, "Nomor Telepon harus Diisi");
     }
 }
 
@@ -44,17 +45,17 @@ if (isset($_POST["resetbtn"])) {
     $password = decrypt($row["clinicadmin_password"], $token);
 
     if (empty($oldpass)) {
-		array_push($errors, "Password is required");
+		array_push($errors, "Password Lama Harus Diisi");
 	} elseif (empty($newpass)) {
-		array_push($errors, "New Password is required");
+		array_push($errors, "Password Baru Harus Diisi");
 	} elseif (empty($conpass)) {
-		array_push($errors, "Confirm Password is required");
+		array_push($errors, "Konfirmasi Password Harus Diisi");
 	} elseif (md5($oldpass) != $password) {
-		array_push($errors, "Incorrect Password");
+		array_push($errors, "Password Lama Salah");
 	} elseif (!empty($newpass)) {
         password_validation($newpass);
     } elseif ($newpass != $conpass) {
-        array_push($errors, "Password not Equal");
+        array_push($errors, "Password Baru Tidak Sama");
     }
 }
 ?>
@@ -75,7 +76,7 @@ if (isset($_POST["resetbtn"])) {
                 $stmt2->bind_param("ssi", $en_pass, $newtoken, $id);
                 if ($stmt2->execute()) {
                     echo '<script>
-                        Swal.fire({ title: "Great!", text: "Password Reset Successfully!", type: "success" }).then((result) => {
+                        Swal.fire({ title: "Great!", text: "Reset Password Berhasil!", type: "success" }).then((result) => {
                             if (result.value) { window.location.href = "admin.php"; }
                         })
                         </script>';
@@ -97,31 +98,31 @@ if (isset($_POST["resetbtn"])) {
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputAdminID">Admin ID #</label>
+                                    <label for="inputAdminID">ID Admin #</label>
                                     <input type="text" name="inputAdminID" class="form-control" id="inputAdminID" value="<?php echo $admin_row["clinicadmin_id"]; ?>" disabled>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputFirstName">Name</label>
-                                    <input type="text" name="inputName" class="form-control" id="inputName" placeholder="Enter Name" value="<?php echo $admin_row["clinicadmin_name"]; ?>">
+                                    <label for="inputFirstName">Nama</label>
+                                    <input type="text" name="inputName" class="form-control" id="inputName" placeholder="Masukkan Nama" value="<?php echo $admin_row["clinicadmin_name"]; ?>">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputContactNumber">Contact Number</label>
-                                    <input type="text" name="inputContactNumber" class="form-control" id="inputContactNumber" placeholder="Enter Phone Number" value="<?php echo $admin_row["clinicadmin_contact"]; ?>">
+                                    <label for="inputContactNumber">Nomor Kontak</label>
+                                    <input type="text" name="inputContactNumber" class="form-control" id="inputContactNumber" placeholder="Masukkan Nomor Telepon" value="<?php echo $admin_row["clinicadmin_contact"]; ?>">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="inputEmailAddress">Email Address</label>
-                                    <input type="text" name="inputEmailAddress" class="form-control" id="inputEmailAddress" placeholder="Enter Email Address" value="<?php echo $admin_row["clinicadmin_email"]; ?>">
+                                    <label for="inputEmailAddress">Alamat Email</label>
+                                    <input type="text" name="inputEmailAddress" class="form-control" id="inputEmailAddress" placeholder="Masukkan Alamat Email" value="<?php echo $admin_row["clinicadmin_email"]; ?>">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3 mt-3">
-                        <button type="submit" class="btn btn-primary btn-block" name="savebtn">Save</button>
+                        <button type="submit" class="btn btn-primary btn-block" name="savebtn">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -133,17 +134,17 @@ if (isset($_POST["resetbtn"])) {
                     <div class="card">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="inputOldPassword">Old Password</label>
-                                <input type="password" name="inputOldPassword" class="form-control" id="inputOldPassword" placeholder="Enter Old Password">
+                                <label for="inputOldPassword">Password Lama</label>
+                                <input type="password" name="inputOldPassword" class="form-control" id="inputOldPassword" placeholder="Masukkan Password Lama">
                             </div>
                             <div class="form-group">
-                                <label for="inputNewPassword">New Password</label>
-                                <input type="password" name="inputNewPassword" class="form-control" id="inputNewPassword" placeholder="Enter New Password">
-                                <small class="form-text text-muted" id="passwordHelp">Use 8 or more characters with a mix of letters, numbers & symbols</small>
+                                <label for="inputNewPassword">Password Baru</label>
+                                <input type="password" name="inputNewPassword" class="form-control" id="inputNewPassword" placeholder="Masukkan Password Baru">
+                                <small class="form-text text-muted" id="passwordHelp">Gunakan 8 karakter atau lebih dengan kombinasi antara huruf, angka, dan simbol</small>
                             </div>
                             <div class="form-group">
-                                <label for="inputConfirmPassword">Confirm New Password</label>
-                                <input type="password" name="inputConfirmPassword" class="form-control" id="inputConfirmPassword" placeholder="Enter Confirm New Password">
+                                <label for="inputConfirmPassword">Konfirmasi Password</label>
+                                <input type="password" name="inputConfirmPassword" class="form-control" id="inputConfirmPassword" placeholder="Konfirmasi Password Baru">
                             </div>
                         </div>
                     </div>
@@ -169,7 +170,7 @@ if (isset($_POST["savebtn"])) {
         if ($stmt->execute()) {
             $_SESSION['sess_clinicadminemail'] = $email;
             echo '<script>
-            Swal.fire({ title: "Great!", text: "Update Successfully!", type: "success" }).then((result) => {
+            Swal.fire({ title: "Sempurna!", text: "Berhasil mengupdate profil!", type: "success" }).then((result) => {
                 if (result.value) { window.location.href = "admin.php"; }
             });
             </script>';
@@ -177,6 +178,14 @@ if (isset($_POST["savebtn"])) {
             echo "Error: " . $query . "<br>" . mysqli_error($conn);
         }
         $stmt->close();
+    } else {
+        echo '<script>
+        Swal.fire({
+            title: "Perhatian!",
+            text: "Gagal mengupdate profil. Silakan coba lagi.",
+            type: "error"
+        });
+        </script>';
     }
 }
 ?>

@@ -106,23 +106,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   
     
     if (empty($password)) {
-        $errPassword = "Password is required";
+        $errPassword = "Password harus diisi";
         $classPassword = "invalid";
     } else if (strlen($password) < 6) {
-        $errPassword = "Password must be at least 6 characters long";
+        $errPassword = "Password harus memiliki panjang minimal 6 karakter";
         $classPassword = "invalid";
     }
 
     if (empty($confirm_password)) {
-        $errConfirmPassword = "Please confirm the password";
+        $errConfirmPassword = "Mohon konfirmasi password";
         $classConfirmPassword = "invalid";
     } else if ($password !== $confirm_password) {
-        $errConfirmPassword = "Passwords do not match";
+        $errConfirmPassword = "Password tidak cocok";
         $classConfirmPassword = "invalid";
     }
 
     if (empty($_FILES['inputAvatar']['name'])) {
-        $errImage = "Image is required";
+        $errImage = "Image harus diisi";
         $classImage = "invalid";
     }
 }
@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 
-<body>
+    <body>
     <?php include NAVIGATION; ?>
     <div class="page-content" id="content">
         <?php include HEADER; ?>
@@ -172,12 +172,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="d-flex">
                         <div class="card col-md-9">
                             <div class="card-body">
-                                <!-- Add Doctor -->
+                                <!-- Tambah Dokter -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputClinic">Clinic</label>
+                                        <label for="inputClinic">Klinik</label>
                                         <select name="inputClinic" id="inputClinic" class="form-control selectpicker <?= $classClinic ?>" data-live-search="true">
-                                            <option value="" selected disabled>Choose</option>
+                                            <option value="" selected disabled>Pilih</option>
                                             <?php
                                             $table_result = mysqli_query($conn, "SELECT * FROM clinics");
                                             while ($table_row = mysqli_fetch_assoc($table_result)) {
@@ -190,21 +190,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputFirstName">First Name</label>
-                                        <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Enter First Name">
+                                        <label for="inputFirstName">Nama Depan</label>
+                                        <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Masukkan Nama Depan">
                                         <?php echo $errFName; ?>
                                     </div>
                                     <div class="form-group col-md6">
-                                        <label for="inputLastName">Last Name/Surname</label>
-                                        <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Enter Last Name">
+                                        <label for="inputLastName">Nama Belakang</label>
+                                        <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Masukkan Nama Belakang">
                                         <?php echo $errLName; ?>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputSpeciality">Speciality</label>
+                                        <label for="inputSpeciality">Spesialisasi</label>
                                         <select name="inputSpeciality" id="inputSpeciality" class="form-control selectpicker <?= $classSpec ?>" data-live-search="true">
-                                            <option value="" selected disabled>Choose</option>
+                                            <option value="" selected disabled>Pilih</option>
                                             <?php
                                             $table_result = mysqli_query($conn, "SELECT * FROM speciality");
                                             while ($table_row = mysqli_fetch_assoc($table_result)) {
@@ -215,40 +215,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <?= $errSpec ?>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputYrsExp">Year Experience</label>
-                                        <input type="text" name="inputYrsExp" class="form-control <?= $classYears ?>" id="inputYrsExp" placeholder="Enter Years Experience">
+                                        <label for="inputYrsExp">Tahun Pengalaman</label>
+                                        <input type="text" name="inputYrsExp" class="form-control <?= $classYears ?>" id="inputYrsExp" placeholder="Masukkan Tahun Pengalaman">
                                         <?= $errYears ?>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputFee">Consultant Fees</label>
-                                        <input type="text" name="inputFee" class="form-control <?= $classFee ?>" id="inputFee" placeholder="Enter Consultant Fees">
+                                        <label for="inputFee">Biaya Konsultasi</label>
+                                        <input type="text" name="inputFee" class="form-control <?= $classFee ?>" id="inputFee" placeholder="Masukkan Biaya Konsultasi">
                                         <?= $errFee ?>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputPassword">Password</label>
-                                        <input type="password" name="inputPassword" class="form-control <?= $classPassword ?>" id="inputPassword" placeholder="Enter Password">
+                                        <label for="inputPassword">Kata Sandi</label>
+                                        <input type="password" name="inputPassword" class="form-control <?= $classPassword ?>" id="inputPassword" placeholder="Masukkan Kata Sandi">
                                         <?= $errPassword ?>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputConfirmPassword">Confirm Password</label>
-                                        <input type="password" name="inputConfirmPassword" class="form-control <?= $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Confirm Password">
+                                        <label for="inputConfirmPassword">Konfirmasi Kata Sandi</label>
+                                        <input type="password" name="inputConfirmPassword" class="form-control <?= $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Konfirmasi Kata Sandi">
                                         <?= $errConfirmPassword ?>
                                     </div>
                                 </div>
-                                <!-- End Add Doctor -->
+                                <!-- Akhir Tambah Dokter -->
                             </div>
                         </div>
 
-                        <div class="card col-md-3">
+<div class="card col-md-3">
                             <div class="card-body">
                                 <div class="imageupload">
                                     <small class="text-danger"><?= $errImage ?></small>
-                                    <img src="../assets/img/empty/empty-avatar.jpg" id="output" class="img-fluid thumbnail <?= $classImage ?>" alt="Doctor-Avatar" title="Doctor-Avatar">
+                                    <img src="../assets/img/empty/empty-avatar.jpg" id="output" class="img-fluid thumbnail <?= $classImage ?>" alt="Dokter-Avatar" title="Dokter-Avatar">
                                     <div class="file-tab">
                                         <label class="btn btn-sm btn-primary btn-block btn-file">
-                                            <span>Browse</span>
+                                            <span>Cari</span>
                                             <input type="file" name="inputAvatar" id="inputAvatar" accept="image/*" onchange="openFile(event)">
                                         </label>
                                     </div>
@@ -273,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="card">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="inputLanguages">Languages Spoke</label><small class="text-muted m-2">Select Multiple Languages You Spoked.</small>
+                                <label for="inputLanguages">Bahasa yang Dibicarakan</label><small class="text-muted m-2">Pilih Bahasa yang Anda Bicarakan.</small>
                                 <div class="row">
                                     <?php $i = 1;
                                     foreach ($select_lang as $lang_value) {
@@ -288,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputDesc">Describe</label>
+                                <label for="inputDesc">Deskripsi</label>
                                 <textarea class="form-control" id="inputDesc" name="inputDesc" rows="3"></textarea>
                             </div>
                         </div>
@@ -298,25 +298,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputDOB">Date of Birth</label>
-                                    <input type="text" name="inputDOB" class="form-control" id="datepicker" placeholder="Enter DOB">
+                                    <label for="inputDOB">Tanggal Lahir</label>
+                                    <input type="text" name="inputDOB" class="form-control" id="datepicker" placeholder="Masukkan Tanggal Lahir">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputGender">Gender</label>
+                                    <label for="inputGender">Jenis Kelamin</label>
                                     <div class="row">
                                         <div class="col">
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input type="radio" id="inputGenderMale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="male">
-                                                <label class="custom-control-label" for="inputGenderMale">Male</label>
+                                                <label class="custom-control-label" for="inputGenderMale">Laki-laki</label>
                                                 <?= $errGender ?>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input type="radio" id="inputGenderFemale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="female">
-                                                <label class="custom-control-label" for="inputGenderFemale">Female</label>
+                                                <label class="custom-control-label" for="inputGenderFemale">Perempuan</label>
                                                 <?= $errGender ?>
                                             </div>
                                         </div>
@@ -325,14 +325,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputContactNumber">Contact Number</label>
-                                <input type="tel" name="inputContactNumber" class="form-control <?= $classContact ?>" id="inputContactNumber" placeholder="Enter Phone Number" pattern="[0-9]*" inputmode="numeric">
+                                <label for="inputContactNumber">Nomor Kontak</label>
+                                <input type="tel" name="inputContactNumber" class="form-control <?= $classContact ?>" id="inputContactNumber" placeholder="Masukkan Nomor Telepon" pattern="[0-9]*" inputmode="numeric">
                                 <?= $errContact ?>
                             </div>
 
                                 <div class="form-group col-md-6">
-                                    <label for="inputEmailAddress">Email Address</label>
-                                    <input type="text" name="inputEmailAddress" class="form-control <?= $classEmail ?>" id="inputEmailAddress" placeholder="Enter Email Address">
+                                    <label for="inputEmailAddress">Alamat Email</label>
+                                    <input type="text" name="inputEmailAddress" class="form-control <?= $classEmail ?>" id="inputEmailAddress" placeholder="Masukkan Alamat Email">
                                     <?= $errEmail ?>
                                 </div>
                             </div>
@@ -341,10 +341,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="row">
                         <div class="col-6">
-                            <button type="reset" class="btn btn-outline-secondary btn-block">Clear</button>
+                            <button type="reset" class="btn btn-outline-secondary btn-block">Bersihkan</button>
                         </div>
                         <div class="col-6">
-                            <button type="submit" class="btn btn-primary btn-block" name="savebtn">Add Doctor</button>
+                            <button type="submit" class="btn btn-primary btn-block" name="savebtn">Tambah Dokter</button>
                         </div>
                     </div>
                 </form>
@@ -384,7 +384,7 @@ if (isset($_POST["savebtn"])) {
             $filename = $_FILES['inputAvatar']['name'];
             $ext = pathinfo($filename, PATHINFO_EXTENSION);
             if (!in_array($ext, $allowed)) {
-                echo "<script>Swal.fire('Oops...','Only can be image!','error')</script>";
+                echo "<script>Swal.fire('Upss...','Hanya dapat format gambar!','error')</script>";
                 exit();
             } else {
                 if (!empty($_FILES['inputAvatar']['name'])) {
@@ -399,7 +399,7 @@ if (isset($_POST["savebtn"])) {
                         move_uploaded_file($_FILES['inputAvatar']['tmp_name'], $path);
                     }
                 } else {
-                    echo "<script>Swal.fire('Oops...','You should select a file to upload!','error')</script>";
+                    echo "<script>Swal.fire('Upss...','Anda harus memilih file untuk diunggah!','error')</script>";
                     exit();
                 }
             }
@@ -416,7 +416,7 @@ if (isset($_POST["savebtn"])) {
         if ($stmt->execute()) {
 
             $last_id = $conn->insert_id;
-            mysqli_query($conn,"INSERT INTO treatment_type (treatment_name, doctor_id) VALUES ('New Patient', $last_id) ");
+            mysqli_query($conn,"INSERT INTO treatment_type (treatment_name, doctor_id) VALUES ('Pasien Baru', $last_id) ");
 
             $selector = bin2hex(random_bytes(8));
             $validator = random_bytes(32);
@@ -435,12 +435,12 @@ if (isset($_POST["savebtn"])) {
 
             if (sendmail($email, $mail['acc_subject'], $mail['acc_title'], $mail['acc_content'], $mail['acc_button'], $link, $token)) {
                 echo '<script>
-                Swal.fire({ title: "Great!", text: "New Doctor Added!", type: "success" }).then((result) => {
+                Swal.fire({ title: "Hore!", text: "Dokter Baru Ditambahkan!", type: "success" }).then((result) => {
                     if (result.value) { window.location.href = "doctor-list.php"; }
                 });
                 </script>';
             } else {
-                echo 'Something Wrong';
+                echo 'Ada yang salah';
             }
             // Tambahkan entri untuk tabel doctor_availabilities
             for ($day_id = 1; $day_id <= 7; $day_id++) {
@@ -452,7 +452,7 @@ if (isset($_POST["savebtn"])) {
                 }
             }
         } else {
-            echo 'Something Wrong';
+            echo 'Ada yang salah';
         }
         $stmt->close();
     }

@@ -18,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	$clinicadmin_id = $r['clinicadmin_id'];
 
 	if (empty($email)) {
-		array_push($errors, "Email Address is required");
+		array_push($errors, "Alamat Email diperlukan");
 	} else if ($result->num_rows != 1) {
-		array_push($errors, "Email Not Exist");
+		array_push($errors, "Alamat Email tidak terdaftar");
 	} else {
 		email_validation($email);
 	}
@@ -39,21 +39,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         <div class="login-wrap mx-auto">
             <div class="login-head">
                 <h4><?php echo $BRAND_NAME; ?></h4>
-                <p>Forgot Password</p>
+                <p>Lupa Kata Sandi</p>
             </div>
             <div class="login-body">
                 <form name="forgot_form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 				<?= display_error(); ?>
                     <div class="form-group">
-                        <label for="inputEmailAddress">Email address</label>
-                        <input type="email" name="inputEmailAddress" class="form-control" id="inputEmailAddress" aria-describedby="emailHelp" placeholder="example@email.com">
-                        <small id="emailHelp" class="form-text text-muted">Provide us the email id/ mobile of your Clinic ME account<br> We will send you an email with instructions to reset your password.</small>
+                        <label for="inputEmailAddress">Alamat Email</label>
+                        <input type="email" name="inputEmailAddress" class="form-control" id="inputEmailAddress" aria-describedby="emailHelp" placeholder="contoh@email.com">
+                        <small id="emailHelp" class="form-text text-muted">Berikan kami alamat email/nomor ponsel akun Anda<br> Kami akan mengirimkan email instruksi untuk mereset kata sandi Anda.</small>
                     </div>
-                    <button type="submit" name="forgotbtn" class="btn btn-primary btn-block button">Send Me</button>
+                    <button type="submit" name="forgotbtn" class="btn btn-primary btn-block button">Kirimkan</button>
                 </form>
             </div>
             <div class="login-footer">
-                <p class="text-muted"><a href="login.php"><i class="fa fa-long-arrow-alt-left"></i> Back</a></p>
+                <p class="text-muted"><a href="login.php"><i class="fa fa-long-arrow-alt-left"></i> Kembali</a></p>
             </div>
         </div>
     </div>
@@ -85,9 +85,9 @@ if (isset($_POST["forgotbtn"])) {
 		$stmt->close();
 		
 		if (sendmail($userEmail, $mail['fg_subject'], $mail['fg_title'], $mail['fg_content'], $mail['fg_button'], $link, "")) {
-			echo "<script>Swal.fire('Great !','Your Password Has Been Sent to Your Email','success')</script>";
+			echo "<script>Swal.fire('Great !','Kata Sandi Anda Telah Dikirim ke Email Anda','success')</script>";
 		} else {
-			echo "<script>Swal.fire('Oops...','Failed to Recover Your Password! Try Again!','error')</script>";
+			echo "<script>Swal.fire('Oops...','Gagal Mengembalikan Kata Sandi Anda! Coba Lagi!','error')</script>";
 		}
 	}
 	$forgotstmt->close();

@@ -39,9 +39,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         array_push($errors, "Konfirmasi Password diperlukan");
     }
 
-   
-}
+    if (count($errors) == 0) {
+        $date_created = date('Y-m-d H:i:s'); // Assuming date_created should be the current date-time
 
+        $stmt = $conn->prepare("INSERT INTO clinics (clinic_name, date_created) VALUES (?, ?)");
+        $stmt->bind_param("ss", $name, $date_created);
+        if ($stmt->execute()) {
+            $last_id = $stmt->insert_id;
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        $stmt->close();
+
+        $token = generateCode(22);
+        $en_pass = encrypt(md5($password), $token);
+
+        $stmt = $conn->prepare("INSERT INTO clinic_manager (clinicadmin_name, clinicadmin_email, clinicadmin_password, clinicadmin_token, clinicadmin_contact, date_created, clinic_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssss", $manager, $email, $en_pass, $token, $contact, $date_created, $last_id);
+
+        if ($stmt->execute()) {
+            $_SESSION['sess_clinicadminemail'] = $email;
+            $_SESSION['loggedin'] = 1;
+            header("Location: clinic-register.php");
+            exit();
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -50,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <?php include CSS_PATH; ?>
     <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
 <body>
@@ -63,31 +91,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <form name="login_form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php echo display_error(); ?>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Nama Klinik</label>
+                        <label for="inputClinicName">Nama Klinik</label>
                         <input type="text" name="inputClinicName" class="form-control" id="inputClinicName" placeholder="Nama Klinik">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputManagerName">Nama Manajer Klinik</label>
+                        <label for="inputManagerName">Nama Manajer Klinik</label>
                         <input type="text" name="inputManagerName" class="form-control" id="inputManagerName" placeholder="John Doe">
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="exampleInputEmail1">Alamat Email</label>
+                            <label for="inputEmail">Alamat Email</label>
                             <input type="text" name="inputEmail" class="form-control" id="inputEmail" placeholder="example@address.com">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="exampleInputContact">Nomor Kontak</label>
+                            <label for="inputContact">Nomor Kontak</label>
                             <input type="text" name="inputContact" class="form-control" id="inputContact" placeholder="01012345678">
                         </div>
                     </div>
                     <div class="form-row mb-2">
                         <div class="form-group col-md-6">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" name="inputPassword" class="form-control" id="inputPassword" placeholder="Masukkan Password" data-toggle="popover" data-placement="left" data-content="Password harus berisi minimal 8 karakter, termasuk huruf besar, huruf kecil, dan angka">
+                            <label for="inputPassword">Password</label>
+                            <div class="input-group">
+                                <input type="password" name="inputPassword" class="form-control" id="inputPassword" placeholder="Masukkan Password" data-toggle="popover" data-placement="left" data-content="Password harus berisi minimal 8 karakter, termasuk huruf besar, huruf kecil, dan angka">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="togglePassword('inputPassword');">
+                                        <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="exampleInputPassword1">Konfirmasi Password</label>
-                            <input type="password" name="inputConfirmPassword" class="form-control" id="inputConfirmPassword" placeholder="Masukkan Ulang Password">
+                            <label for="inputConfirmPassword">Konfirmasi Password</label>
+                            <div class="input-group">
+                                <input type="password" name="inputConfirmPassword" class="form-control" id="inputConfirmPassword" placeholder="Masukkan Ulang Password">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="togglePassword('inputConfirmPassword');">
+                                        <i class="fas fa-eye" id="toggleConfirmPasswordIcon"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <button type="submit" name="registerbtn" class="btn btn-primary btn-block button">Buat Akun</button>
@@ -103,45 +145,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $(document).ready(function() {
             $('[data-toggle="popover"]').popover();
         });
+
+        function togglePassword(fieldId) {
+            var field = document.getElementById(fieldId);
+            var icon = document.querySelector(`#${fieldId} + .input-group-append .fas`);
+            if (field.type === "password") {
+                field.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                field.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
     </script>
 </body>
 
 </html>
-
-<?php
-if (isset($_POST['registerbtn'])) {
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-
-    if (count($errors) == 0) {
-        $stmt = $conn->prepare("INSERT INTO clinics (clinic_name, date_created) VALUES (?, ?)");
-        $stmt->bind_param("ss", $name, $date_created);
-        if ($stmt->execute()) {
-            $last_id = mysqli_insert_id($conn);
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
-        $stmt->close();
-
-        $token = generateCode(22);
-        $en_pass = encrypt(md5($password), $token);
-        
-        $stmt = $conn->prepare("INSERT INTO clinic_manager (clinicadmin_name, clinicadmin_email, clinicadmin_password, clinicadmin_token, clinicadmin_contact, date_created, clinic_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $manager, $email, $en_pass, $token, $contact, $date_created, $last_id);
-
-       
-
-        if ($stmt->execute() ) {
-            $_SESSION['sess_clinicadminemail'] = $email;
-            $_SESSION['loggedin'] = 1;
-            header("Location: clinic-register.php");
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
-
-        $stmt->close();
-        
-    }
-}
-?>

@@ -16,4 +16,3 @@ $perawat_row = $perawat_result->fetch_assoc();
 if (!$perawat_row) {
     die('Email perawat tidak valid.');
 }
-

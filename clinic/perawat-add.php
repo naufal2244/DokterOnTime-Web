@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errPassword = "Password is required";
         $classPassword = "invalid";
     } else if (strlen($password) < 6) {
-        $errPassword = "Password must be at least 6 characters long";
+        $errPassword = "Kata sandi harus terdiri dari minimal 6 karakter";
         $classPassword = "invalid";
     }
 
@@ -102,14 +102,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->execute()) {
             $success = true; // Set success flag to true
         } else {
-            echo 'Something went wrong';
+            echo "Error: " . $stmt->error . "<br>";
         }
         $stmt->close();
     }
 }
 
 // Fetch doctors' data to populate the dropdown
-$stmt2 = $conn->prepare("SELECT doctor_id, doctor_firstname, doctor_lastname FROM doctors");
+$stmt2 = $conn->prepare("SELECT doctor_id, doctor_firstname, doctor_lastname FROM doctors WHERE clinic_id = ?");
+$stmt2->bind_param("i", $clinic_id);
 $stmt2->execute();
 $doctors = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt2->close();
@@ -175,7 +176,7 @@ $stmt2->close();
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputPassword">Password</label>
+                                        <label for="inputPassword">Sandi</label>
                                         <div class="input-group">
                                             <input type="password" name="inputPassword" class="form-control <?php echo $classPassword ?>" id="inputPassword" placeholder="Enter Password">
                                             <div class="input-group-append">
@@ -187,7 +188,7 @@ $stmt2->close();
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputConfirmPassword">Confirm Password</label>
+                                        <label for="inputConfirmPassword">Konfirmasi Sandi</label>
                                         <div class="input-group">
                                             <input type="password" name="inputConfirmPassword" class="form-control <?php echo $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Confirm Password">
                                             <div class="input-group-append">
@@ -206,7 +207,7 @@ $stmt2->close();
 
                     <div class="row">
                         <div class="col-6">
-                            <button type="reset" class="btn btn-outline-secondary btn-block">Bersihkan</button>
+                            <button type="reset" class="btn btn-outline-secondary btn-block">Bersihkan Input</button>
                         </div>
                         <div class="col-6">
                             <button type="submit" class="btn btn-primary btn-block" name="savebtn">Tambah Perawat</button>
@@ -229,6 +230,14 @@ $stmt2->close();
                 if (result.value) {
                     window.location.href = "perawat-list.php";
                 }
+            });
+        </script>
+    <?php elseif (!empty($errPassword) && strlen($password) < 6) : ?>
+        <script>
+            Swal.fire({
+                title: "Kesalahan!",
+                text: "Kata sandi harus terdiri dari minimal 6 karakter",
+                icon: "error"
             });
         </script>
     <?php endif; ?>

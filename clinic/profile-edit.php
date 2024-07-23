@@ -82,12 +82,17 @@ $close_times[1] = $weekdays['close_time'];
 			
 				$opensweek = escape_input($_POST["inputOpensHourWeek"]);
 				$closeweek = escape_input($_POST["inputCloseHourWeek"]);
+
+
+
 			
 				$openssat = escape_input($_POST["inputOpensHourSat"]);
 				$closesat = escape_input($_POST["inputCloseHourSat"]);
 			
 				$openssun = escape_input($_POST["inputOpensHourSun"]);
 				$closesun = escape_input($_POST["inputCloseHourSun"]);
+
+
 			
 				$address = escape_input($_POST["inputAddress"]);
 				$city = escape_input($_POST["inputCity"]);
@@ -174,8 +179,8 @@ $close_times[1] = $weekdays['close_time'];
 				}
 			
 				if (multi_empty($errName,  $errURL, $errEmail, $errAddress, $errCity, $errState, $errZipcode)) {
-					$clinicstmt = $conn->prepare("UPDATE clinics SET clinic_name = ?, clinic_email = ?, clinic_url = ?,  clinic_address = ?, clinic_city = ?, clinic_state = ?, clinic_zipcode = ? WHERE clinic_id = ?");
-					$clinicstmt->bind_param("sssssssi", $clinic_name, $email, $url,  $address, $city, $state, $zipcode, $clinic_row['clinic_id']);
+					$clinicstmt = $conn->prepare("UPDATE clinics SET clinic_name = ?, clinic_email = ?, clinic_url = ?, clinic_contact = ?, clinic_address = ?, clinic_city = ?, clinic_state = ?, clinic_zipcode = ? WHERE clinic_id = ?");
+					$clinicstmt->bind_param("ssssssssi", $clinic_name, $email, $url, $contact, $address, $city, $state, $zipcode, $clinic_row['clinic_id']);
 			
 					// Inisialisasi status eksekusi
     $update_success = true;
@@ -217,7 +222,7 @@ $close_times[1] = $weekdays['close_time'];
 
     if ($clinicstmt->execute() && $update_success) {
         echo '<script>
-            Swal.fire({ title: "Great!", text: "Record Updated!", type: "success" }).then((result) => {
+            Swal.fire({ title: "Berhasil!", text: "Data Profil Berhasil diupdate!", type: "success" }).then((result) => {
                 if (result.value) { window.location.href = "profile-edit.php"; }
             });
         </script>';
@@ -232,36 +237,36 @@ $close_times[1] = $weekdays['close_time'];
 			<div class="col-12">
 				<form name="regform" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 					<h5 class="card-title mt-3">
-						Clinic Profile Info
+						Profil Rumah Sakit
 					</h5>
 					<div class="card">
 						<div class="card-body">
 							<div class="form-row">
 								<div class="form-group col-md-6">
-									<label for="inputDoctorID">Clinic ID #</label>
+									<label for="inputDoctorID">ID Rumah Sakit #</label>
 									<input type="text" name="inputClinicID" class="form-control" id="inputClinicID" readonly value="<?php echo $clinic_row["clinic_id"]; ?>">
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="form-group col-md-6">
-									<label for="inputClinicName">Clinic Name</label>
+									<label for="inputClinicName">Nama Rumah Sakit</label>
 									<input type="text" name="inputClinicName" class="form-control <?= $className ?>" id="inputClinicName" placeholder="" value="<?php echo $clinic_row["clinic_name"]; ?>">
 									<?= $errName; ?>
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="form-group col-md-6">
-									<label for="inputContact">Contact Number</label>
+									<label for="inputContact">Nomor Rumah Sakit</label>
 									<input type="text" name="inputContact" class="form-control <?= $classContact ?>" id="inputContact" placeholder="" value="<?php echo $clinic_row["clinic_contact"]; ?>">
 									<?= $errContact; ?>
 								</div>
 								<div class="form-group col-md-6">
-									<label for="inputEmailAddress">Email Address</label>
+									<label for="inputEmailAddress">Email Rumah Sakit</label>
 									<input type="text" name="inputEmailAddress" class="form-control <?= $classEmail ?>" id="inputEmailAddress" placeholder="example@address.com" value="<?php echo $clinic_row["clinic_email"]; ?>">
 									<?= $errEmail; ?>
 								</div>
 								<div class="form-group col-md-6">
-									<label for="inputURL">URL</label>
+									<label for="inputURL">Website Rumah Sakit</label>
 									<input type="text" name="inputURL" class="form-control <?= $classURL ?>" id="inputURL" placeholder="www.example.com" value="<?php echo $clinic_row["clinic_url"]; ?>">
 									<?= $errURL; ?>
 								</div>
@@ -271,10 +276,10 @@ $close_times[1] = $weekdays['close_time'];
 
 					<div class="card">
 						<div class="card-body">
-							<span class="card-title">Business Hour</span>
+							<span class="card-title">Jam Kerja</span>
 							<div class="mb-2">
-								<small class="text-muted">When you're closed on a certain day, just leave the hours blank.</small>
-								<small class="text-muted">Remember: 12PM is midday, 12AM is midnight</small>
+								
+								<small class="text-muted">Ingat: 12.00 adalah tengah hari, 00.00 adalah tengah malam</small>
 							</div>
 							
 							<div class="form-group row">
@@ -316,20 +321,20 @@ $close_times[1] = $weekdays['close_time'];
 					<div class="card">
 						<div class="card-body">
 							<div class="form-group">
-								<label for="inputAddress">Address</label>
+								<label for="inputAddress">Alamat</label>
 								<input type="text" name="inputAddress" class="form-control <?= $classAddress ?>" id="inputAddress" placeholder="1234 Main St" value="<?php echo $clinic_row["clinic_address"]; ?>">
 								<?= $errAddress; ?>
 							</div>
 							<div class="form-row">
 								<div class="form-group col-md-6">
-									<label for="inputCity">City</label>
+									<label for="inputCity">Kota</label>
 									<input type="text" name="inputCity" class="form-control <?= $classCity ?>" id="inputCity" value="<?php echo $clinic_row["clinic_city"]; ?>">
 									<?= $errCity; ?>
 								</div>
 								<div class="form-group col-md-4">
-									<label for="inputState">State</label>
+									<label for="inputState">Provinsi</label>
 									<select name="inputState" id="inputState" class="form-control selectpicker <?= $classState ?>" data-live-search="true">
-										<option value="" selected disabled>Choose</option>
+										<option value="" selected disabled>Pilih</option>
 										<?php foreach ($select_state as $state_value) {
 											if ($clinic_row["clinic_state"] == "$state_value") {
 												$selected = "selected";
@@ -342,7 +347,7 @@ $close_times[1] = $weekdays['close_time'];
 									<?= $errState; ?>
 								</div>
 								<div class="form-group col-md-2">
-									<label for="inputZipCode">Zip Code</label>
+									<label for="inputZipCode">Kode Zip</label>
 									<input type="text" name="inputZipCode" class="form-control <?= $classZipcode ?>" id="inputZipCode" value="<?php echo $clinic_row["clinic_zipcode"]; ?>">
 									<?= $errZipcode; ?>
 								</div>
@@ -351,61 +356,12 @@ $close_times[1] = $weekdays['close_time'];
 					</div>
 
 					<div class="mb-3 mt-3">
-						<button type="submit" class="btn btn-primary btn-block" name="savebtn">Save</button>
+						<button type="submit" class="btn btn-primary btn-block" name="savebtn">Simpan</button>
 					</div>
 				</form>
 			</div>
 			
-			<div class="col-12">
-				<hr>
-				<h5 class="card-title mt-3">
-					Clinic Cover Image
-				</h5>
-				<form name="imgform" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
-					<div class="card">
-						<div class="card-body">
-							<div class="input-group mb-3">
-								<div class="custom-file">
-									<input type="file" name="inputImageUpload[]" class="custom-file-input" id="inputImageUpload" multiple>
-									<label class="custom-file-label" for="inputImageUpload">Choose file</label>
-								</div>
-								<div class="input-group-prepend">
-									<button type="submit" name="uploadbtn" class="btn btn-primary btn-sm px-4" id="inputGroupFileImage">Upload</button>
-								</div>
-							</div>
-
-							<div class="row">
-								<?php
-								$table_result = mysqli_query($conn, "SELECT * FROM clinic_images WHERE clinic_id = " . $clinic_row['clinic_id'] . "");
-								$count = mysqli_num_rows($table_result);
-								if ($count == 0) {
-									echo '<div class="col mt-2">
-								<div class="text-center">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
-								<h6 class="mt-2">No Image Available</h6>
-								</div></div>';
-								} else {
-									while ($table_row = mysqli_fetch_assoc($table_result)) {
-										if (!empty($table_row["clinicimg_filename"])) {
-											echo '<div class="col-sm-3">
-										<img src="../uploads/' . $clinic_row["clinic_id"] . '/clinic/' . $table_row["clinicimg_filename"] . '" class="img-thumbnail" width="300px" alt="">
-										</div>';
-										} else {
-											echo '<div class="col-sm-3">
-										<img src="../assets/img/empty/empty-image.png" class="img-thumbnail" width="300px" alt="">
-										</div>';
-										}
-									}
-								}
-								?>
-							</div>
-
-						</div>
-					</div>
-				</form>
-			</div>
-
-		</div>
+			
 		<!-- End Page Content -->
 	</div>
 	<?php include JS_PATH; ?>

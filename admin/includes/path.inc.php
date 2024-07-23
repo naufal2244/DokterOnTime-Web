@@ -1,7 +1,7 @@
 <?php
 // Clinic
 $HOME_PAGE = "index.php";
-$BRAND_NAME = "Clinic UI";
+$BRAND_NAME = "DokterOnTime";
 $PATH = "doclab/admin";
 
 switch ($_SERVER["SCRIPT_NAME"]) {

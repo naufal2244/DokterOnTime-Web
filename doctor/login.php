@@ -34,7 +34,7 @@ include('./includes/path.inc.php');
 				</form>
 			</div>
 			<div class="login-footer">
-				<!-- <a class="text-muted">Don't have an account? <a href="register.php">Sign up</a></p> -->
+			<p class="text-muted"><a href="/doclabWeb/index.php">Kembali ke Halaman Utama</a></p>
 			</div>
 		</div>
 	</div>

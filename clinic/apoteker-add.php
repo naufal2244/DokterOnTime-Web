@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <?php include CSS_PATH; ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         .invalid-feedback {
             color: red;
@@ -134,33 +134,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Page content -->
         <div class="row">
             <div class="col-12">
-                <form name="regform" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+                <form name="regform" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="d-flex">
                         <div class="card col-md-12">
                             <div class="card-body">
                                 <!-- Add Apoteker -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputFirstName">First Name</label>
+                                        <label for="inputFirstName">Nama Depan</label>
                                         <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Enter First Name">
                                         <div class="invalid-feedback"><?php echo $errFName; ?></div>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputLastName">Last Name/Surname</label>
+                                        <label for="inputLastName">Nama Belakang</label>
                                         <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Enter Last Name">
                                         <div class="invalid-feedback"><?php echo $errLName; ?></div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputEmailAddress">Email Address</label>
+                                        <label for="inputEmailAddress">Alamat Email</label>
                                         <input type="text" name="inputEmailAddress" class="form-control <?php echo $classEmail ?>" id="inputEmailAddress" placeholder="Enter Email Address">
                                         <div class="invalid-feedback"><?php echo $errEmail; ?></div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputPassword">Password</label>
+                                        <label for="inputPassword">Sandi</label>
                                         <div class="input-group">
                                             <input type="password" name="inputPassword" class="form-control <?php echo $classPassword ?>" id="inputPassword" placeholder="Enter Password">
                                             <div class="input-group-btn">
@@ -172,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputConfirmPassword">Confirm Password</label>
+                                        <label for="inputConfirmPassword">Konfirmasi Sandi</label>
                                         <div class="input-group">
                                             <input type="password" name="inputConfirmPassword" class="form-control <?php echo $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Confirm Password">
                                             <div class="input-group-btn">
@@ -191,10 +191,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="row">
                         <div class="col-6">
-                            <button type="reset" class="btn btn-outline-secondary btn-block">Clear</button>
+                            <button type="reset" class="btn btn-outline-secondary btn-block">Bersihkan Input</button>
                         </div>
                         <div class="col-6">
-                            <button type="submit" class="btn btn-primary btn-block" name="savebtn">Add Apoteker</button>
+                            <button type="submit" class="btn btn-primary btn-block" name="savebtn">Tambah Apoteker</button>
                         </div>
                     </div>
                 </form>
@@ -239,6 +239,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 icon.classList.remove('fa-eye-slash');
                 icon.classList.add('fa-eye');
             }
+        }
+
+        function validateForm() {
+            var password = document.getElementById("inputPassword").value;
+            if (password.length < 6) {
+                Swal.fire({
+                    title: "Kesalahan!",
+                    text: "Kata sandi harus terdiri dari minimal 6 karakter",
+                    icon: "error"
+                });
+                return false;
+            }
+            return true;
         }
     </script>
 </body>

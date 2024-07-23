@@ -1,6 +1,8 @@
 <?php
 include('../config/autoload.php');
 include('./includes/path.inc.php');
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -32,9 +34,9 @@ include('./includes/path.inc.php');
                     <button type="submit" name="loginbtn" class="btn btn-primary btn-block button">Masuk</button>
                 </form>
             </div>
-            <!-- <div class="login-footer">
-                <a class="text-muted">Tidak punya akun? <a href="register.php">Daftar</a></p>
-            </div> -->
+            <div class="login-footer">
+            <a href="/doclabWeb/index.php">Kembali ke Halaman Utama</a>
+            </div>
         </div>
     </div>
     <?php include JS_PATH; ?>
@@ -59,10 +61,6 @@ if (isset($_POST['loginbtn'])) {
 
     $hashedPassword = $r['password'];
 
-    // Debug output
-    echo "Input Password: $inputPassword <br>";
-    echo "Stored Hashed Password: $hashedPassword <br>";
-
     try {
         if (empty($inputEmail)) {
             echo "<script>Swal.fire({title: 'Error!', text: 'Harap Masukkan Email', icon: 'error'}).then(function() { $('#inputEmail').focus(); });</script>";
@@ -81,6 +79,7 @@ if (isset($_POST['loginbtn'])) {
             $_SESSION['PerawatRoleID'] = $r['perawat_id'];
             $_SESSION['PerawatRoleEmail'] = $r['alamat_email'];
             $_SESSION['PerawatRoleLoggedIn'] = 1;
+            $_SESSION['doctor_id'] = $r['doctor_id']; // Simpan doctor_id dalam sesi
             header("Location: index.php");
         }
     } catch (Exception $error) {

@@ -14,10 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $con_pass = $conn->real_escape_string($_POST['inputConfirmPassword']);
 
     if (empty($name)) {
-        array_push($errors, "Nama Klinik diperlukan");
+        array_push($errors, "Nama Rumah Sakit diperlukan");
     }
     if (empty($manager)) {
-        array_push($errors, "Nama Manajer Klinik diperlukan");
+        array_push($errors, "Nama Manajer Rumah Sakit diperlukan");
     }
     if (empty($email)) {
         array_push($errors, "Email diperlukan");
@@ -85,26 +85,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="login-wrap mx-auto">
             <div class="login-head">
                 <h4><?php echo $BRAND_NAME; ?></h4>
-                <p>Buat Akun! Kelola Klinik Anda</p>
+                <p>Buat Akun! Kelola Rumah Sakit Anda</p>
             </div>
             <div class="login-body">
                 <form name="login_form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php echo display_error(); ?>
                     <div class="form-group">
-                        <label for="inputClinicName">Nama Klinik</label>
-                        <input type="text" name="inputClinicName" class="form-control" id="inputClinicName" placeholder="Nama Klinik">
+                        <label for="inputClinicName">Nama Rumah Sakit</label>
+                        <input type="text" name="inputClinicName" class="form-control" id="inputClinicName" placeholder="Contoh: Rumah Sakit Awal Bros ">
                     </div>
                     <div class="form-group">
-                        <label for="inputManagerName">Nama Manajer Klinik</label>
+                        <label for="inputManagerName">Nama Admin Rumah Sakit</label>
                         <input type="text" name="inputManagerName" class="form-control" id="inputManagerName" placeholder="John Doe">
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="inputEmail">Alamat Email</label>
+                            <label for="inputEmail">Email Admin</label>
                             <input type="text" name="inputEmail" class="form-control" id="inputEmail" placeholder="example@address.com">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="inputContact">Nomor Kontak</label>
+                            <label for="inputContact">Nomor HP Admin</label>
                             <input type="text" name="inputContact" class="form-control" id="inputContact" placeholder="01012345678">
                         </div>
                     </div>

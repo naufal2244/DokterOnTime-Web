@@ -2,6 +2,12 @@
 include('../config/autoload.php');
 include('./includes/path.inc.php');
 include('./includes/session.inc.php');
+
+// // Pastikan session sudah dimulai
+// session_start();
+
+// Ambil clinic_id dari session
+$clinic_id = $_SESSION['clinic_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +29,7 @@ include('./includes/session.inc.php');
                         <?php
                         function headerTable()
                         {
-                            $header = array("Nama Dokter", "Email Perawat", "Nama Perawat");
+                            $header = array("Dokter yang Didampingi", "Email Perawat", "Nama Perawat");
                             $arrlen = count($header);
                             for ($i = 0; $i < $arrlen; $i++) {
                                 echo "<th>" . $header[$i] . "</th>" . PHP_EOL;
@@ -39,14 +45,19 @@ include('./includes/session.inc.php');
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $table_result = mysqli_query($conn, "SELECT 
-                                        CONCAT(d.doctor_firstname, ' ', d.doctor_lastname) AS doctor_name, 
-                                        p.alamat_email, 
-                                        CONCAT(p.nama_depan, ' ', p.nama_belakang) AS nurse_name
-                                    FROM perawat p
-                                    JOIN doctors d ON p.doctor_id = d.doctor_id");
+                                    $query = "SELECT 
+                                                CONCAT(d.doctor_firstname, ' ', d.doctor_lastname) AS doctor_name, 
+                                                p.alamat_email, 
+                                                CONCAT(p.nama_depan, ' ', p.nama_belakang) AS nurse_name
+                                              FROM perawat p
+                                              JOIN doctors d ON p.doctor_id = d.doctor_id
+                                              WHERE d.clinic_id = ?";
+                                    $stmt = $conn->prepare($query);
+                                    $stmt->bind_param("i", $clinic_id);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
 
-                                    while ($table_row = mysqli_fetch_assoc($table_result)) {
+                                    while ($table_row = $result->fetch_assoc()) {
                                         ?><tr>
                                             <td><?= htmlspecialchars($table_row["doctor_name"]); ?></td>
                                             <td><?= htmlspecialchars($table_row["alamat_email"]); ?></td>
@@ -54,6 +65,8 @@ include('./includes/session.inc.php');
                                         </tr>
                                     <?php
                                     }
+
+                                    $stmt->close();
                                     ?>
                                 </tbody>
                                 <!-- <tfoot>

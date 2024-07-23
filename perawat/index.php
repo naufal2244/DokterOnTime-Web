@@ -24,9 +24,7 @@ if (!isset($_SESSION['PerawatRoleLoggedIn']) || $_SESSION['PerawatRoleLoggedIn']
             display: inline-block;
             margin: 2px 0;
             width: 150px;
-            /* Atur lebar tetap */
             text-align: center;
-            /* Pusatkan teks */
         }
 
         .status-belum-periksa {
@@ -84,13 +82,11 @@ if (!isset($_SESSION['PerawatRoleLoggedIn']) || $_SESSION['PerawatRoleLoggedIn']
     <?php include NAVIGATION; ?>
     <div class="page-content" id="content">
         <?php include HEADER; ?>
-        <!-- Page content -->
         <div class="row">
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group">
-                            <!-- Pastikan ada elemen untuk DateTimePicker -->
                             <div id="datepicker"></div>
                             <input type="hidden" name="date" id="selectedDate">
                         </div>
@@ -99,10 +95,8 @@ if (!isset($_SESSION['PerawatRoleLoggedIn']) || $_SESSION['PerawatRoleLoggedIn']
             </div>
 
             <div class="col-md-8">
-                <!-- Card Content -->
                 <div class="card">
                     <div class="card-body">
-                        <!-- Dropdown Pilih Sesi -->
                         <div class="form-group row">
                             <label for="session" class="col-form-label" style="margin-left: 20px;">Pilih Sesi :</label>
                             <div>
@@ -114,7 +108,6 @@ if (!isset($_SESSION['PerawatRoleLoggedIn']) || $_SESSION['PerawatRoleLoggedIn']
                             </div>
                         </div>
 
-                        <!-- Datatable -->
                         <div class="data-tables">
                             <table class="table table-responsive-lg nowrap">
                                 <thead>
@@ -130,13 +123,10 @@ if (!isset($_SESSION['PerawatRoleLoggedIn']) || $_SESSION['PerawatRoleLoggedIn']
                                 </tbody>
                             </table>
                         </div>
-                        <!-- End Datatable -->
                     </div>
                 </div>
-                <!-- End Card Content -->
             </div>
         </div>
-        <!-- End Page Content -->
     </div>
     <?php include JS_PATH; ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -162,7 +152,6 @@ if (!isset($_SESSION['PerawatRoleLoggedIn']) || $_SESSION['PerawatRoleLoggedIn']
                 }
             });
 
-            // Load data for today's date on page load
             var today = moment().format('YYYY-MM-DD');
             $("#selectedDate").val(today);
             loadData(today, $('#session').val());

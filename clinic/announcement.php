@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <?php include CSS_PATH; ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -46,11 +47,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <form name="announce_frm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                             <?php echo display_error(); ?>
                             <div class="form-group">
-                                <!-- <label for="inputTitle">Judul</label> -->
-                                <input type="text" name="inputJudul" class="form-control form-control-sm" id="inputJudul" placeholder="Judul">
+                                <label for="inputTitle">Judul</label>
+                                <input type="text" name="inputJudul" class="form-control form-control-sm" id="inputJudul" placeholder="Contoh: Perubahan Jadwal">
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control" name="inputIsi" id="inputIsi" rows="3" placeholder="Pengumuman Baru"></textarea>
+                                <label for="inputIsi">Isi Pengumman</label>
+                                <textarea class="form-control" name="inputIsi" id="inputIsi" rows="3" placeholder="Contoh: Tanggal 14 Juli besok tutup"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary btn-sm px-5 pull-right" name="postbtn">Posting</button>
                         </form>

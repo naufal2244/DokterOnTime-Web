@@ -11,7 +11,7 @@
         <div class="sidebabr-inner">
             <ul class="nav flex-column bg-white mb-0" id="metismenu">
                 <!-- Upper -->
-                <p class="sidebar-heading px-3 pb-1 mb-0">Main</p>
+                <p class="sidebar-heading px-3 pb-1 mb-0">Utama</p>
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'index.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="index.php" class="nav-link"><i class="fas fa-tachometer-alt mr-3 fa-fw"></i>Beranda</a>
                 </li>

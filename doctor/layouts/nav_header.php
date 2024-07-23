@@ -22,7 +22,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-sm dropdown-toggle btn-profile px-3" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
-                    Hi, <?php echo $doctor_row["doctor_lastname"].' '.$doctor_row["doctor_firstname"]; ?>
+                    Hi, <?php echo $doctor_row["doctor_firstname"].' '.$doctor_row["doctor_lastname"]; ?>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                     <!-- <a href="#" class="dropdown-item"><i class="fa fa-tools mr-2"></i>Settings</a> -->

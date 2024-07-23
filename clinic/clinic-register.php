@@ -22,7 +22,7 @@ $row = mysqli_fetch_assoc($result);
 // Tangani POST request setelah semua pemrosesan di atas
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = "0";
-    $clinic_name = escape_input($_POST["inputClinicName"]);
+    
 
     $weekopen = escape_input($_POST["inputOpensHourWeek"]);
     $weekclose = escape_input($_POST["inputCloseHourWeek"]);
@@ -55,8 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $updatestmt = $conn->prepare("UPDATE clinics SET clinic_name = ?, clinic_email = ?, clinic_url = ?, clinic_contact = ?, clinic_address = ?, clinic_city = ?, clinic_state = ?, clinic_zipcode = ?, clinic_status = ? WHERE clinic_id = ?");
-    $updatestmt->bind_param("ssssssssss", $clinic_name, $email, $url, $contact, $address, $city, $state, $zipcode, $status, $clinic_id);
+    $updatestmt = $conn->prepare("UPDATE clinics SET  clinic_email = ?, clinic_url = ?, clinic_contact = ?, clinic_address = ?, clinic_city = ?, clinic_state = ?, clinic_zipcode = ?, clinic_status = ? WHERE clinic_id = ?");
+    $updatestmt->bind_param("sssssssss",  $email, $url, $contact, $address, $city, $state, $zipcode, $status, $clinic_id);
 
     if ($updatestmt->execute()) {
         // Insert or update business hours for Monday to Friday
@@ -98,6 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <?php include CSS_PATH; ?>
     <link rel="stylesheet" href="../assets/css/clinic/style.css">
+    
 </head>
 <body>
     <div class="container">
@@ -109,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!-- Timeline Steps -->
                 <li class="li">
                     <div class="timestamp">
-                        <span class="frame">Step 1</span>
+                        <span class="frame">Langkah 1</span>
                     </div>
                     <div class="status">
                         <h4>Detail</h4>
@@ -117,18 +118,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </li>
                 <li class="li">
                     <div class="timestamp">
-                        <span class="frame">Step 2</span>
+                        <span class="frame">Langkah 2</span>
                     </div>
                     <div class="status">
-                        <h4>Contact</h4>
+                        <h4>Kontak</h4>
                     </div>
                 </li>
                 <li class="li">
                     <div class="timestamp">
-                        <span class="frame">Step 3</span>
+                        <span class="frame">Langkah 3</span>
                     </div>
                     <div class="status">
-                        <h4>Location</h4>
+                        <h4>Alamat</h4>
                     </div>
                 </li>
             </ul>
@@ -136,19 +137,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="register-wrap">
                 <!-- Details -->
                 <div class="tab">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="inputClinicName">Clinic Name</label>
-                            <input type="text" name="inputClinicName" class="form-control input" id="inputClinicName" placeholder="Enter Name">
-                        </div>
-                    </div>
-                    <label for="inputBusinessHour">Business Hour</label>
+                 
+                    <label for="inputBusinessHour">Jam Kerja Rumah Sakit</label>
                     <div class="mb-3">
-                        <small class="text-muted">When you're closed on a certain day, just leave the hours blank.</small>
+                        <small class="text-muted">Ingat: 12.00 adalah tengah hari, 00.00 adalah tengah malam</small>
                         
                     </div>
                     <div class="form-group row">
-                        <label for="inputBusinessHourWeek" class="col-sm-2 col-form-label text-right">Monday - Friday</label>
+                        <label for="inputBusinessHourWeek" class="col-sm-2 col-form-label text-right">Senin - Jumat</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control timepicker" name="inputOpensHourWeek">
                         </div><span>--</span>
@@ -157,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputBusinessHourSat" class="col-sm-2 col-form-label text-right">Saturday</label>
+                        <label for="inputBusinessHourSat" class="col-sm-2 col-form-label text-right">Sabtu</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control timepicker" name="inputOpensHourSat">
                         </div><span>--</span>
@@ -166,7 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputBusinessHourSun" class="col-sm-2 col-form-label text-right">Sunday</label>
+                        <label for="inputBusinessHourSun" class="col-sm-2 col-form-label text-right">Minggu</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control timepicker" name="inputOpensHourSun">
                         </div><span>--</span>
@@ -180,17 +176,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="tab">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="inputContact">Contact Number</label>
+                            <label for="inputContact">Nomor Rumah Sakit</label>
                             <input type="text" name="inputContact" class="form-control input" id="inputContact" placeholder="Enter Phone Number">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="inputEmailAddress">Email Address*</label>
+                            <label for="inputEmailAddress">Email Rumah Sakit*</label>
                             <input type="text" name="inputEmailAddress" class="form-control input" id="inputEmailAddress" placeholder="Enter Email Address">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="inputURL">URL Link</label>
+                            <label for="inputURL">Website Rumah Sakit</label>
                             <input type="text" name="inputURL" class="form-control input" id="inputURL" placeholder="Enter URL">
                         </div>
                     </div>
@@ -199,25 +195,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!-- Location -->
                 <div class="tab">
                     <div class="form-group">
-                        <label for="inputAddress">Address</label>
+                        <label for="inputAddress">Alamat</label>
                         <input type="text" name="inputAddress" class="form-control input" id="inputAddress" onfocus="geolocate()" oninput="map_marker()" placeholder="1234 Main St">
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="inputCity">City</label>
+                            <label for="inputCity">Kota</label>
                             <input type="text" name="inputCity" class="form-control input" id="inputCity" oninput="map_marker()">
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="inputState">State</label>
+                            <label for="inputState">Provinsi</label>
                             <select name="inputState" id="inputState" class="form-control input" onblur="map_marker()">
-                                <option value="" selected disabled>Choose</option>
+                                <option value="" selected disabled>Pilih</option>
                                 <?php foreach ($select_state as $state_value) {
                                     echo '<option value="' . $state_value . '">' . $state_value . '</option>';
                                 } ?>
                             </select>
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="inputZipCode">Zip Code</label>
+                            <label for="inputZipCode">Kode Zip </label>
                             <input type="text" name="inputZipCode" class="form-control input" id="inputZipCode" oninput="map_marker()">
                         </div>
                     </div>
@@ -243,10 +239,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mt-3">
                 <div class="row">
                     <div class="col-6">
-                        <button type="button" class="btn btn-primary btn-block" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                        <button type="button" class="btn btn-primary btn-block" id="prevBtn" onclick="nextPrev(-1)">Sebelumnya</button>
                     </div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-primary btn-block" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                        <button type="button" class="btn btn-primary btn-block" id="nextBtn" onclick="nextPrev(1)">PPP</button>
                     </div>
                 </div>
             </div>
@@ -278,9 +274,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("prevBtn").style.display = "inline";
             }
             if (n == (x.length - 1)) {
-                document.getElementById("nextBtn").innerHTML = "Submit";
+                document.getElementById("nextBtn").innerHTML = "Simpan";
             } else {
-                document.getElementById("nextBtn").innerHTML = "Next";
+                document.getElementById("nextBtn").innerHTML = "Lanjut";
             }
             // ... and run a function that displays the correct step indicator:
             fixStepIndicator(n)

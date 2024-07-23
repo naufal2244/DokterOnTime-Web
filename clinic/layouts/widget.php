@@ -1,5 +1,5 @@
 <div class="row" style="margin-bottom: -10px;">
-    <div class="col-md-4">
+    <!-- <div class="col-md-4">
         <div class="card">
             <div class="card-body d-flex">
                 <div class="widget-left">
@@ -25,8 +25,8 @@
                 <span class="widget-circle"></span>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
+    </div> -->
+    <div class="col-md-6">
         <div class="card">
             <div class="card-body d-flex">
                 <div class="widget-left">
@@ -50,12 +50,12 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-body d-flex">
                 <div class="widget-left">
                     <div class="widget-titles">
-                        <h6>Total Doctors</h6>
+                        <h6>Total Dokter</h6>
                     </div>
                     <span class="widget-numbers"><?=$tr_row?></span>
                 </div>

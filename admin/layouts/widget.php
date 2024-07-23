@@ -1,10 +1,10 @@
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-body d-flex">
                 <div class="widget-left">
                     <div class="widget-titles">
-                        <h6>Total Clinics</h6>
+                        <h6>Total Rumah Sakit</h6>
                     </div>
                     <span class="widget-numbers"><?= $clinic_count ?></span>
                 </div>
@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <!-- <div class="col-md-4">
         <div class="card">
             <div class="card-body d-flex">
                 <div class="widget-left">
@@ -48,8 +48,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
+    </div> -->
+    <!-- <div class="col-md-4">
         <div class="card">
             <div class="card-body d-flex">
                 <div class="widget-left">
@@ -78,4 +78,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

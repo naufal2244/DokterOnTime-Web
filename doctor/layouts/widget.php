@@ -1,5 +1,5 @@
-<div class="row">
-	<div class="col-md-4">
+<!-- <div class="row">
+	<div class="col-md-6">
 		<div class="card">
 			<div class="card-body d-flex">
 				<div class="widget-left">
@@ -25,13 +25,13 @@
 				<span class="widget-circle"></span>
 			</div>
 		</div>
-	</div>
-	<div class="col-md-4">
+	</div> -->
+	<div class="col-md-12">
 		<div class="card">
-			<div class="card-body d-flex">
+			<div class="card-body d-flex ">
 				<div class="widget-left">
 					<div class="widget-titles">
-						<h6>Total Janji Temu</h6>
+						<h6>Janji Temu Mendatang</h6>
 					</div>
 					<span class="widget-numbers">
 						<?= $app_row ?>
@@ -52,35 +52,4 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
-		<div class="card">
-			<div class="card-body d-flex">
-				<div class="widget-left">
-					<div class="widget-titles">
-						<h6>Total Perawatan</h6>
-					</div>
-					<span class="widget-numbers">
-						<?= $tr_row ?>
-					</span>
-				</div>
-				<div class="widget-icons bg-oren">
-					<div class="c-oren">
-						<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" stroke-width="2">
-							<g stroke-width="2" transform="translate(0, 0)">
-								<path data-cap="butt" fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M13,29.678 C7.676,28.516,3.485,24.324,2.322,19" stroke-linejoin="round" stroke-linecap="round"></path>
-								<path data-cap="butt" fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M29.678,19 C28.515,24.324,24.324,28.516,19,29.678" stroke-linejoin="round" stroke-linecap="round"></path>
-								<path data-cap="butt" fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M19,2.322 C24.324,3.484,28.515,7.676,29.678,13" stroke-linejoin="round" stroke-linecap="round"></path>
-								<path data-cap="butt" fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M2.322,13 C3.485,7.676,7.676,3.484,13,2.322" stroke-linejoin="round" stroke-linecap="round"></path>
-								<polyline data-cap="butt" data-color="color-2" fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" points="13,9.674 13,1 19,1 19,9.674 " stroke-linejoin="round" stroke-linecap="round"></polyline>
-								<polyline data-cap="butt" data-color="color-2" fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" points="22.326,13 31,13 31,19 22.326,19 " stroke-linejoin="round" stroke-linecap="round"></polyline>
-								<polyline data-cap="butt" data-color="color-2" fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" points="19,22.326 19,31 13,31 13,22.326 " stroke-linejoin="round" stroke-linecap="round"></polyline>
-								<polyline data-cap="butt" data-color="color-2" fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" points="9.674,19 1,19 1,13 9.674,13 " stroke-linejoin="round" stroke-linecap="round"></polyline>
-								<circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" cx="16" cy="16" r="7" stroke-linejoin="round"></circle>
-							</g>
-						</svg>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+	

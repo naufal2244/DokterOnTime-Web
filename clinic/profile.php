@@ -18,7 +18,7 @@ include('../helper/select_helper.php');
         <!-- Page content -->
         <div class="row">
             <div class="col-12 mt-3 mb-3">
-                <a href="./profile-edit.php" class="btn btn-primary btn-sm pull-right px-5">Edit Clinic Profile</a>
+                <a href="./profile-edit.php" class="btn btn-primary btn-sm pull-right px-5">Edit Profil </a>
             </div>
 
             <div class="col-12">
@@ -43,7 +43,7 @@ include('../helper/select_helper.php');
                 </div>
                 <div class="card">
     <div class="card-body">
-        <h6><i class="far fa-clock fa-fw mr-1 mb-2"></i>Opening Hours</h6>
+        <h6><i class="far fa-clock fa-fw mr-1 mb-2"></i>Jam Kerja</h6>
         <?php
         $hour_result = mysqli_query($conn,"SELECT * FROM business_hour WHERE clinic_id = ".$clinic_row["clinic_id"]." ");
         $business_hours = [];
@@ -53,7 +53,7 @@ include('../helper/select_helper.php');
         ?>
 
         <!-- Monday - Friday -->
-        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Monday - Friday</span></p>
+        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Senin - Jumat</span></p>
         <p class="col-xs-8">
             <?php 
             $weekdays = array_filter($business_hours, function($hour_row) {
@@ -81,7 +81,7 @@ include('../helper/select_helper.php');
         </p>
 
         <!-- Saturday -->
-        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Saturday</span></p>
+        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Sabtu</span></p>
         <p class="col-xs-8">
             <?php 
             if (isset($business_hours[6]) && $business_hours[6]['open_time'] != "" && $business_hours[6]['close_time'] != "") {
@@ -93,7 +93,7 @@ include('../helper/select_helper.php');
         </p>
 
         <!-- Sunday -->
-        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Sunday</span></p>
+        <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Minggu</span></p>
         <p class="col-xs-8">
             <?php 
             if (isset($business_hours[7]) && $business_hours[7]['open_time'] != "" && $business_hours[7]['close_time'] != "") {

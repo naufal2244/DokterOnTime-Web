@@ -19,7 +19,7 @@
                     Hi, <?php echo $admin_row["clinicadmin_name"]; ?>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="admin.php" class="dropdown-item"><i class="fa fa-users-cog mr-2"></i>Manajemen Admin</a>
+                    <a href="admin.php" class="dropdown-item"><i class="fa fa-users-cog mr-2"></i>Edit Profil</a>
                     <!-- <a href="#" class="dropdown-item"><i class="fa fa-tools mr-2"></i>Pengaturan</a> -->
                     <div class="dropdown-divider"></div>
                     <a href="logout.php" class="dropdown-item"><i class="fa fa-sign-out-alt mr-2"></i>Keluar</a>

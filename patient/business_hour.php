@@ -9,19 +9,19 @@ $getdata = json_decode($contentdata);
 
 $id = $getdata->clinicID;
 
-$query = "SELECT * FROM business_hour WHERE clinic_id = '$id' ";
+$query = "SELECT * FROM business_hour WHERE clinic_id = '$id'";
 $result = mysqli_query($conn, $query);
 
 $numrow = mysqli_num_rows($result);
 
-if($numrow > 0) {
-	$arr = array();
-	while($row = mysqli_fetch_assoc($result)) {
-		$arr[] = $row;
-	}
-
-	echo json_encode($arr);
-	mysqli_close($conn);
+if ($numrow > 0) {
+    $arr = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $arr[] = $row;
+    }
+    echo json_encode($arr);
+    mysqli_close($conn);
 } else {
-	echo json_encode(null);
+    echo json_encode(null);
 }
+?>

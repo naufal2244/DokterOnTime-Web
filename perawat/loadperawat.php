@@ -23,9 +23,10 @@ try {
     exit;
 }
 
-if (isset($_POST['date']) && isset($_POST['session'])) {
+if (isset($_POST['date']) && isset($_POST['session']) && isset($_SESSION['doctor_id'])) {
     $date = $_POST['date'];
     $session = $_POST['session'];
+    $doctorId = $_SESSION['doctor_id'];
 
     // Hitung sub-sesi berdasarkan sesi utama
     $subSessions = [];
@@ -33,14 +34,14 @@ if (isset($_POST['date']) && isset($_POST['session'])) {
         $subSessions[] = ($session - 1) * 3 + $i;
     }
 
-    // Query untuk mengambil data janji_temu berdasarkan sesi
+    // Query untuk mengambil data janji_temu berdasarkan sesi dan doctor_id
     $query = "SELECT nama_lengkap, nomor_antrian, session_id 
               FROM janji_temu 
-              WHERE tanggal_janji = :date AND session_id IN (" . implode(',', $subSessions) . ")
+              WHERE tanggal_janji = :date AND session_id IN (" . implode(',', $subSessions) . ") AND doctor_id = :doctorId
               ORDER BY session_id ASC";
 
     $stmt = $pdo->prepare($query);
-    $stmt->execute(['date' => $date]);
+    $stmt->execute(['date' => $date, 'doctorId' => $doctorId]);
     $appointments = $stmt->fetchAll();
 
     if (empty($appointments)) {

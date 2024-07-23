@@ -8,27 +8,45 @@ $id_janji_temu = $_GET['appointmentId'];
 
 $query = "
     SELECT 
-        rm.saran_dokter,
-        dp.nama_diagnosis,
-        tlp.deskripsi_tindak_lanjut,
-        d.clinic_name,
+        jt.tanggal_janji,
+        c.clinic_name,
         d.doctor_firstname,
         d.doctor_lastname,
-        ds.speciality_name AS doctor_speciality
+        s.speciality_name AS doctor_speciality,
+        rm.saran_dokter,
+        dgn.nama_diagnosis,
+        tl.deskripsi_tindak_lanjut,
+        ob.nama_obat,
+        dos.deskripsi_dosis,
+        fre.deskripsi_frekuensi
     FROM 
-        riwayat_medis rm
-    LEFT JOIN 
-        diagnosis_pasien dp ON rm.id_riwayat_medis = dp.id_riwayat_medis
-    LEFT JOIN 
-        tindak_lanjut_pasien tlp ON rm.id_riwayat_medis = tlp.id_riwayat_medis
-    LEFT JOIN 
-        janji_temu jt ON rm.id_janji_temu = jt.id_janji_temu
+        janji_temu jt
     LEFT JOIN 
         doctors d ON jt.doctor_id = d.doctor_id
     LEFT JOIN 
-        speciality ds ON d.doctor_speciality = ds.speciality_id
+        clinics c ON d.clinic_id = c.clinic_id
+    LEFT JOIN 
+        speciality s ON d.doctor_speciality = s.speciality_id
+    LEFT JOIN
+        riwayat_medis rm ON jt.id_janji_temu = rm.id_janji_temu
+    LEFT JOIN
+        diagnosis_pasien d_pas ON rm.id_riwayat_medis = d_pas.id_riwayat_medis
+    LEFT JOIN
+        diagnosis dgn ON d_pas.diagnosis_id = dgn.id_diagnosis
+    LEFT JOIN
+        tindak_lanjut_pasien tlp ON rm.id_riwayat_medis = tlp.id_riwayat_medis
+    LEFT JOIN
+        tindak_lanjut tl ON tlp.id_tindak_lanjut = tl.id_tindak_lanjut
+    LEFT JOIN
+        obat_pasien obp ON rm.id_riwayat_medis = obp.id_riwayat_medis
+    LEFT JOIN
+        obat ob ON obp.id_obat = ob.id_obat
+    LEFT JOIN
+        dosis dos ON obp.id_dosis = dos.id_dosis
+    LEFT JOIN
+        frekuensi fre ON obp.id_frekuensi = fre.id_frekuensi
     WHERE 
-        rm.id_janji_temu = '$id_janji_temu'
+        jt.id_janji_temu = '$id_janji_temu'
 ";
 
 $result = $conn->query($query);

@@ -40,22 +40,12 @@ while ($row = $result->fetch_assoc()) {
     $availabilities[] = $row['session_id'];
 }
 
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = 5; // Jumlah sesi per halaman
-$offset = ($page - 1) * $limit;
-
-// Query untuk mengambil data time blocks
+// Query untuk mengambil semua data time blocks
 $time_blocks = [];
-$time_result = $conn->query("SELECT * FROM time_blocks LIMIT $limit OFFSET $offset");
+$time_result = $conn->query("SELECT * FROM time_blocks");
 while ($row = $time_result->fetch_assoc()) {
     $time_blocks[$row['time_block_id']] = $row;
 }
-
-// Query untuk menghitung total items
-$total_result = $conn->query("SELECT COUNT(*) as total FROM time_blocks");
-$total_row = $total_result->fetch_assoc();
-$total_items = $total_row['total'];
-$total_pages = ceil($total_items / $limit);
 
 // Array of days
 $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
@@ -110,86 +100,57 @@ $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
                     <div class="card-body">
 
                         <!-- Dropdown for Days -->
-                        <form method="POST" action="?day=<?= $selected_day ?>&page=<?= $page ?>">
-    <div class="form-group">
-        <label for="selectDay">Pilih Hari:</label>
-        <select name="selected_day" class="form-control form-control-sm" id="selectDay" style="width: auto; display: inline-block;">
-            <?php foreach ($days as $index => $day): ?>
-                <option value="<?= $index + 1 ?>" <?= $selected_day == $index + 1 ? 'selected' : '' ?>><?= $day ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-
-    <div class="session-day" id="selectedDay"><?= $days[$selected_day - 1] ?></div>
-
-    <div class="session-container">
-        <div class="session-table" id="sessionTable">
-            <div class="form-check mt-1">
-                <input type="checkbox" class="form-check-input" id="checkAll">
-                <label class="form-check-label" for="checkAll">Check All</label>
-            </div>
-            <?php foreach ($time_blocks as $time_block): ?>
-                <div class="session-section mt-3 ms-4">
-                    <div class="session-header">
-                        <input type="checkbox" class="form-check-input sesi-check" id="sesi<?= $time_block['time_block_id'] ?>-check" data-session="<?= $time_block['time_block_id'] ?>">
-                        <strong class="ms-2">Sesi <?= $time_block['time_block_id'] ?> (<?= $time_block['start_time'] ?> - <?= $time_block['end_time'] ?>)</strong>
-                    </div>
-                    <div class="subsesi ms-4 mt-2">
-                        <?php for ($sub_session = 1; $sub_session <= 3; $sub_session++):
-                            $session_id = (($time_block['time_block_id'] - 1) * 3) + $sub_session;
-                            $checked = in_array($session_id, $availabilities) ? 'checked' : '';
-                            $start_time = date("H:i", strtotime($time_block['start_time']) + ($sub_session - 1) * 20 * 60);
-                            $end_time = date("H:i", strtotime($time_block['start_time']) + $sub_session * 20 * 60);
-                        ?>
-                            <div class="form-check form-check-inline">
-                                <input type="checkbox" class="form-check-input sesi sub-sesi-<?= $time_block['time_block_id'] ?>" name="availabilities[]" value="<?= $session_id ?>" id="sesi<?= $session_id ?>" <?= $checked ?> data-session="<?= $time_block['time_block_id'] ?>">
-                                <label class="form-check-label" for="sesi<?= $session_id ?>"><?= $sub_session ?> (<?= $start_time ?> - <?= $end_time ?>)</label>
+                        <form method="POST" action="?day=<?= $selected_day ?>">
+                            <div class="form-group">
+                                <label for="selectDay">Pilih Hari:</label>
+                                <select name="selected_day" class="form-control form-control-sm" id="selectDay" style="width: auto; display: inline-block;">
+                                    <?php foreach ($days as $index => $day): ?>
+                                        <option value="<?= $index + 1 ?>" <?= $selected_day == $index + 1 ? 'selected' : '' ?>><?= $day ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
-                        <?php endfor; ?>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-        <!-- Pagination -->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <?php if ($page > 1): ?>
-                    <li class="page-item">
-                        <a class="page-link" href="?day=<?= $selected_day ?>&page=<?= $page - 1 ?>" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                <?php endif; ?>
 
-                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <li class="page-item <?= $page == $i ? 'active' : '' ?>">
-                        <a class="page-link" href="?day=<?= $selected_day ?>&page=<?= $i ?>"><?= $i ?></a>
-                    </li>
-                <?php endfor; ?>
+                            <div class="session-day" id="selectedDay"><?= $days[$selected_day - 1] ?></div>
 
-                <?php if ($page < $total_pages): ?>
-                    <li class="page-item">
-                        <a class="page-link" href="?day=<?= $selected_day ?>&page=<?= $page + 1 ?>" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                <?php endif; ?>
-            </ul>
-        </nav>
-    </div>
+                            <div class="session-container">
+                                <div class="session-table" id="sessionTable">
+                                    <div class="form-check mt-1">
+                                        <input type="checkbox" class="form-check-input" id="checkAll">
+                                        <label class="form-check-label" for="checkAll">Check All</label>
+                                    </div>
+                                    <?php foreach ($time_blocks as $time_block): ?>
+                                        <div class="session-section mt-3 ms-4">
+                                            <div class="session-header">
+                                                <input type="checkbox" class="form-check-input sesi-check" id="sesi<?= $time_block['time_block_id'] ?>-check" data-session="<?= $time_block['time_block_id'] ?>">
+                                                <strong class="ms-2">Sesi <?= $time_block['time_block_id'] ?> (<?= $time_block['start_time'] ?> - <?= $time_block['end_time'] ?>)</strong>
+                                            </div>
+                                            <div class="subsesi ms-4 mt-2">
+                                                <?php for ($sub_session = 1; $sub_session <= 3; $sub_session++):
+                                                    $session_id = (($time_block['time_block_id'] - 1) * 3) + $sub_session;
+                                                    $checked = in_array($session_id, $availabilities) ? 'checked' : '';
+                                                    $start_time = date("H:i", strtotime($time_block['start_time']) + ($sub_session - 1) * 20 * 60);
+                                                    $end_time = date("H:i", strtotime($time_block['start_time']) + $sub_session * 20 * 60);
+                                                ?>
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="checkbox" class="form-check-input sesi sub-sesi-<?= $time_block['time_block_id'] ?>" name="availabilities[]" value="<?= $session_id ?>" id="sesi<?= $session_id ?>" <?= $checked ?> data-session="<?= $time_block['time_block_id'] ?>">
+                                                        <label class="form-check-label" for="sesi<?= $session_id ?>"><?= $sub_session ?> (<?= $start_time ?> - <?= $end_time ?>)</label>
+                                                    </div>
+                                                <?php endfor; ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
 
-    <div class="update-btn-container mt-3">
-        <button type="submit" class="btn btn-primary">Update Availability</button>
-    </div>
-</form>
-
-
+                            <div class="update-btn-container mt-3">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         <!-- End Page Content -->
-
     </div>
 
     <?php include JS_PATH; ?>
@@ -202,7 +163,7 @@ $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
     $(document).ready(function() {
         $('#selectDay').on('change', function() {
             var selectedDay = $(this).val();
-            window.location.href = window.location.pathname + "?day=" + selectedDay + "&page=<?= $page ?>";
+            window.location.href = window.location.pathname + "?day=" + selectedDay;
         });
 
         $('#checkAll').on('click', function() {
@@ -227,22 +188,18 @@ $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
         // SweetAlert script for success message
         <?php if (isset($_SESSION['update_success']) && $_SESSION['update_success']): ?>
             var currentDay = <?= $selected_day ?>;
-            var currentPage = <?= $page ?>;
             Swal.fire({
-                title: "Great!",
-                text: "Update Availability Successful!",
+                title: "Berhasil!",
+                text: "Berhasil menyimpan data kehadiran",
                 icon: "success"
             }).then((result) => {
                 if (result.isConfirmed || result.isDismissed) {
                     <?php unset($_SESSION['update_success']); ?>
-                    window.location.href = "atur-jadwal.php?day=" + currentDay + "&page=" + currentPage; // Redirect to another page after closing the popup
+                    window.location.href = "atur-jadwal.php?day=" + currentDay; // Redirect to another page after closing the popup
                 }
             });
         <?php endif; ?>
     });
-</script>
-
-
-
+    </script>
 </body>
 </html>

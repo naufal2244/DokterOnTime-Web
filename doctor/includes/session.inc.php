@@ -22,6 +22,7 @@ $_SESSION['clinic_id'] = $doctor_row['clinic_id'];
 
 $token = $doctor_row["doctor_token"];
 
-$pt_row = mysqli_num_rows(mysqli_query($conn,"SELECT * FROM appointment INNER JOIN patients ON appointment.patient_id = patients.patient_id WHERE doctor_id = '".$doctor_row['doctor_id']."' AND status = 1"));
-$app_row = mysqli_num_rows(mysqli_query($conn,"SELECT * FROM appointment WHERE doctor_id = '".$doctor_row['doctor_id']."'"));
-$tr_row = mysqli_num_rows(mysqli_query($conn,"SELECT * FROM treatment_type WHERE doctor_id = '".$doctor_row['doctor_id']."'"));
+// $pt_row = mysqli_num_rows(mysqli_query($conn,"SELECT * FROM appointment INNER JOIN patients ON appointment.patient_id = patients.patient_id WHERE doctor_id = '".$doctor_row['doctor_id']."' AND status = 1"));
+$app_row = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM janji_temu WHERE doctor_id = '".$doctor_row['doctor_id']."' AND status_periksa = 0 AND tanggal_janji > CURDATE()"));
+
+// $tr_row = mysqli_num_rows(mysqli_query($conn,"SELECT * FROM treatment_type WHERE doctor_id = '".$doctor_row['doctor_id']."'"));

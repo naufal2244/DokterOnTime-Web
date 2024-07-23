@@ -7,6 +7,20 @@ include('includes/session.inc.php');
 <html lang="en">
 <head>
     <?php include CSS_PATH;?>
+    <style>
+        .sukses {
+            background-color: #87e7ae;
+            color: white;
+
+        }
+
+        .badge {
+            padding: 10px;
+            width: 100px; /* Sesuaikan nilai ini sesuai kebutuhan */
+            
+            
+        }
+    </style>
 </head>
 
 <body>
@@ -28,12 +42,12 @@ include('includes/session.inc.php');
                                 <table id="datatable" class="table" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Clinic ID #</th>
-                                            <th>Clinic Name</th>
-                                            <th>Phone Number</th>
-                                            <th>Date Added</th>
+                                            <th>ID Rumah Sakit</th>
+                                            <th>Nama RS</th>
+                                            <th>Nomor RS</th>
+                                            <th>Tanggal Registrasi</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -44,20 +58,21 @@ include('includes/session.inc.php');
                                             $encrypt_id = urlencode(base64_encode($id));
                                         ?>
                                         <tr>
-                                            <td><?php echo $table_row["clinic_id"]; ?></td>
+                                            <td><?php echo '#' . '' . $table_row["clinic_id"]; ?></td>
+
                                             <td><?php echo $table_row["clinic_name"];?></td>
                                             <td><?php echo $table_row["clinic_contact"];?></td>
                                             <td><?php echo $table_row["date_created"];?></td>
                                             <td>
                                                 <?php if ($table_row["clinic_status"] == "1") {
-                                                    echo '<span class="badge badge-success">Approved</span>';
+                                                    echo '<span class="badge sukses">Dikonfirmasi</span>';
                                                 } else {
-                                                    echo '<span class="badge badge-danger">Not Approve</span>';
+                                                    echo '<span class="badge badge-danger">Belum dikonfirmasi</span>';
                                                 }?>
                                             </td>
                                             <td>
-                                                <a href="clinic-view.php?cid=<?php echo $encrypt_id;?>" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i> View</a>
-                                                <a href="clinic-edit.php?cid=<?php echo $encrypt_id;?>" class="btn btn-sm btn-secondary"><i class="fa fa-pen"></i> Edit</a>
+                                                <a href="clinic-view.php?cid=<?php echo $encrypt_id;?>" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i>Konfirmasi</a>
+                                             
                                                 <!-- <a href="clinic-view.php" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</a> -->
                                             </td>
                                         </tr>
@@ -65,12 +80,12 @@ include('includes/session.inc.php');
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>Clinic ID #</th>
-                                            <th>Clinic Name</th>
-                                            <th>Phone Number</th>
-                                            <th>Date Added</th>
+                                        <th>ID Rumah Sakit</th>
+                                            <th>Nama RS</th>
+                                            <th>Nomor RS</th>
+                                            <th>Tanggal Registrasi</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -86,5 +101,6 @@ include('includes/session.inc.php');
     </div>
 
     <?php include JS_PATH;?>
+    
 </body>
 </html>

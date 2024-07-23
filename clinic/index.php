@@ -25,14 +25,14 @@ include('includes/session.inc.php');
                 <?php
                 if ($clinic_row["clinic_status"] == 0) {
                     echo '<div class="alert alert-danger mt-3" role="alert">
-                            Sorry, system administrator under checking your profile, Please Wait until Approve! Thank you using our platform 
+                            Maaf, administrator sistem sedang memeriksa profil Anda. Harap tunggu hingga disetujui! Terima kasih telah menggunakan platform kami.
                         </div>';
                 } else {
                     $doctor_result = mysqli_query($conn, "SELECT * FROM doctors WHERE clinic_id = " . $clinic_row['clinic_id'] . "");
                     $doctor_row = mysqli_fetch_assoc($doctor_result);
                     if (mysqli_num_rows($doctor_result) == 0) {
                         echo '<div class="alert alert-warning mt-3" role="alert">
-                                Please Add Doctor <a href="doctor-add.php" class="alert-link">Link to Add Doctor</a>
+                               Silakan Tambahkan Dokter. Tambah Dokter di  <a href="doctor-add.php" class="alert-link">Sini</a>
                             </div>';
                     }
                 }
@@ -42,9 +42,7 @@ include('includes/session.inc.php');
                 $doctor_result = mysqli_query($conn, "SELECT * FROM clinic_images WHERE clinic_id = " . $clinic_row['clinic_id'] . "");
                 $doctor_row = mysqli_fetch_assoc($doctor_result);
                 if (mysqli_num_rows($doctor_result) == 0) {
-                    echo '<div class="alert alert-warning mt-3" role="alert">
-                            Please Add Some Image for Clinic <a href="profile-edit.php" class="alert-link">Link to Add Images</a>
-                        </div>';
+                  
                 }
                 ?>
                 
@@ -57,126 +55,137 @@ include('includes/session.inc.php');
             </div>
 
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <canvas id="myChart"></canvas>
-                        <script>
-                            Chart.platform.disableCSSInjection = true;
-                            var ctx = document.getElementById('myChart').getContext('2d');
-                            var myChart = new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                                    datasets: [{
-                                        label: '# of Appointment',
-                                        data: [
-                                            <?php
-                                            $month_array = array("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec");
-                                            foreach ($month_array as $key => $month_value) {
-                                                $result = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM appointment WHERE MONTH(app_date) = '" . ++$key . "' AND clinic_id = '" . $clinic_row['clinic_id'] . "' AND consult_status = 1"));
-                                                echo "$result,";
-                                            }
-                                            ?>
-                                        ],
-                                        fill: false,
-                                        borderColor: '#2196f3',
-                                        backgroundColor: '#2196f3',
-                                        borderWidth: 2
-                                    }]
-                                },
-                                options: {
-                                    title: {
-                                        display: true,
-                                        text: 'Monthly Visited Appointment',
-                                    },
-                                    scales: {
-                                        yAxes: [{
-                                            ticks: {
-                                                scaleIntegersOnly: true,
-                                                stepSize: 1,
-                                                beginAtZero: true,
-                                            }
-                                        }]
+    <div class="card">
+        <div class="card-body">
+            <canvas id="myChart"></canvas>
+            <script>
+                Chart.platform.disableCSSInjection = true;
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                        datasets: [{
+                            label: '#Banyak Janji Temu',
+                            data: [
+                                <?php
+                                $month_array = range(1, 12); // Array dari 1 sampai 12 untuk bulan
+                                $data_points = [];
+                                foreach ($month_array as $month) {
+                                    $clinic_id = $clinic_row['clinic_id']; // Pastikan clinic_id diambil dengan benar
+                                    $query = "SELECT COUNT(*) as count FROM janji_temu jt JOIN doctors d ON jt.doctor_id = d.doctor_id WHERE MONTH(jt.tanggal_janji) = '$month' AND d.clinic_id = '$clinic_id' AND jt.status_periksa = 2";
+                                    $result = mysqli_query($conn, $query);
+                                    if (!$result) {
+                                        die("Query Error: " . mysqli_error($conn)); // Tampilkan pesan kesalahan jika query gagal
                                     }
+                                    $row = mysqli_fetch_assoc($result);
+                                    $count = $row['count'];
+                                    echo "$count,";
                                 }
-                            });
-                        </script>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                    <canvas id="HorizontalChart"></canvas>
-                        <script>
-                            Chart.platform.disableCSSInjection = true;
-                            var ctx = document.getElementById('HorizontalChart').getContext('2d');
-                            var myChart = new Chart(ctx, {
-                                type: 'horizontalBar',
-                                data: {
-                                    // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                                    labels: [
-                                        <?php
-                                        $idquery = array();
-                                        $result = mysqli_query($conn,"SELECT * FROM doctors WHERE clinic_id = ".$clinic_row['clinic_id']." ");
-                                        while($row = mysqli_fetch_assoc($result)) {
-                                            echo '"'.$row['doctor_lastname'].' '.$row['doctor_firstname'].'",';
-
-                                            $idquery[] = $row["doctor_id"];
-                                        }
-                                        ?>
-                                    ],
-                                    datasets: [{
-                                        label: '# of Appointment',
-                                        data: [
-                                            <?php
-                                            foreach ($idquery as $arrvalue) {
-                                                $newsql = "SELECT * FROM appointment WHERE doctor_id = $arrvalue AND consult_status = 1";
-                                                $idnum = mysqli_num_rows(mysqli_query($conn,$newsql));
-                                                echo $idnum.',';
-                                            }
-                                            ?>
-                                        ],
-                                        backgroundColor: [
-                                            'rgba(255, 99, 132, 0.2)',
-                                            'rgba(54, 162, 235, 0.2)',
-                                            'rgba(255, 206, 86, 0.2)',
-                                            'rgba(75, 192, 192, 0.2)',
-                                            'rgba(153, 102, 255, 0.2)',
-                                            'rgba(255, 159, 64, 0.2)'
-                                        ],
-                                        borderColor: [
-                                            'rgba(255, 99, 132, 1)',
-                                            'rgba(54, 162, 235, 1)',
-                                            'rgba(255, 206, 86, 1)',
-                                            'rgba(75, 192, 192, 1)',
-                                            'rgba(153, 102, 255, 1)',
-                                            'rgba(255, 159, 64, 1)'
-                                        ],
-                                        borderWidth: 1
-                                    }]
-                                },
-                                options: {
-                                    title: {
-                                        display: true,
-                                        text: 'Visied Appointment Based on Doctor',
-                                    },
-                                    scales: {
-                                        yAxes: [{
-                                            ticks: {
-                                                beginAtZero: true
-                                            }
-                                        }]
-                                    }
+                                ?>
+                            ],
+                            fill: false,
+                            borderColor: '#2196f3',
+                            backgroundColor: '#2196f3',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Kunjungan Janji Temu Bulanan',
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    scaleIntegersOnly: true,
+                                    stepSize: 1,
+                                    beginAtZero: true,
                                 }
-                            });
-                        </script>
-                    </div>
-                </div>
-            </div>
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</div>
 
-            <div class="col-md-6">
+
+
+
+
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-body">
+            <canvas id="HorizontalChart"></canvas>
+            <script>
+                Chart.platform.disableCSSInjection = true;
+                var ctx = document.getElementById('HorizontalChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: [
+                            <?php
+                            $idquery = array();
+                            $result = mysqli_query($conn,"SELECT * FROM doctors WHERE clinic_id = ".$clinic_row['clinic_id']." ");
+                            while($row = mysqli_fetch_assoc($result)) {
+                                echo '"'.$row['doctor_firstname'].' '.$row['doctor_lastname'].'",';
+                                $idquery[] = $row["doctor_id"];
+                            }
+                            ?>
+                        ],
+                        datasets: [{
+                            label: '#Banyak Janji Temu',
+                            data: [
+                                <?php
+                                foreach ($idquery as $arrvalue) {
+                                    $newsql = "SELECT * FROM janji_temu WHERE doctor_id = $arrvalue AND status_periksa = 2"; // Disesuaikan untuk menggunakan tabel dan kolom yang benar
+                                    $idnum = mysqli_num_rows(mysqli_query($conn,$newsql));
+                                    echo $idnum.',';
+                                }
+                                ?>
+                            ],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Kunjungan Janji Temu Berdasarkan Dokter',
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+
+            <!-- <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
                     <canvas id="PieChart"></canvas>
@@ -237,7 +246,7 @@ include('includes/session.inc.php');
                         </script>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
         </div>
     </div>

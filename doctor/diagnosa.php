@@ -419,6 +419,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
             max-height: 200px;
             overflow-y: auto;
         }
+
+        .history-value{
+            margin-right: 5px;
+            /* margin-left: 5px; */
+        }
     </style>
 </head>
 
@@ -450,7 +455,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
             </div>
             <div class="info-item" style="text-align: center;">
                 <i class="fas fa-tachometer-alt rounded-circle"></i>
-                <span class="d-block mt-2"><?php echo $appointment['tensi'] !== null ? htmlspecialchars($appointment['tensi']) . ' mmHg' : '-'; ?></span>
+                <span class="d-block mt-2"><?php echo $appointment['tensi'] !== null ? htmlspecialchars($appointment['tensi'])  : '-'; ?></span>
             </div>
         </div>
 
@@ -468,10 +473,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
                                 <?php
                                 if (!empty($riwayatPenyakit)) {
                                     foreach ($riwayatPenyakit as $penyakit) {
-                                        echo '<div>' . htmlspecialchars($penyakit['nama']) . '</div>';
+                                        echo '<div class="history-value">' . htmlspecialchars($penyakit['nama']) . '</div>';
                                     }
                                 } else {
-                                    echo '<div>Tidak ada riwayat penyakit.</div>';
+                                    echo '<div><small class="text-muted">Tidak ada riwayat penyakit.</small></div>';
                                 }
                                 ?>
                             </span>
@@ -482,10 +487,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
                                 <?php
                                 if (!empty($riwayatKeluarga)) {
                                     foreach ($riwayatKeluarga as $penyakit) {
-                                        echo '<div>' . htmlspecialchars($penyakit['nama']) . '</div>';
+                                        echo '<div class="history-value">' . htmlspecialchars($penyakit['nama']) . '</div>';
                                     }
                                 } else {
-                                    echo '<div>Tidak ada riwayat penyakit keluarga.</div>';
+                                    echo '<div><small class="text-muted">Tidak ada riwayat penyakit keluarga.</small></div>';
                                 }
                                 ?>
                             </span>
@@ -497,10 +502,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
                                 <?php
                                 if (!empty($riwayatAlergi)) {
                                     foreach ($riwayatAlergi as $alergi) {
-                                        echo '<div>' . htmlspecialchars($alergi['nama']) . '</div>';
+                                        echo '<div class="history-value">' . htmlspecialchars($alergi['nama']) . '</div>';
                                     }
                                 } else {
-                                    echo '<div>Tidak ada riwayat alergi.</div>';
+                                    echo '<div><small class="text-muted">Tidak ada riwayat alergi.</small></div>';
                                 }
                                 ?>
                             </span>
@@ -512,25 +517,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
                                 <?php
                                 if (!empty($riwayatOperasi)) {
                                     foreach ($riwayatOperasi as $operasi) {
-                                        echo '<div>' . htmlspecialchars($operasi['nama']) . '</div>';
+                                        echo '<div class="history-value">' . htmlspecialchars($operasi['nama']) . '</div>';
                                     }
                                 } else {
-                                    echo '<div>Tidak ada riwayat operasi.</div>';
+                                    echo '<div><small class="text-muted">Tidak ada riwayat operasi.</small></div>';
                                 }
                                 ?>
                             </span>
                         </div>
 
                         <div class="history-item">
-                            <label>Riwayat Perawatan 5 Tahun</label>
+                            <label>Riwayat Perawatan 5 Tahun Terakhir</label>
                             <span class="form-control" style="display: inline-block; height: auto;">
                                 <?php
                                 if (!empty($riwayatPerawatan)) {
                                     foreach ($riwayatPerawatan as $perawatan) {
-                                        echo '<div>' . htmlspecialchars($perawatan['nama']) . '</div>';
+                                        echo '<div class="history-value">' . htmlspecialchars($perawatan['nama']) . '</div>';
                                     }
                                 } else {
-                                    echo '<div>Tidak ada riwayat perawatan.</div>';
+                                    echo '<div><small class="text-muted">Tidak ada Riwayat Perawatan</small></div>';
+                                    
                                 }
                                 ?>
                             </span>
@@ -538,7 +544,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
 
                         <div class="history-item">
                             <label>Obat yang sedang dikonsumsi</label>
-                            <span class="form-control">Data Obat yang sedang dikonsumsi</span>
+                            <span class="form-control" ><small class="text-muted">Tidak ada data</small></span>
                         </div>
                     </div>
                 </div>
@@ -612,9 +618,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
             <div class="section-content" id="medication-section">
                 <div class="section-title">Obat</div>
                 <div class="medication-fields">
-                <div class="form-group row">
-    <div class="col-md-6">
-        <label>Nama Obat</label>
+                <div class="form-group row ">
+    <div class="col-md-6 ">
+        <label >Nama Obat</label>
         <div class="dropdown">
             <input type="text" class="form-control dropdown-toggle" id="dropdownNamaObat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" placeholder="Pilih Obat" autocomplete="off">
             <div class="dropdown-menu w-100" aria-labelledby="dropdownNamaObat">
@@ -682,7 +688,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
 
     </div>
             </div>
-            <button type="button" class="btn btn-primary add-more-btn" id="add-more">Tambah</button>
+            <button type="button" class="btn btn-primary add-more-btn" id="add-more">Tambah Obat</button>
 
             <div class="form-group row justify-content-center">
                 <div class="col-md-4">

@@ -35,13 +35,13 @@ include('./includes/session.inc.php');
 		}
 
 		.status-sudah-periksa {
-			background-color: #32cd32;
-			color: black;
+			background-color: #87e7ae;
+			color: white;
 		}
 
 		.status-tidak-hadir {
 			background-color: #FF4500;
-			color: black;
+			color: white;
 		}
 
 		.btn-diagnosa {

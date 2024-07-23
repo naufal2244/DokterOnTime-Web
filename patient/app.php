@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php
             $list2 = $conn->query("SELECT * FROM doctors");
             while($trow = $list2->fetch_assoc()):
-                echo '<option value="'.$trow['doctor_id'].'">'.$trow['doctor_lastname']." ".$trow['doctor_firstname'].'</option>';
+                echo '<option value="'.$trow['doctor_id'].'">'.$trow['doctor_firstname']." ".$trow['doctor_lastname'].'</option>';
             endwhile;
             ?>
         </select>
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <td><?= $row['app_date'] ?></td>
                         <td><?= $row['app_time'] ?></td>
                         <td><?= $row['clinic_name'] ?></td>
-                        <td><?= $row['doctor_lastname'].' '.$row['doctor_firstname'] ?></td>
+                        <td><?= $row['doctor_firstname'].' '.$row['doctor_lastname'] ?></td>
                         <td><?= $row['status'] ?></td>
                         <td>
                             <?php

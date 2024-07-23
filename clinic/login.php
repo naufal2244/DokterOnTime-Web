@@ -16,7 +16,7 @@ include('./includes/path.inc.php');
             <div class="login-head">
                 <h4><?php echo $BRAND_NAME; ?></h4>
                 <p>Halo, Masuk ke Akun Anda!</p>
-                <p>Klinik</p>
+                <p>Admin Rumah Sakit</p>
             </div>
             <div class="login-body">
                 <form name="login_form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
@@ -37,6 +37,10 @@ include('./includes/path.inc.php');
             </div>
             <div class="login-footer">
                 <p class="text-muted">Belum punya akun? <a href="register.php">Daftar</a></p>
+                <p class="text-muted" style="margin-top: 10px ;">
+                    <a href="/doclabWeb/index.php">Kembali ke Halaman Utama</a>
+                </p>
+
             </div>
         </div>
     </div>

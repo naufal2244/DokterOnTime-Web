@@ -22,7 +22,7 @@ $row = mysqli_fetch_assoc($result);
         <!-- Page content -->
         <div class="row">
             <div class="col-12 mt-3 mb-3">
-                <a href="./clinic-edit.php" class="btn btn-primary btn-sm pull-right px-5" data-toggle="modal" data-target="#exampleModal">Approve</a>
+                <a href="./clinic-edit.php" class="btn btn-primary btn-sm pull-right px-5" data-toggle="modal" data-target="#exampleModal">Konfirmasi</a>
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["REQUEST_URI"]); ?>">
@@ -35,11 +35,11 @@ $row = mysqli_fetch_assoc($result);
                                 </div>
                                 <div class="modal-body">
                                     <input type="hidden" name="inputClinic" value="<?= $row["clinic_id"] ?>">
-                                    <p>Do you approve <?php echo $row["clinic_name"]; ?> ?</p>
+                                    <p>Apakah Kamu Konfirmasi <?php echo $row["clinic_name"]; ?> ?</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="submit" name="approvebtn" class="btn btn-primary">Approve</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batalkan</button>
+                                    <button type="submit" name="approvebtn" class="btn btn-primary">Konrimasi</button>
                                 </div>
                             </div>
                        </form>
@@ -68,41 +68,56 @@ $row = mysqli_fetch_assoc($result);
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <h6><i class="far fa-clock fa-fw mr-1 mb-2"></i>Opening Hours</h6>
+                        <h6><i class="far fa-clock fa-fw mr-1 mb-2"></i>Jam Kerja</h6>
                         <?php
-                        $hour_result = mysqli_query($conn,"SELECT * FROM business_hour WHERE clinic_id = ".$row["clinic_id"]." ");
-                        while ($hour_row = mysqli_fetch_assoc($hour_result)) {
-                            ?>
-                            <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Monday - Friday</span></p>
-                            <p class="col-xs-8">
-                                <?php if($hour_row["open_week"] == "" && $hour_row["close_week"] == "") {
-                                    echo "Closed";
-                                } else {
-                                    echo $hour_row['open_week'].' -- '.$hour_row['close_week'];
-                                }
-                                ?>
-                            </p>
-                            <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Saturday</span></p>
-                            <p class="col-xs-8">
-                                <?php if($hour_row["open_sat"] == "" && $hour_row["close_sat"] == "") {
-                                    echo "Closed";
-                                } else {
-                                    echo $hour_row['open_sat'].' -- '.$hour_row['close_sat'];
-                                }
-                                ?>
-                            </p>
-                            <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Sunday</span></p>
-                            <p class="col-xs-8">
-                                <?php if($hour_row["open_sun"] == "" && $hour_row["close_sun"] == "") {
-                                    echo "Closed";
-                                } else {
-                                    echo $hour_row['open_sun'].' -- '.$hour_row['close_sun'];
-                                }
-                                ?>
-                            </p>
-                            <?php
-                        }
-                        ?>
+                       $hour_result = mysqli_query($conn,"SELECT days_id, open_time, close_time FROM business_hour WHERE clinic_id = ".$row["clinic_id"]." ORDER BY days_id");
+                       $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                       $weekdays = [];
+                       $weekends = [];
+                       
+                       while ($hour_row = mysqli_fetch_assoc($hour_result)) {
+                           if ($hour_row['days_id'] <= 5) {
+                               $weekdays[] = $hour_row;
+                           } else {
+                               $weekends[] = $hour_row;
+                           }
+                       }
+                       
+                       ?>
+                     <p class="col-xs-2"><span class="badge badge-info px-3 py-1">Senin - Jumat</span></p>
+<p class="col-xs-8">
+    <?php
+    if (empty($weekdays)) {
+        echo "Tutup";
+    } else {
+        // Assuming all weekdays have the same time, take the first day's time
+        $first_day = $weekdays[0];
+        echo 'Monday - Friday: ' . $first_day['open_time'] . ' -- ' . $first_day['close_time'];
+    }
+    ?>
+</p>
+<p class="col-xs-2"><span class="badge badge-info px-3 py-1">Sabtu</span></p>
+<p class="col-xs-8">
+    <?php
+    if (empty($weekends[0])) {
+        echo "Tutup";
+    } else {
+        echo 'Saturday: ' . $weekends[0]['open_time'] . ' -- ' . $weekends[0]['close_time'];
+    }
+    ?>
+</p>
+<p class="col-xs-2"><span class="badge badge-info px-3 py-1">Minggu</span></p>
+<p class="col-xs-8">
+    <?php
+    if (empty($weekends[1])) {
+        echo "Tutup";
+    } else {
+        echo 'Sunday: ' . $weekends[1]['open_time'] . ' -- ' . $weekends[1]['close_time'];
+    }
+    ?>
+</p>
+
+                       
                     </div>
                 </div>
             </div>
@@ -142,7 +157,7 @@ if (isset($_POST['approvebtn'])) {
     $appstmt->bind_param("ss", $status, $clinic_id);
     if ($appstmt->execute()) {
         echo '<script>
-                Swal.fire({ title: "Great!", text: "New Record Added!", type: "success" }).then((result) => {
+                Swal.fire({ title: "Berhasil!", text: "Berhasil dikonfirmasi!", type: "success" }).then((result) => {
                     if (result.value) { window.location.href = "clinic-list.php"; }
                 });
                 </script>';

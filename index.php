@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="icon" href="assets/img/icon/favicon.ico" type="image/ico" sizes="16x16">
-	<title>Welcome to CLINIC ME</title>
+	<title>DokterOnTime</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="assets/css/all.min.css">
@@ -80,12 +80,25 @@ body {
 }
 
 .jumbotron {
-    /* padding: 18rem 0; */
     padding: 20% 0;
     background: url('./assets/img/background.jpg');
     background-repeat: no-repeat;
     background-position: 100% 10%;
+    background-size: cover; /* memastikan gambar menutupi area dengan baik */
 }
+
+@media (max-width: 768px) {
+    .jumbotron {
+        background-position: 80% 10%; /* pindahkan gambar ke kanan ketika layar kecil */
+    }
+}
+
+@media (max-width: 576px) {
+    .jumbotron {
+        background-position: 70% 10%; /* pindahkan gambar lebih ke kanan ketika layar sangat kecil */
+    }
+}
+
 
 .jumbotron-title {
     font-size: 3rem;
@@ -242,7 +255,7 @@ FOR ANIMATION
 	<div class="wrapper">
 		<nav class="navbar navbar-expand-lg navbar-light">
 			<div class="container">
-				<a class="navbar-brand" href="#">Clinic <b>ME</b></a>
+				<a class="navbar-brand" href="#"><b>DokterOnTime</b></a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
 					aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -250,28 +263,33 @@ FOR ANIMATION
 				<div class="collapse navbar-collapse" id="navbarNav">
 					<ul class="navbar-nav ml-auto">
 						<li class="nav-item">
-							<a class="nav-link" href="#about">About</a>
+							<a class="nav-link" href="#about">Tentang</a>
+						</li>
+						<!-- <li class="nav-item">
+							<a class="nav-link" href="#howitwork">Cara Kerja</a>
+						</li> -->
+						<li class="nav-item">
+							<a class="nav-link" href="#feature">Fitur</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#howitwork">How it Work</a>
+							<a class="nav-link" href="#testimonial">Kata Mereka</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#feature">Features</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#support">Support</a>
+							<!-- Go Buy some van to cook -->
+							<a class="nav-link" href="#developer">Developer</a>
 						</li>
 						<li class="nav-item dropdown nav-dropdown">
 							<a class="nav-link dropdown-toggle dropdown-link" href="#" id="navbarDropdownMenuLink"
 								role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Log In/Sign Up
+								Masuk / Daftar
 							</a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 								<a class="dropdown-item" href="#patient">Pasien</a>
-								<a class="dropdown-item" href="clinic/login.php">Klinik</a>
+								<a class="dropdown-item" href="clinic/login.php">Admin Rumah Sakit</a>
 								<a class="dropdown-item" href="doctor/login.php">Dokter</a>
 								<a class="dropdown-item" href="pharmacist/login.php">Apoteker</a>
 								<a class="dropdown-item" href="perawat/login.php">Perawat</a>
+							
 							</div>
 						</li>
 					</ul>
@@ -281,13 +299,13 @@ FOR ANIMATION
 
 		<div class="jumbotron jumbotron-fluid">
 			<div class="container">
-				<h2 class="jumbotron-title">Your health is our piority</h2>
-				<p>This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+				<h2 class="jumbotron-title">Bergabung Sekarang!</h2>
+				<p>Kesehatan Anda adalah Prioritas Kami</p>
 			</div>
 		</div>
 
 		<section class="about-section text-center" id="about">
-			<h2 class="section-title">About</h2>
+			<h2 class="section-title">Tentang</h2>
 			<div class="container">
 				<div class="row slideanim">
 					<div class="col-6 col-md-4">
@@ -295,11 +313,11 @@ FOR ANIMATION
 							<img src="https://img.icons8.com/dusk/128/000000/counselor.png" alt="" title="">
 						</div>
 						<div class="desc">
-							<h4 class="mb-3">Easiest way around</h4>
+							<h4 class="mb-3">Dapatkan No Antri <br> dari Rumah</h4>
 							<p class="paragraph">
-								One tap and a car comes directly to you. Hop in—your driver knows exactly where to go.
-								And
-								when you get there, just step out. Payment is completely seamless.
+							Buat janji temu kapan saja dan dari mana saja. Dapatkan nomor antrian 
+							dengan waktu periksa yang pasti sehingga tahu persis kapan harus tiba di 
+							rumah sakit tanpa perlu menunggu antrian panjang melelahkan.
 							</p>
 						</div>
 					</div>
@@ -308,11 +326,10 @@ FOR ANIMATION
 							<img src="assets/img/clinic-letter.png" alt="" title="">
 						</div>
 						<div class="desc">
-							<h4 class="mb-3">Anywhere, anytime</h4>
+							<h4 class="mb-3">Ambil Obat</h4>
 							<p class="paragraph">
-								Daily commute. Errand across town. Early morning flight. Late night drinks. Wherever
-								you’re
-								headed, count on Uber for a ride—no reservations required.
+							Cek status pembuatan obat dari ponsel. 
+							Ketahui apakah obat sudah siap diambil sehingga tidak perlu menunggu antrian di rumah sakit.
 							</p>
 						</div>
 					</div>
@@ -321,11 +338,10 @@ FOR ANIMATION
 							<img src="https://img.icons8.com/dusk/128/000000/heart-with-pulse.png" alt="" title="">
 						</div>
 						<div class="desc">
-							<h4 class="mb-3">Track Your Health</h4>
+							<h4 class="mb-3">Riwayat Medis Digital</h4>
 							<p class="paragraph">
-								Economy cars at everyday prices are always available. For special occasions, no occasion
-								at
-								all, or when you just a need a bit more room, call a black car or SUV.
+							Lihat riwayat medis secara digital di ponsel. 
+							 Nikmati kemudahan akses tanpa ribet, semua informasi kesehatan tersedia dalam genggaman.
 							</p>
 						</div>
 					</div>
@@ -333,39 +349,39 @@ FOR ANIMATION
 			</div>
 		</section>
 
-		<section class="text-center" id="howitwork">
+		<!-- <section class="text-center" id="howitwork">
 			<h2 class="section-title">How it Work</h2>
 			<div class="container">
 				<div class="row slideanim">
 				</div>
 			</div>
-		</section>
+		</section> -->
 
 		<section class="feature-section text-center" id="feature">
-			<h2 class="section-title">Feature</h2>
+			<h2 class="section-title">Fitur</h2>
 			<div class="container">
-				<div class="row slideanim">
+				<div class="row slideanim mb-5">
 					<div class="col-sm-4">
 						<div class="card">
 							<div class="card-body">
-								<img src="https://img.icons8.com/officexs/80/000000/triangular-bandage.png">
-								<h5 class="card-title">Administrator</h5>
-								<p class="card-text">With supporting text below as a natural lead-in to additional
-									content.
+							<img width="96" height="96" src="https://img.icons8.com/color/96/triangular-bandage.png" alt="triangular-bandage"/>
+								<h5 class="card-title">Pasien</h5>
+								<p class="card-text">Buat Janji Temu dengan satu klik. <br>
+								Nikmati efisiensi dan kemudahan dalam satu aplikasi!
 								</p>
-								<a href="admin/index.php" class="btn btn-primary">Admin</a>
+								<a href="#" class="btn btn-primary">Pasien</a>
 							</div>
 						</div>
 					</div>
 					<div class="col-sm-4">
 						<div class="card">
 							<div class="card-body">
-								<img src="https://img.icons8.com/officexs/80/000000/clinic.png">
-								<h5 class="card-title">Clinic</h5>
-								<p class="card-text">With supporting text below as a natural lead-in to additional
-									content.
+								<img src="https://img.icons8.com/officexs/80/000000/triangular-bandage.png">
+								<h5 class="card-title">Dokter</h5>
+								<p class="card-text">Kelola janji temu dengan mudah dan efisien. <br>
+									Lihat jadwal harian dan atur sesi hadir dengan mudah.
 								</p>
-								<a href="clinic/index.php" class="btn btn-primary">Clinic</a>
+								<a href="doctor/index.php" class="btn btn-primary">Dokter</a>
 							</div>
 						</div>
 					</div>
@@ -373,28 +389,54 @@ FOR ANIMATION
 						<div class="card">
 							<div class="card-body">
 								<img src="https://img.icons8.com/officexs/80/000000/medical-doctor.png">
-								<h5 class="card-title">Doctor</h5>
-								<p class="card-text">With supporting text below as a natural lead-in to additional
-									content.
+								<h5 class="card-title">Perawat</h5>
+								<p class="card-text">Pantau dan kelola janji temu dengan efisien. <br>
+								Dukung dokter dalam memberikan perawatan optimal.
 								</p>
-								<a href="doctor/index.php" class="btn btn-primary">Doctor</a>
+								<a href="perawat/index.php" class="btn btn-primary">Perawat</a>
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="row slideanim">
+					<div class="col-sm-4">
+						<div class="card">
+							<div class="card-body">
+							<img width="96" height="96" src="https://img.icons8.com/fluency/96/pharmacy-shop.png" alt="pharmacy-shop"/>
+								<h5 class="card-title">Apoteker</h5>
+								<p class="card-text">Kelola dan pantau resep obat dengan mudah. <br>
+								
+								</p>
+								<a href="pharmacist/index.php" class="btn btn-primary">Apoteker</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="card">
+							<div class="card-body">
+								<img src="https://img.icons8.com/officexs/80/000000/clinic.png">
+								<h5 class="card-title">Admin Rumah Sakit</h5>
+								<p class="card-text">Atur dan kelola operasional rumah sakit secara efisien untuk memastikan layanan yang optimal
+								</p>
+								<a href="clinic/index.php" class="btn btn-primary">Admin RS</a>
+							</div>
+						</div>
+					</div>
+				
 				</div>
 			</div>
 		</section>
 
 		<section class="text-center" id="testimonial">
-			<h2 class="section-title">Testimonial</h2>
+			<h2 class="section-title">Kata Mereka</h2>
 			<div id="carouselContent" class="carousel slide" data-ride="carousel">
 				<div class="carousel-inner text-center" role="listbox">
 					<div class="carousel-item active">
 						<div class="avatar"><img
 								src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png"></div>
-						<p>John Doe saved us from a web disaster.</p>
+						<p>I want meth, i wanna go high</p>
 						<div class="quote">
-							<p><strong>- Chris Fox</strong><br>CEO at Mighty Schools.</p>
+							<p><strong>- Jesse Pinkman</strong><br>CEO at Los Pollos Hermanos.</p>
 						</div>
 					</div>
 					<div class="carousel-item">
@@ -417,7 +459,7 @@ FOR ANIMATION
 			</div>
 		</section>
 
-		<section id="patient">
+		<!-- <section id="patient">
 			<div class="container">
 				<div class="row slideanim">
 					<div class="col-5 img-banner">
@@ -430,7 +472,7 @@ FOR ANIMATION
 					</div>
 				</div>
 			</div>
-		</section>
+		</section> -->
 
 	</div>
 
@@ -438,54 +480,30 @@ FOR ANIMATION
 		<div class="upper-footer">
 			<div class="container">
 				<div class="row">
-					<div class="col-3">
-						<a class="navbar-brand" href="#">Clinic ME</a>
+					<div class="col-12 text-center">
+						<a class="navbar-brand mb-3" href="#">DokterOnTime</a><br>
+						<a class="mr-3" href="https://www.youtube.com/channel/UCu75qh7vj6zP4WhOGN-KEqg"><i class="fab fa-youtube"></i></a>
+						<a class="mr-3" href="https://www.instagram.com/dokter.on.time/"><i class="fab fa-instagram"></i></a> <!-- Instagram icon added here -->
+						<div class="mt-3">
+							<a href="mailto:pkmkc.dokter@gmail.com">
+								<i class="fas fa-envelope mr-1" ></i> pkmkc.dokter@gmail.com
+							</a>
+						</div>
+
 					</div>
-					<div class="col-3">
-						<h5>Product</h4>
-							<ul>
-								<li class=""><a href="#">About</a></li>
-								<li class=""><a href="#">Features</a></li>
-								<li class=""><a href="#">Career</a></li>
-								<li class=""><a href="#">Help Center</a></li>
-							</ul>
-					</div>
-					<div class="col-3">
-						<h5>Support</h5>
-						<ul>
-							<li class=""><a href="#">Help Center</a></li>
-							<li class=""><a href="#">FAQ</a></li>
-							<li class=""><a href="#">Security</a></li>
-							<li class=""><a href="#">Blog</a></li>
-						</ul>
-					</div>
-					<div class="col-3">
-						<a class="mr-3" href=""><i class="fab fa-facebook-f"></i></a>
-						<a class="mr-3" href=""><i class="fab fa-twitter"></i></a>
-						<a class="mr-3" href=""><i class="fab fa-google"></i></a>
-						<ul>
-							<li class=""><a href="#">clinicme@gmail.com</a></li>
-							<li class=""><a href="#">(010)1234678</a></li>
-						</ul>
-					</div>
+					
 				</div>
 			</div>
 		</div>
-		<div class="bottom-footer">
+		<div class="bottom-footer mt-5">
 			<div class="container">
 				<div class="row">
 					<div class="col-6">
-						<p>&copy;
-							<script type="text/javascript">
-								document.write(new Date().getFullYear());
-							</script> Clinic ME Sdn Bhd
+						<p> 
+								
 						</p>
 					</div>
-					<div class="col-6 footer-link">
-						<a class="bottom-footer-link" href="#">Privacy</a>&middot;
-						<a class="bottom-footer-link" href="#">Accessibility</a>&middot;
-						<a class="bottom-footer-link" href="#">Terms</a>
-					</div>
+					
 					<div class="top-button"><a href="#top" class="top-scroll"><i class="fas fa-angle-up"></i></a></div>
 				</div>
 			</div>

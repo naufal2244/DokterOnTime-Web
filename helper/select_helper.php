@@ -7,7 +7,8 @@ $select_maritalstatus = array("Single", "Married", "Divorced", "Widowed");
 /*
  * Langauges
  */
-$select_lang = array("English", "Malay", "Chinese", "Tamil", "Portuguese", "Dutch", "Russian", "Arabic");
+$select_lang = array("Bahasa ", "Inggris",  "Cina", "Tamil", "Portugis", "Belanda", "Rusia", "Arab");
+
 
 /*
  * State
@@ -15,23 +16,46 @@ $select_lang = array("English", "Malay", "Chinese", "Tamil", "Portuguese", "Dutc
  * Malaysia
  */
 $select_state = array(
-    "Johor",
-    "Kedah",
-    "Kelantan",
-    "Melaka",
-    "Negeri Sembilan",
-    "Pahang",
-    "Perak",
-    "Perlis",
-    "Pulau Pinang",
-    "Sarawak",
-    "Selangor",
-    "Terengganu",
-    "Kuala Lumpur",
-    "Labuan",
-    "Sabah",
-    "Putrajaya"
+    "Aceh",
+    "Sumatera Utara",
+    "Sumatera Barat",
+    "Riau",
+    "Jambi",
+    "Sumatera Selatan",
+    "Bengkulu",
+    "Lampung",
+    "Kepulauan Bangka Belitung",
+    "Kepulauan Riau",
+    "DKI Jakarta",
+    "Jawa Barat",
+    "Jawa Tengah",
+    "DI Yogyakarta",
+    "Jawa Timur",
+    "Banten",
+    "Bali",
+    "Nusa Tenggara Barat",
+    "Nusa Tenggara Timur",
+    "Kalimantan Barat",
+    "Kalimantan Tengah",
+    "Kalimantan Selatan",
+    "Kalimantan Timur",
+    "Kalimantan Utara",
+    "Sulawesi Utara",
+    "Sulawesi Tengah",
+    "Sulawesi Selatan",
+    "Sulawesi Tenggara",
+    "Gorontalo",
+    "Sulawesi Barat",
+    "Maluku",
+    "Maluku Utara",
+    "Papua Barat",
+    "Papua",
+    "Papua Tengah",
+    "Papua Pegunungan",
+    "Papua Selatan",
+    "Papua Barat Daya"
 );
+
 
 /*
  * Nationality

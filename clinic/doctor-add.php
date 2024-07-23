@@ -6,20 +6,38 @@ include('./includes/session.inc.php');
 include(SELECT_HELPER);
 include(EMAIL_HELPER);
 
+$clinic_id = $_SESSION["clinic_id"];
+// Debugging: Tampilkan clinic_id
+echo "<script>console.log('clinic_id: " . $clinic_id . "');</script>";
+echo "<script>console.log('clinic_id: " . $clinic_id . "');</script>";
+
+
+
+// Ambil nama klinik berdasarkan clinic_id dari sesi
+$stmt = $conn->prepare("SELECT clinic_name, clinic_status FROM clinics WHERE clinic_id = ?");
+$stmt->bind_param("i", $clinic_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$clinic_row = $result->fetch_assoc();
+$clinic_name = $clinic_row['clinic_name'];
+$clinic_status = $clinic_row['clinic_status']; // Pastikan mengambil clinic_status
+
+
 $errClinic = $errFName = $errLName = $errSpec = $errYears = $errFee = $errSpoke = $errGender = $errEmail = $errContact = $errImage = $errPassword = $errConfirmPassword = "";
 $classClinic = $classFName = $classLName = $classSpec = $classYears = $classFee = $classSpoke = $classGender = $classEmail = $classContact = $classPassword = $classConfirmPassword = "";
 
+
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['inputClinic'])) {
-        $clinic_id = escape_input($_POST['inputClinic']);
-    }
+    // Tidak perlu lagi memeriksa inputClinic karena clinic_id diambil dari sesi
     $fname       = escape_input($_POST['inputFirstName']);
     $lname       = escape_input($_POST['inputLastName']);
     if (isset($_POST['inputSpeciality'])) {
         $speciality = escape_input($_POST['inputSpeciality']);
     }
     $years      = escape_input($_POST['inputYrsExp']);
-    $fees      = escape_input($_POST['inputFee']);
+ 
     $desc       = escape_input($_POST['inputDesc']);
     if (isset($_POST['inputLanguages'])) {
         $lang = $_POST['inputLanguages'];
@@ -58,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errSpec = $error_html['errSpec'];
         $classSpec = $error_html['errClass'];
     }
-    
+
     if (empty($clinic_id)) {
         $errClinic = "Clinic is required";
         $classClinic = $error_html['errClass'];
@@ -73,16 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $classYears = $error_html['errClass'];
         }
     }
+
     
-    if (empty($fees)) {
-        $errFee = $error_html['errFee'];
-        $classFee = $error_html['errClass'];
-    } else {
-        if (!filter_var($fees, FILTER_VALIDATE_INT)) {
-            $errFee = $error_html['invalidInt'];
-            $classFee = $error_html['errClass'];
-        }
-    }
 
     if (empty($lang)) {
         $errSpoke = $error_html['errSpoke'];
@@ -103,8 +113,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-  
-    
     if (empty($password)) {
         $errPassword = "Password harus diisi";
         $classPassword = "invalid";
@@ -161,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 
-    <body>
+<body>
     <?php include NAVIGATION; ?>
     <div class="page-content" id="content">
         <?php include HEADER; ?>
@@ -176,14 +184,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="inputClinic">Klinik</label>
-                                        <select name="inputClinic" id="inputClinic" class="form-control selectpicker <?= $classClinic ?>" data-live-search="true">
-                                            <option value="" selected disabled>Pilih</option>
-                                            <?php
-                                            $table_result = mysqli_query($conn, "SELECT * FROM clinics");
-                                            while ($table_row = mysqli_fetch_assoc($table_result)) {
-                                                echo '<option value="' . $table_row["clinic_id"] . '">'. $table_row["clinic_id"] .' '. $table_row["clinic_name"] . '</option>';
-                                            }
-                                            ?>
+                                        <select name="inputClinic" id="inputClinic" class="form-control selectpicker <?= $classClinic ?>" data-live-search="true" disabled>
+                                            <option value="<?= $clinic_id ?>" selected><?= $clinic_id . ' ' . $clinic_name ?></option>
                                         </select>
                                         <?= $errClinic ?>
                                     </div>
@@ -219,11 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <input type="text" name="inputYrsExp" class="form-control <?= $classYears ?>" id="inputYrsExp" placeholder="Masukkan Tahun Pengalaman">
                                         <?= $errYears ?>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputFee">Biaya Konsultasi</label>
-                                        <input type="text" name="inputFee" class="form-control <?= $classFee ?>" id="inputFee" placeholder="Masukkan Biaya Konsultasi">
-                                        <?= $errFee ?>
-                                    </div>
+                                   
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
@@ -241,14 +239,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
 
-<div class="card col-md-3">
+                        <div class="card col-md-3">
                             <div class="card-body">
                                 <div class="imageupload">
                                     <small class="text-danger"><?= $errImage ?></small>
                                     <img src="../assets/img/empty/empty-avatar.jpg" id="output" class="img-fluid thumbnail <?= $classImage ?>" alt="Dokter-Avatar" title="Dokter-Avatar">
                                     <div class="file-tab">
                                         <label class="btn btn-sm btn-primary btn-block btn-file">
-                                            <span>Cari</span>
+                                            <span>Pilih</span>
                                             <input type="file" name="inputAvatar" id="inputAvatar" accept="image/*" onchange="openFile(event)">
                                         </label>
                                     </div>
@@ -273,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="card">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="inputLanguages">Bahasa yang Dibicarakan</label><small class="text-muted m-2">Pilih Bahasa yang Anda Bicarakan.</small>
+                                <label for="inputLanguages">Bahasa </label>
                                 <div class="row">
                                     <?php $i = 1;
                                     foreach ($select_lang as $lang_value) {
@@ -308,14 +306,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="row">
                                         <div class="col">
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="inputGenderMale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="male">
+                                                <input type="radio" id="inputGenderMale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="Laki-laki">
                                                 <label class="custom-control-label" for="inputGenderMale">Laki-laki</label>
                                                 <?= $errGender ?>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="inputGenderFemale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="female">
+                                                <input type="radio" id="inputGenderFemale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="Perempuan">
                                                 <label class="custom-control-label" for="inputGenderFemale">Perempuan</label>
                                                 <?= $errGender ?>
                                             </div>
@@ -341,7 +339,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="row">
                         <div class="col-6">
-                            <button type="reset" class="btn btn-outline-secondary btn-block">Bersihkan</button>
+                            <button type="reset" class="btn btn-outline-secondary btn-block">Bersihkan Input</button>
                         </div>
                         <div class="col-6">
                             <button type="submit" class="btn btn-primary btn-block" name="savebtn">Tambah Dokter</button>
@@ -372,12 +370,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         });
     </script>
+    
 </body>
 
 </html>
 <?php
+echo "<script>console.log( $errConfirmPassword );</script>";
+echo "<script>console.log('Halo Nama ku ');</script>";
+
+function generateKodeDokter($conn, $clinic_id) {
+    // Ambil kode dokter terakhir berdasarkan clinic_id
+    $query = "SELECT kode_dokter FROM doctors WHERE clinic_id = ? ORDER BY kode_dokter DESC LIMIT 1";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $clinic_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $last_kode = $result->fetch_assoc()['kode_dokter'];
+
+    if ($last_kode) {
+        // Increment kode dokter terakhir
+        $num = (int) substr($last_kode, 1) + 1;
+        $new_kode = 'D' . str_pad($num, 3, '0', STR_PAD_LEFT);
+    } else {
+        // Jika belum ada kode dokter, mulai dari D001
+        $new_kode = 'D001';
+    }
+
+    return $new_kode;
+}
+
+
 if (isset($_POST["savebtn"])) {
-    if (multi_empty($errFName, $errLName, $errSpec, $errYears, $errFee, $errSpoke, $errGender, $errEmail, $errContact, $errImage, $errPassword, $errConfirmPassword)) {
+    if (multi_empty($errFName, $errLName, $errSpec, $errYears, $errSpoke, $errGender, $errEmail, $errContact, $errImage, $errPassword, $errConfirmPassword)) {
+
+
+        $kode_dokter = generateKodeDokter($conn, $clinic_id);
 
         if (isset($_FILES["inputAvatar"]["name"])) {
             $allowed =  array('gif', 'png', 'jpg');
@@ -411,8 +438,9 @@ if (isset($_POST["savebtn"])) {
         // Hash the password before saving it to the database
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $conn->prepare("INSERT INTO doctors (doctor_avatar, doctor_firstname, doctor_lastname, doctor_speciality, doctor_experience, doctor_desc, doctor_spoke, doctor_gender, doctor_dob, doctor_email, doctor_contact, consult_fee, date_created, clinic_id, doctor_password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->bind_param("ssssisssssssiss", $image, $fname, $lname, $speciality, $years, $desc, $spoke, $gender, $dob, $email, $contact, $fees, $date_created, $clinic_id, $hashedPassword);
+        $stmt = $conn->prepare("INSERT INTO doctors (doctor_avatar, doctor_firstname, doctor_lastname, doctor_speciality, doctor_experience, doctor_desc, doctor_spoke, doctor_gender, doctor_dob, doctor_email, doctor_contact, date_created, clinic_id, doctor_password, kode_dokter) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssssissssssisss", $image, $fname, $lname, $speciality, $years, $desc, $spoke, $gender, $dob, $email, $contact, $date_created, $clinic_id, $hashedPassword, $kode_dokter);
+        
         if ($stmt->execute()) {
 
             $last_id = $conn->insert_id;
@@ -435,7 +463,7 @@ if (isset($_POST["savebtn"])) {
 
             if (sendmail($email, $mail['acc_subject'], $mail['acc_title'], $mail['acc_content'], $mail['acc_button'], $link, $token)) {
                 echo '<script>
-                Swal.fire({ title: "Hore!", text: "Dokter Baru Ditambahkan!", type: "success" }).then((result) => {
+                Swal.fire({ title: "Berhasil!", text: "Dokter Baru Ditambahkan!", type: "success" }).then((result) => {
                     if (result.value) { window.location.href = "doctor-list.php"; }
                 });
                 </script>';

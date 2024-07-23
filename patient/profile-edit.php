@@ -4,22 +4,19 @@ header("Content-Type:application/json; charset=UTF-8");
 
 include("../config/database.php");
 
-if(isset($_POST['inputID'])) {
-	$id = mysqli_escape_string($conn,$_POST['inputID']);
-	$firstname = mysqli_escape_string($conn,$_POST['inputFirstname']);
-	$lastname = mysqli_escape_string($conn,$_POST['inputLastname']);
-	$email = mysqli_escape_string($conn,$_POST['inputEmail']);
-	$identity = mysqli_escape_string($conn,$_POST['inputIdentity']);
-	$dob = mysqli_escape_string($conn,$_POST['inputDOB']);
-	$gender = mysqli_escape_string($conn,$_POST['inputGender']);
-	$contact = mysqli_escape_string($conn,$_POST['inputContact']);
-	$maritalstatus = mysqli_escape_string($conn,$_POST['inputMaritalStatus']);
-	$nationality = mysqli_escape_string($conn,$_POST['inputNationality']);
+if (isset($_POST['inputID'])) {
+	$id = mysqli_escape_string($conn, $_POST['inputID']);
+	$firstname = mysqli_escape_string($conn, $_POST['inputFirstname']);
+	$lastname = mysqli_escape_string($conn, $_POST['inputLastname']);
+	$email = mysqli_escape_string($conn, $_POST['inputEmail']);
+	$identity = mysqli_escape_string($conn, $_POST['inputIdentity']);
+	$dob = mysqli_escape_string($conn, $_POST['inputDOB']);
+	$gender = mysqli_escape_string($conn, $_POST['inputGender']);
+	$contact = mysqli_escape_string($conn, $_POST['inputContact']);
+	$maritalstatus = mysqli_escape_string($conn, $_POST['inputMaritalStatus']);
 
-	// $query = "UPDATE patients SET patient_firstname = '".$firstname."', patient_lastname = '".$lastname."', patient_identity = '".$identity."', patient_email = '".$email."', patient_dob = '".$dob."', patient_gender = '".$gender."', patient_contact = '".$contact."', patient_maritalstatus = '".$maritalstatus."', patient_nationality = '".$nationality."' WHERE patient_id = '".$id."' ";
-	
-	$stmt = $conn->prepare("UPDATE patients SET patient_firstname = ?, patient_lastname = ?, patient_identity = ?, patient_email = ?, patient_dob = ?, patient_gender = ?, patient_contact = ?, patient_maritalstatus = ?, patient_nationality = ? WHERE patient_id = ? ");
-	$stmt->bind_param("ssssssssss", $firstname, $lastname, $identity, $email, $dob, $gender, $contact, $maritalstatus, $nationality, $id);
+	$stmt = $conn->prepare("UPDATE patients SET patient_firstname = ?, patient_lastname = ?, patient_identity = ?, patient_email = ?, patient_dob = ?, patient_gender = ?, patient_contact = ?, patient_maritalstatus = ? WHERE patient_id = ?");
+	$stmt->bind_param("sssssssss", $firstname, $lastname, $identity, $email, $dob, $gender, $contact, $maritalstatus, $id);
 
 	if ($stmt->execute()) {
 		$result2 = $conn->query("SELECT * FROM patients WHERE patient_id = '".$id."' ");

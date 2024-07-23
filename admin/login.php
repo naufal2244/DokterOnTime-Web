@@ -12,21 +12,28 @@ include('./includes/path.inc.php');
         <div class="login-wrap mx-auto">
             <div class="login-head">
                 <h4><?php echo $BRAND_NAME;?></h4>
-                <p>Hello there, Sign into your Account!</p>
+                <p>Halo, Masuk ke Akun Anda!</p>
+                <p>Admin Sistem     </p>
             </div>
             <div class="login-body">
                 <form name="login_form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
+                        <label for="exampleInputEmail1">Alamat Email</label>
                         <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value="admin@admin.com">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <small id="emailHelp" class="form-text text-muted">Kami tidak akan membagikan email Anda kepada siapapun.</small>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
+                        <label for="exampleInputPassword1">Kata Sandi</label>
                         <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" value="Admin@123">
                     </div>
-                    <button type="submit" name="loginbtn" class="btn btn-primary btn-block button">Log In</button>
+                    <button type="submit" name="loginbtn" class="btn btn-primary btn-block button">Masuk</button>
                 </form>
+            </div>
+            <div class="login-footer">
+                
+                    <a href="/doclabWeb/index.php">Kembali ke Halaman Utama</a>
+           
+
             </div>
         </div>
     </div>

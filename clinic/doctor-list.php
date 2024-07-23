@@ -33,7 +33,7 @@ include('./includes/session.inc.php');
 								</div>
 								<div class="col-md-8">
 									<div class="card-body d-flex flex-column">
-										<h6 class="card-title font-weight-bold"><?= $trow["doctor_lastname"] . ' ' . $trow["doctor_firstname"]; ?></h6>
+										<h6 class="card-title font-weight-bold"><?= $trow["doctor_firstname"] . ' ' . $trow["doctor_lastname"]; ?></h6>
 										<p class="card-text"><b>
 										<?php
 											$table_result = mysqli_query($conn, "SELECT * FROM speciality WHERE speciality_id =  '".$trow["doctor_speciality"]."' ");
@@ -67,7 +67,7 @@ include('./includes/session.inc.php');
 								<form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
 									<div class="modal-body">
 										<input type="hidden" name="doctor_id" value="<?= $trow['doctor_id'] ?>">
-										Apakah Anda yakin ingin menghapus <strong><?= $trow['doctor_lastname'].' '.$trow['doctor_firstname'] ?></strong> ?
+										Apakah Anda yakin ingin menghapus <strong><?= $trow['doctor_firstname'].' '.$trow['doctor_lastname'] ?></strong> ?
 									</div>
 									<div class="modal-footer" style="border:none;">
 										<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
@@ -92,7 +92,7 @@ include('./includes/session.inc.php');
 if (isset($_POST["deletebtn"])) {
 
 	$id = $_POST["doctor_id"];
-	if (mysqli_query($conn, "DELETE FROM doctor WHERE doctor_id = $id")) {
+	if (mysqli_query($conn, "DELETE FROM doctors WHERE doctor_id = $id")) {
 		echo '<script>
 		Swal.fire({ title: "Bagus!", text: "Doctor berhasil dihapus!", type: "success" }).then((result) => {
 			if (result.value) { window.location.href = "doctor-list.php"; }

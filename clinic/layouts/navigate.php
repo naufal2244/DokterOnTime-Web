@@ -32,13 +32,13 @@
                         <?php
                     }
                 ?>
-                <li class="nav-item <?php if (preg_match('/(patient)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
+                <!-- <li class="nav-item <?php if (preg_match('/(patient)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
                     <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fa fa-user-injured mr-3 fa-fw"></i>Pasien</a>
                     <ul class="side-collapse">
                         <a href="patient-list.php" class="nav-link"><i class="fas fa-list-ol mr-3 fa-fw"></i>Daftar Pasien</a>
                         <a href="patient-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Pasien</a>
                     </ul>
-                </li>
+                </li> -->
                 <!-- ini yang risi buat untuk apoteker -->
                 <li class="nav-item <?php if (preg_match('/(apoteker)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
                         <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-pills mr-3 fa-fw"></i>Apoteker</a>
@@ -50,15 +50,16 @@
 
 
                 <li class="nav-item <?php if (preg_match('/(perawat)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
-                        <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-pills mr-3 fa-fw"></i>Perawat</a>
-                    <ul class="side-collapse">
-                        <a href="perawat-list.php" class="nav-link"><i class="fas fa-users mr-3 fa-fw"></i>Daftar Perawat</a>
-                        <a href="perawat-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Perawat</a>
-                    </ul>
-                </li>
+    <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-stethoscope mr-3 fa-fw"></i>Perawat</a>
+    <ul class="side-collapse">
+        <a href="perawat-list.php" class="nav-link"><i class="fas fa-users mr-3 fa-fw"></i>Daftar Perawat</a>
+        <a href="perawat-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Perawat</a>
+    </ul>
+</li>
 
-                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'appointment.php') !== FALSE) {echo 'mm-active';} ?>">
-                    <a href="appointment.php" class="nav-link" ><i class="fas fa-calendar-check mr-3 fa-fw"></i>Janji Temu</a>
+
+                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'patient-list.php') !== FALSE) {echo 'mm-active';} ?>">
+                    <a href="patient-list.php" class="nav-link" ><i class="fas fa-calendar-check mr-3 fa-fw"></i>Riwayat Janji Temu</a>
                 </li>
                 <!-- <li class="nav-item <?php if (preg_match('/(schedule)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
                     <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fa fa-user-clock mr-3 fa-fw"></i>Jadwal</a>
@@ -74,13 +75,16 @@
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'announcement.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="announcement.php" class="nav-link"><i class="fa fa-bullhorn mr-3 fa-fw"></i>Pengumuman</a>
                 </li>
-                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'report.php') !== FALSE) {echo 'mm-active';} ?>">
+                <!-- <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'report.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="report.php" class="nav-link"><i class="fa fa-chart-bar mr-3 fa-fw"></i>Laporan</a>
+                </li> -->
+                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'report.php') !== FALSE) {echo 'mm-active';} ?>">
+                <a href="speciality.php" class="nav-link"><i class="fas fa-tags mr-3 fa-fw"></i>Layanan Poli</a>
                 </li>
                 <!-- End Lower -->
             </ul>
         </div>
-        <!-- Sidebar Inner -->
+        <!-- Sidebar Inner -->  
     </div>
 </div>
 <!-- End vertical navbar -->

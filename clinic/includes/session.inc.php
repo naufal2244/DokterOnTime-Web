@@ -1,7 +1,10 @@
 <?php
+
+
 try {
     if ($_SESSION["loggedin"] != 1) {
         header("Location: login.php");
+        exit();
     }
 
     $sess_email = $_SESSION["sess_clinicadminemail"];
@@ -9,10 +12,12 @@ try {
     $stmt1 = $conn->prepare("SELECT * FROM clinic_manager WHERE clinicadmin_email = ?");
     $stmt1->bind_param("s", $sess_email);
     $stmt1->execute();
-    // $result = $stmt1->get_result();
     $admin_row = $stmt1->get_result()->fetch_assoc();
     $adminid = $admin_row['clinic_id'];
     $token = $admin_row["clinicadmin_token"];
+
+    // Simpan clinic_id ke dalam sesi
+    $_SESSION["clinic_id"] = $adminid;
 
     $stmt2 = $conn->prepare("SELECT * FROM clinics WHERE clinic_id = ?");
     $stmt2->bind_param("i", $adminid);
@@ -31,3 +36,4 @@ try {
     error_log($e);
     exit('Error message for user to understand');
 }
+?>

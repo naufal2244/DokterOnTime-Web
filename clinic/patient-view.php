@@ -133,7 +133,7 @@ tbody tr td:first-child {
                             </thead>
                             <tbody>
                                 <?php
-                                $tresult = $conn->query("SELECT * FROM appointment WHERE patient_id = $patient_id");
+                                $tresult = $conn->query("SELECT * FROM janji_temu WHERE patient_id = $patient_id");
                                 if ($tresult->num_rows == 0) {
                                     echo '<td colspan="2">No Record Found</td>';
                                 } else {

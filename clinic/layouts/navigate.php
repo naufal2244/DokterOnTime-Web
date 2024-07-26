@@ -15,72 +15,43 @@
                 <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'index.php') !== FALSE) {echo 'mm-active';} ?>">
                     <a href="index.php" class="nav-link"><i class="fas fa-tachometer-alt mr-3 fa-fw"></i>Beranda</a>
                 </li>
-                <li class="nav-item <?php if (preg_match('/(profile)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
-                    <a href="profile.php" class="nav-link"><i class="fas fa-clinic-medical mr-3 fa-fw"></i>Profil Klinik</a> 
-                    <!-- fas fa-clinic-medical -->
-                </li>
-                <?php
-                    if ($clinic_row["clinic_status"] == 1) {
-                        ?>
-                        <li class="nav-item <?php if (preg_match('/(doctor)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
-                            <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-stethoscope mr-3 fa-fw"></i>Dokter</a>
-                            <ul class="side-collapse">
-                                <a href="doctor-list.php" class="nav-link"><i class="fas fa-list-ol mr-3 fa-fw"></i>Daftar Dokter</a>
-                                <a href="doctor-add.php" class="nav-link"><i class="fa fa-user-plus mr-3 fa-fw"></i>Tambah Dokter</a>
-                            </ul>
-                        </li>
-                        <?php
-                    }
-                ?>
-                <!-- <li class="nav-item <?php if (preg_match('/(patient)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
-                    <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fa fa-user-injured mr-3 fa-fw"></i>Pasien</a>
-                    <ul class="side-collapse">
-                        <a href="patient-list.php" class="nav-link"><i class="fas fa-list-ol mr-3 fa-fw"></i>Daftar Pasien</a>
-                        <a href="patient-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Pasien</a>
-                    </ul>
-                </li> -->
-                <!-- ini yang risi buat untuk apoteker -->
-                <li class="nav-item <?php if (preg_match('/(apoteker)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
+                <?php if ($clinic_row["clinic_status"] == 1) { ?>
+                    <li class="nav-item <?php if (preg_match('/(profile)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
+                        <a href="profile.php" class="nav-link"><i class="fas fa-clinic-medical mr-3 fa-fw"></i>Profil Klinik</a> 
+                    </li>
+                    <li class="nav-item <?php if (preg_match('/(doctor)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
+                        <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-stethoscope mr-3 fa-fw"></i>Dokter</a>
+                        <ul class="side-collapse">
+                            <a href="doctor-list.php" class="nav-link"><i class="fas fa-list-ol mr-3 fa-fw"></i>Daftar Dokter</a>
+                            <a href="doctor-add.php" class="nav-link"><i class="fa fa-user-plus mr-3 fa-fw"></i>Tambah Dokter</a>
+                        </ul>
+                    </li>
+                    <li class="nav-item <?php if (preg_match('/(apoteker)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
                         <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-pills mr-3 fa-fw"></i>Apoteker</a>
-                    <ul class="side-collapse">
-                        <a href="apoteker-list.php" class="nav-link"><i class="fas fa-users mr-3 fa-fw"></i>Daftar Apoteker</a>
-                        <a href="apoteker-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Apoteker</a>
-                    </ul>
-                </li>
-
-
-                <li class="nav-item <?php if (preg_match('/(perawat)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
-    <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-stethoscope mr-3 fa-fw"></i>Perawat</a>
-    <ul class="side-collapse">
-        <a href="perawat-list.php" class="nav-link"><i class="fas fa-users mr-3 fa-fw"></i>Daftar Perawat</a>
-        <a href="perawat-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Perawat</a>
-    </ul>
-</li>
-
-
-                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'patient-list.php') !== FALSE) {echo 'mm-active';} ?>">
-                    <a href="patient-list.php" class="nav-link" ><i class="fas fa-calendar-check mr-3 fa-fw"></i>Riwayat Janji Temu</a>
-                </li>
-                <!-- <li class="nav-item <?php if (preg_match('/(schedule)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
-                    <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fa fa-user-clock mr-3 fa-fw"></i>Jadwal</a>
-                    <ul class="side-collapse">
-                        <a href="schedule.php" class="nav-link"><i class="far fa-calendar-alt mr-3 fa-fw"></i>Lihat Jadwal</a>
-                        <a href="schedule-setup.php" class="nav-link"><i class="far fa-calendar-plus mr-3 fa-fw"></i>Pengaturan Jadwal</a>
-                        <a href="schedule-list.php" class="nav-link"><i class="fas fa-list mr-3 fa-fw"></i>Daftar Jadwal</a>
-                    </ul>
-                </li> -->
-                <!-- End Upper -->
-                <!-- Lower -->
-                <p class="sidebar-heading px-3 pb-1 mb-0">Lainnya</p>
-                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'announcement.php') !== FALSE) {echo 'mm-active';} ?>">
-                    <a href="announcement.php" class="nav-link"><i class="fa fa-bullhorn mr-3 fa-fw"></i>Pengumuman</a>
-                </li>
-                <!-- <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'report.php') !== FALSE) {echo 'mm-active';} ?>">
-                    <a href="report.php" class="nav-link"><i class="fa fa-chart-bar mr-3 fa-fw"></i>Laporan</a>
-                </li> -->
-                <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'report.php') !== FALSE) {echo 'mm-active';} ?>">
-                <a href="speciality.php" class="nav-link"><i class="fas fa-tags mr-3 fa-fw"></i>Layanan Poli</a>
-                </li>
+                        <ul class="side-collapse">
+                            <a href="apoteker-list.php" class="nav-link"><i class="fas fa-users mr-3 fa-fw"></i>Daftar Apoteker</a>
+                            <a href="apoteker-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Apoteker</a>
+                        </ul>
+                    </li>
+                    <li class="nav-item <?php if (preg_match('/(perawat)/',$_SERVER["REQUEST_URI"]) == TRUE) {echo 'mm-active';} ?>">
+                        <a href="#" class="nav-link has-arrow" aria-expanded="false"><i class="fas fa-stethoscope mr-3 fa-fw"></i>Perawat</a>
+                        <ul class="side-collapse">
+                            <a href="perawat-list.php" class="nav-link"><i class="fas fa-users mr-3 fa-fw"></i>Daftar Perawat</a>
+                            <a href="perawat-add.php" class="nav-link"><i class="fas fa-user-plus mr-3 fa-fw"></i>Tambah Perawat</a>
+                        </ul>
+                    </li>
+                    <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'patient-list.php') !== FALSE) {echo 'mm-active';} ?>">
+                        <a href="patient-list.php" class="nav-link" ><i class="fas fa-calendar-check mr-3 fa-fw"></i>Riwayat Janji Temu</a>
+                    </li>
+                    <!-- Lower -->
+                    <p class="sidebar-heading px-3 pb-1 mb-0">Lainnya</p>
+                    <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'announcement.php') !== FALSE) {echo 'mm-active';} ?>">
+                        <a href="announcement.php" class="nav-link"><i class="fa fa-bullhorn mr-3 fa-fw"></i>Pengumuman</a>
+                    </li>
+                    <li class="nav-item <?php if (stripos($_SERVER['REQUEST_URI'],'speciality.php') !== FALSE) {echo 'mm-active';} ?>">
+                        <a href="speciality.php" class="nav-link"><i class="fas fa-tags mr-3 fa-fw"></i>Layanan Poli</a>
+                    </li>
+                <?php } ?>
                 <!-- End Lower -->
             </ul>
         </div>

@@ -248,6 +248,109 @@ FOR ANIMATION
     }
 }
 
+.developer-section {
+    background-color: white;
+    padding: 3rem 0;
+}
+
+.developer-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.developer-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin: 2rem 1;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 300px; /* Tinggi total untuk memastikan kartu sejajar */
+}
+
+.developer-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 10%;
+    margin-bottom: 1rem;
+}
+
+.developer-name {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    height: 2rem; /* Tinggi tetap untuk nama */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.developer-role {
+    color: black;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    height: 2rem; /* Tinggi tetap untuk peran */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.developer-description {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    height: 4rem; /* Tinggi tetap untuk deskripsi */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto; /* Untuk memastikan ikon sosial berada di bawah */
+}
+
+
+.social-icons a {
+    margin: 0 0.5rem;
+    background: #f09433; 
+background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
+    font-size: 1.2rem;
+
+	width: 28px;
+	height: 28px;
+	border-radius: 50px;
+}
+
+.social-icons a:hover {
+    color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .developer-card {
+        margin-top: 2rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .developer-card {
+        margin: 1rem auto;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-2 {
+        max-width: 16.666667%;
+    }
+}
+
+
 	</style>
 </head>
 
@@ -433,18 +536,20 @@ FOR ANIMATION
 				<div class="carousel-inner text-center" role="listbox">
 					<div class="carousel-item active">
 						<div class="avatar"><img
-								src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png"></div>
-						<p>I want meth, i wanna go high</p>
+						src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png">
+								</div>
+						<p>Sangat Mmebantu Saya dalam memantau antrian.</p>
 						<div class="quote">
-							<p><strong>- Jesse Pinkman</strong><br>CEO at Los Pollos Hermanos.</p>
+							<p><strong>- Risa</strong><br>Ibu Rumah Tangga</p>
 						</div>
 					</div>
 					<div class="carousel-item">
 						<div class="avatar"><img
-								src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png"></div>
-						<p>No one is better than John Doe.</p>
+						src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png">
+								</div>
+						<p>Mempermudah saya membuat janji temu ditengah kesibukkan saya.</p>
 						<div class="quote">
-							<p><strong>- Rebecca Flex</strong><br>CEO at Company.</p>
+							<p><strong>- Andi</strong><br>Karyawan Swasta</p>
 						</div>
 					</div>
 				</div>
@@ -458,6 +563,92 @@ FOR ANIMATION
 				</a>
 			</div>
 		</section>
+
+		<section class="developer-section text-center" id="developer">
+    <h2 class="section-title">Developers</h2>
+    <div class="container">
+        <div class="row slideanim">
+		<div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="developer-card">
+                    <img src="assets/img/naufal1.jpeg" alt="Team Member 2" class="developer-img">
+                    <h5 class="developer-name">Naufal Fadhilah Ardhani</h5>
+                    <p class="developer-role">Ketua</p>
+                  
+                    <div class="social-icons">
+          
+                        <a href="https://www.instagram.com/ardhaninaufal_?igsh=MWxmOHVsM3hzNDR3bA=="><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="developer-card">
+                    <img src="assets/img/bulutfhiya.jpg" alt="Team Member 1" class="developer-img">
+                    <h5 class="developer-name">Luthfiya Ratna Sari</h5>
+                    <p class="developer-role">Pembimbing</p>
+                    
+                    <div class="social-icons">
+                  
+                        <a href="https://www.instagram.com/luthfifiya?igsh=ZjJwMmw3NDBnempz"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+         
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="developer-card">
+                    <img src="assets/img/risi.jpg" alt="Team Member 3" class="developer-img">
+                    <h5 class="developer-name">Risi Gustiar</h5>
+                    <p class="developer-role">Anggota</p>
+    
+                    <div class="social-icons">
+               
+                        <a href="https://www.instagram.com/risigustiar28?igsh=M29jcDAxNmZjYzA0"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+			<div class="row slideanim mt-2">
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="developer-card">
+                    <img src="assets/img/rendi.jpg" alt="Team Member 4" class="developer-img">
+                    <h5 class="developer-name">Rendi Sinaga</h5>
+                    <p class="developer-role">Anggota</p>
+                
+                    <div class="social-icons">
+                
+                        <a href="https://www.instagram.com/rendi_snaga?igsh=MTE0dGY3NTkxcDJqOA=="><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="developer-card">
+                    <img src="assets/img/agung.jpg" alt="Team Member 5" class="developer-img">
+                    <h5 class="developer-name">Said Agung Dwiyanto</h5>
+                    <p class="developer-role">Anggota</p>
+                 
+                    <div class="social-icons">
+       
+                        <a href="https://www.instagram.com/agung_1456?igsh=amQwN29taGN5bTFy"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="developer-card">
+                    <img src="assets/img/dzakwan.jpg" alt="Team Member 5" class="developer-img">
+                    <h5 class="developer-name">Muhammad Dzakwan Naufal</h5>
+                    <p class="developer-role">Anggota</p>
+        
+                    <div class="social-icons">
+             
+                        <a href="https://www.instagram.com/dzkwn_naufal?igsh=MWpzbWt1M3RzNGh6cw=="><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 		<!-- <section id="patient">
 			<div class="container">

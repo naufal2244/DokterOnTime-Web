@@ -7,7 +7,7 @@ $select_maritalstatus = array("Single", "Married", "Divorced", "Widowed");
 /*
  * Langauges
  */
-$select_lang = array("Bahasa ", "Inggris",  "Cina", "Tamil", "Portugis", "Belanda", "Rusia", "Arab");
+$select_lang = array("Indonesia ", "Inggris",  "Cina", "Tamil", "Portugis", "Belanda", "Rusia", "Arab");
 
 
 /*

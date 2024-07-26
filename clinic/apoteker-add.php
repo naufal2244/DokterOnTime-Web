@@ -142,19 +142,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="inputFirstName">Nama Depan</label>
-                                        <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Enter First Name">
+                                        <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Enter First Name" value="<?= isset($fname) ? $fname : '' ?>">
                                         <div class="invalid-feedback"><?php echo $errFName; ?></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="inputLastName">Nama Belakang</label>
-                                        <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Enter Last Name">
+                                        <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Enter Last Name" value="<?= isset($lname) ? $lname : '' ?>">
                                         <div class="invalid-feedback"><?php echo $errLName; ?></div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="inputEmailAddress">Alamat Email</label>
-                                        <input type="text" name="inputEmailAddress" class="form-control <?php echo $classEmail ?>" id="inputEmailAddress" placeholder="Enter Email Address">
+                                        <input type="text" name="inputEmailAddress" class="form-control <?php echo $classEmail ?>" id="inputEmailAddress" placeholder="Enter Email Address" value="<?= isset($email) ? $email : '' ?>">
                                         <div class="invalid-feedback"><?php echo $errEmail; ?></div>
                                     </div>
                                 </div>
@@ -207,8 +207,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php if ($success) : ?>
         <script>
             Swal.fire({
-                title: "Great!",
-                text: "New Apoteker Added!",
+                title: "Bagus!",
+                text: "Apoteker baru ditambahkan!",
                 icon: "success"
             }).then((result) => {
                 if (result.value) {
@@ -257,3 +257,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 
 </html>
+

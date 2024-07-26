@@ -193,12 +193,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="inputFirstName">Nama Depan</label>
-                                        <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Masukkan Nama Depan">
+                                        <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Masukkan Nama Depan" value="<?= isset($fname) ? $fname : '' ?>">
                                         <?php echo $errFName; ?>
                                     </div>
                                     <div class="form-group col-md6">
                                         <label for="inputLastName">Nama Belakang</label>
-                                        <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Masukkan Nama Belakang">
+                                        <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Masukkan Nama Belakang" value="<?= isset($lname) ? $lname : '' ?>">
                                         <?php echo $errLName; ?>
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <?php
                                             $table_result = mysqli_query($conn, "SELECT * FROM speciality");
                                             while ($table_row = mysqli_fetch_assoc($table_result)) {
-                                                echo '<option value="' . $table_row["speciality_id"] . '">' . $table_row["speciality_name"] . '</option>';
+                                                echo '<option value="' . $table_row["speciality_id"] . '" ' . (isset($speciality) && $speciality == $table_row["speciality_id"] ? 'selected' : '') . '>' . $table_row["speciality_name"] . '</option>';
                                             }
                                             ?>
                                         </select>
@@ -218,20 +218,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="inputYrsExp">Tahun Pengalaman</label>
-                                        <input type="text" name="inputYrsExp" class="form-control <?= $classYears ?>" id="inputYrsExp" placeholder="Masukkan Tahun Pengalaman">
+                                        <input type="text" name="inputYrsExp" class="form-control <?= $classYears ?>" id="inputYrsExp" placeholder="Masukkan Tahun Pengalaman" value="<?= isset($years) ? $years : '' ?>">
                                         <?= $errYears ?>
                                     </div>
-                                   
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="inputPassword">Kata Sandi</label>
-                                        <input type="password" name="inputPassword" class="form-control <?= $classPassword ?>" id="inputPassword" placeholder="Masukkan Kata Sandi">
+                                        <input type="password" name="inputPassword" class="form-control <?= $classPassword ?>" id="inputPassword" placeholder="Masukkan Kata Sandi" value="<?= isset($password) ? $password : '' ?>">
                                         <?= $errPassword ?>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="inputConfirmPassword">Konfirmasi Kata Sandi</label>
-                                        <input type="password" name="inputConfirmPassword" class="form-control <?= $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Konfirmasi Kata Sandi">
+                                        <input type="password" name="inputConfirmPassword" class="form-control <?= $classConfirmPassword ?>" id="inputConfirmPassword" placeholder="Konfirmasi Kata Sandi" value="<?= isset($confirm_password) ? $confirm_password : '' ?>">
                                         <?= $errConfirmPassword ?>
                                     </div>
                                 </div>
@@ -278,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         echo
                                             '<div class="col">
                                             <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" name="inputLanguages[]" id="customCheck' . $i . '" class="custom-control-input ' . $classSpoke . '" value="' . $lang_value . '">
+                                            <input type="checkbox" name="inputLanguages[]" id="customCheck' . $i . '" class="custom-control-input ' . $classSpoke . '" value="' . $lang_value . '" ' . (isset($lang) && in_array($lang_value, $lang) ? 'checked' : '') . '>
                                             <label class="custom-control-label" for="customCheck' . $i . '">' . $lang_value . '</label>
                                         </div></div>';
                                         $i++;
@@ -287,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div class="form-group">
                                 <label for="inputDesc">Deskripsi</label>
-                                <textarea class="form-control" id="inputDesc" name="inputDesc" rows="3"></textarea>
+                                <textarea class="form-control" id="inputDesc" name="inputDesc" rows="3"><?= isset($desc) ? $desc : '' ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -297,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="inputDOB">Tanggal Lahir</label>
-                                    <input type="text" name="inputDOB" class="form-control" id="datepicker" placeholder="Masukkan Tanggal Lahir">
+                                    <input type="text" name="inputDOB" class="form-control" id="datepicker" placeholder="Masukkan Tanggal Lahir" value="<?= isset($dob) ? $dob : '' ?>">
                                 </div>
                             </div>
                             <div class="form-row">
@@ -306,14 +305,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="row">
                                         <div class="col">
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="inputGenderMale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="Laki-laki">
+                                                <input type="radio" id="inputGenderMale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="Laki-laki" <?= isset($gender) && $gender == 'Laki-laki' ? 'checked' : '' ?>>
                                                 <label class="custom-control-label" for="inputGenderMale">Laki-laki</label>
                                                 <?= $errGender ?>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" id="inputGenderFemale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="Perempuan">
+                                                <input type="radio" id="inputGenderFemale" name="inputGender" class="custom-control-input <?= $classGender ?>" value="Perempuan" <?= isset($gender) && $gender == 'Perempuan' ? 'checked' : '' ?>>
                                                 <label class="custom-control-label" for="inputGenderFemale">Perempuan</label>
                                                 <?= $errGender ?>
                                             </div>
@@ -322,15 +321,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="inputContactNumber">Nomor Kontak</label>
-                                <input type="tel" name="inputContactNumber" class="form-control <?= $classContact ?>" id="inputContactNumber" placeholder="Masukkan Nomor Telepon" pattern="[0-9]*" inputmode="numeric">
-                                <?= $errContact ?>
-                            </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputContactNumber">Nomor Kontak</label>
+                                    <input type="tel" name="inputContactNumber" class="form-control <?= $classContact ?>" id="inputContactNumber" placeholder="Masukkan Nomor Telepon" pattern="[0-9]*" inputmode="numeric" value="<?= isset($contact) ? $contact : '' ?>">
+                                    <?= $errContact ?>
+                                </div>
 
                                 <div class="form-group col-md-6">
                                     <label for="inputEmailAddress">Alamat Email</label>
-                                    <input type="text" name="inputEmailAddress" class="form-control <?= $classEmail ?>" id="inputEmailAddress" placeholder="Masukkan Alamat Email">
+                                    <input type="text" name="inputEmailAddress" class="form-control <?= $classEmail ?>" id="inputEmailAddress" placeholder="Masukkan Alamat Email" value="<?= isset($email) ? $email : '' ?>">
                                     <?= $errEmail ?>
                                 </div>
                             </div>
@@ -370,10 +369,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         });
     </script>
-    
 </body>
-
 </html>
+
 <?php
 echo "<script>console.log( $errConfirmPassword );</script>";
 echo "<script>console.log('Halo Nama ku ');</script>";

@@ -508,7 +508,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', end
                 <div class="card-body text-center">
                     <img width="96" height="96" src="https://img.icons8.com/fluency/96/pharmacy-shop.png" alt="pharmacy-shop"/>
                     <h5 class="card-title">Apoteker</h5>
-                    <p class="card-text">Kelola dan pantau resep obat dengan mudah.</p>
+                    <p class="card-text">Kelola resep obat yang diteruskan oleh dokter serta update satus pembuatan dan pengambilan obat dengan mudah.</p>
                     <a href="pharmacist/index.php" class="btn btn-primary">Apoteker</a>
                 </div>
             </div>

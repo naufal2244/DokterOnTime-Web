@@ -7,166 +7,87 @@ include(SELECT_HELPER);
 include(EMAIL_HELPER);
 
 $clinic_id = $_SESSION["clinic_id"];
-// Debugging: Tampilkan clinic_id
-echo "<script>console.log('clinic_id: " . $clinic_id . "');</script>";
-echo "<script>console.log('clinic_id: " . $clinic_id . "');</script>";
+error_log("Debug: clinic_id from session: " . $clinic_id);
 
-
-
-// Ambil nama klinik berdasarkan clinic_id dari sesi
 $stmt = $conn->prepare("SELECT clinic_name, clinic_status FROM clinics WHERE clinic_id = ?");
 $stmt->bind_param("i", $clinic_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $clinic_row = $result->fetch_assoc();
 $clinic_name = $clinic_row['clinic_name'];
-$clinic_status = $clinic_row['clinic_status']; // Pastikan mengambil clinic_status
+$clinic_status = $clinic_row['clinic_status'];
 
+error_log("Debug: clinic_name: " . $clinic_name . ", clinic_status: " . $clinic_status);
 
-$errClinic = $errFName = $errLName = $errSpec = $errYears = $errFee = $errSpoke = $errGender = $errEmail = $errContact = $errImage = $errPassword = $errConfirmPassword = "";
-$classClinic = $classFName = $classLName = $classSpec = $classYears = $classFee = $classSpoke = $classGender = $classEmail = $classContact = $classPassword = $classConfirmPassword = "";
-
-
-
+$errClinic = $errFName = $errLName = $errSpec = $errYears = $errSpoke = $errGender = $errEmail = $errContact = $errPassword = $errConfirmPassword = "";
+$classClinic = $classFName = $classLName = $classSpec = $classYears = $classSpoke = $classGender = $classEmail = $classContact = $classPassword = $classConfirmPassword = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Tidak perlu lagi memeriksa inputClinic karena clinic_id diambil dari sesi
-    $fname       = escape_input($_POST['inputFirstName']);
-    $lname       = escape_input($_POST['inputLastName']);
-    if (isset($_POST['inputSpeciality'])) {
-        $speciality = escape_input($_POST['inputSpeciality']);
-    }
-    $years      = escape_input($_POST['inputYrsExp']);
- 
-    $desc       = escape_input($_POST['inputDesc']);
-    if (isset($_POST['inputLanguages'])) {
-        $lang = $_POST['inputLanguages'];
-        $spoke = implode(",", $lang);
-    }
-    $dob        = escape_input($_POST['inputDOB']);
-    if (isset($_POST['inputGender'])) {
-        $gender     = escape_input($_POST['inputGender']);
-    }
-    $email      = escape_input($_POST['inputEmailAddress']);
-    $contact    = escape_input($_POST['inputContactNumber']);
-    $password   = escape_input($_POST['inputPassword']);
+    error_log("Debug: Form is submitted using POST method");
+
+    $fname = escape_input($_POST['inputFirstName']);
+    $lname = escape_input($_POST['inputLastName']);
+    $speciality = isset($_POST['inputSpeciality']) ? escape_input($_POST['inputSpeciality']) : '';
+    $years = escape_input($_POST['inputYrsExp']);
+    $desc = escape_input($_POST['inputDesc']);
+    $lang = isset($_POST['inputLanguages']) ? $_POST['inputLanguages'] : [];
+    $spoke = implode(",", $lang);
+    $dob = escape_input($_POST['inputDOB']);
+    $gender = isset($_POST['inputGender']) ? escape_input($_POST['inputGender']) : '';
+    $email = escape_input($_POST['inputEmailAddress']);
+    $contact = escape_input($_POST['inputContactNumber']);
+    $password = escape_input($_POST['inputPassword']);
     $confirm_password = escape_input($_POST['inputConfirmPassword']);
 
-    if (empty($fname)) {
-        $errFName = $error_html['errFirstName'];
-        $classFName = $error_html['errClass'];
-    } else {
-        if (!preg_match($regrex['text'], $fname)) {
-            $errFName = $error_html['invalidText'];
-            $classFName = $error_html['errClass'];
+    error_log("Debug: Received data - fname: $fname, lname: $lname, speciality: $speciality, years: $years, desc: $desc, spoke: $spoke, dob: $dob, gender: $gender, email: $email, contact: $contact, password: [HIDDEN], confirm_password: [HIDDEN]");
+
+    if (multi_empty($errFName, $errLName, $errSpec, $errYears, $errSpoke, $errGender, $errEmail, $errContact, $errPassword, $errConfirmPassword)) {
+        error_log("Debug: All validations passed");
+
+        $kode_dokter = generateKodeDokter($conn, $clinic_id);
+        error_log("Debug: Generated kode_dokter: " . $kode_dokter);
+
+        $token = generateCode(6);
+        $en_token = md5($token);
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $conn->prepare("INSERT INTO doctors (doctor_firstname, doctor_lastname, doctor_speciality, doctor_experience, doctor_desc, doctor_spoke, doctor_gender, doctor_dob, doctor_email, doctor_contact, date_created, clinic_id, doctor_password, kode_dokter) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssssissssssiss", $fname, $lname, $speciality, $years, $desc, $spoke, $gender, $dob, $email, $contact, $date_created, $clinic_id, $hashedPassword, $kode_dokter);
+        
+        if ($stmt->execute()) {
+            error_log("Debug: Doctor data inserted successfully. Last inserted ID: " . $conn->insert_id);
+
+            $last_id = $conn->insert_id;
+            mysqli_query($conn, "INSERT INTO treatment_type (treatment_name, doctor_id) VALUES ('Pasien Baru', $last_id)");
+
+            for ($day_id = 1; $day_id <= 7; $day_id++) {
+                for ($session_id = 1; $session_id <= 65; $session_id++) {
+                    $stmt_availabilities = $conn->prepare("INSERT INTO doctor_availabilities (doctor_id, day_id, session_id, available) VALUES (?, ?, ?, ?)");
+                    $default_available = 0; // FALSE
+                    $stmt_availabilities->bind_param("iiii", $last_id, $day_id, $session_id, $default_available);
+                    $stmt_availabilities->execute();
+                }
+            }
+
+            // Redirect after successful insert to prevent double submission
+            header("Location: doctor-list.php?success=1");
+            exit();
+        } else {
+            error_log("Error: Failed to insert doctor data. Error: " . $stmt->error);
+            echo 'Ada yang salah';
         }
-    }
-
-    if (empty($lname)) {
-        $errLName = $error_html['errLastName'];
-        $classLName = $error_html['errClass'];
+        $stmt->close();
     } else {
-        if (!preg_match($regrex['text'], $lname)) {
-            $errFName = $error_html['invalidText'];
-            $classFName = $error_html['errClass'];
-        }
-    }
-
-    if (empty($speciality)) {
-        $errSpec = $error_html['errSpec'];
-        $classSpec = $error_html['errClass'];
-    }
-
-    if (empty($clinic_id)) {
-        $errClinic = "Clinic is required";
-        $classClinic = $error_html['errClass'];
-    }
-
-    if (empty($years)) {
-        $errYears = $error_html['errYears'];
-        $classYears = $error_html['errClass'];
-    } else {
-        if (!filter_var($years, FILTER_VALIDATE_INT)) {
-            $errYears = $error_html['invalidInt'];
-            $classYears = $error_html['errClass'];
-        }
-    }
-
-    
-
-    if (empty($lang)) {
-        $errSpoke = $error_html['errSpoke'];
-        $classSpoke = $error_html['errClass'];
-    }
-    if (empty($gender)) {
-        $errGender = $error_html['errGender'];
-        $classGender = $error_html['errClass'];
-    }
-
-    if (empty($email)) {
-        $errEmail = $error_html['errEmail'];
-        $classEmail = $error_html['errClass'];
-    } else {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errEmail =  $error_html['invalidEmail'];
-            $classEmail = $error_html['errClass'];
-        }
-    }
-
-    if (empty($password)) {
-        $errPassword = "Password harus diisi";
-        $classPassword = "invalid";
-    } else if (strlen($password) < 6) {
-        $errPassword = "Password harus memiliki panjang minimal 6 karakter";
-        $classPassword = "invalid";
-    }
-
-    if (empty($confirm_password)) {
-        $errConfirmPassword = "Mohon konfirmasi password";
-        $classConfirmPassword = "invalid";
-    } else if ($password !== $confirm_password) {
-        $errConfirmPassword = "Password tidak cocok";
-        $classConfirmPassword = "invalid";
-    }
-
-    if (empty($_FILES['inputAvatar']['name'])) {
-        $errImage = "Image harus diisi";
-        $classImage = "invalid";
+        error_log("Debug: Validation failed - errors exist");
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <?php include CSS_PATH; ?>
-    <style>
-        .imageupload .btn-file {
-            overflow: hidden;
-            position: relative;
-        }
-
-        .imageupload .btn-file input[type="file"] {
-            cursor: inherit;
-            display: block;
-            font-size: 100px;
-            min-height: 100%;
-            min-width: 100%;
-            opacity: 0;
-            position: absolute;
-            right: 0;
-            text-align: right;
-            top: 0;
-        }
-
-        .imageupload .thumbnail {
-            margin-bottom: 10px;
-        }
-
-        .imageupload .invalid {
-            border: 1px solid red;
-        }
-    </style>
 </head>
 
 <body>
@@ -176,9 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Page content -->
         <div class="row">
             <div class="col-12">
-                <form name="regform" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+                <form name="regform" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <div class="d-flex">
-                        <div class="card col-md-9">
+                        <div class="card col-md-12">
                             <div class="card-body">
                                 <!-- Tambah Dokter -->
                                 <div class="form-row">
@@ -196,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <input type="text" name="inputFirstName" class="form-control <?php echo $classFName ?>" id="inputFirstName" placeholder="Masukkan Nama Depan" value="<?= isset($fname) ? $fname : '' ?>">
                                         <?php echo $errFName; ?>
                                     </div>
-                                    <div class="form-group col-md6">
+                                    <div class="form-group col-md-6">
                                         <label for="inputLastName">Nama Belakang</label>
                                         <input type="text" name="inputLastName" class="form-control <?php echo $classLName ?>" id="inputLastName" placeholder="Masukkan Nama Belakang" value="<?= isset($lname) ? $lname : '' ?>">
                                         <?php echo $errLName; ?>
@@ -235,34 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
                                 </div>
                                 <!-- Akhir Tambah Dokter -->
-                            </div>
-                        </div>
-
-                        <div class="card col-md-3">
-                            <div class="card-body">
-                                <div class="imageupload">
-                                    <small class="text-danger"><?= $errImage ?></small>
-                                    <img src="../assets/img/empty/empty-avatar.jpg" id="output" class="img-fluid thumbnail <?= $classImage ?>" alt="Dokter-Avatar" title="Dokter-Avatar">
-                                    <div class="file-tab">
-                                        <label class="btn btn-sm btn-primary btn-block btn-file">
-                                            <span>Pilih</span>
-                                            <input type="file" name="inputAvatar" id="inputAvatar" accept="image/*" onchange="openFile(event)">
-                                        </label>
-                                    </div>
-                                </div>
-                                <script>
-                                    var openFile = function(file) {
-                                        var input = file.target;
-
-                                        var reader = new FileReader();
-                                        reader.onload = function() {
-                                            var dataURL = reader.result;
-                                            var output = document.getElementById('output');
-                                            output.src = dataURL;
-                                        };
-                                        reader.readAsDataURL(input.files[0]);
-                                    };
-                                </script>
                             </div>
                         </div>
                     </div>
@@ -347,37 +240,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
             </div>
         </div>
-        <!-- End Page Content -->
     </div>
     <?php include JS_PATH; ?>
     <script>
-        $('#datepicker').on('changeDate', function() {
-            var date = $(this).datepicker('getDate'),
-                year = date.getFullYear(),
-                current_year = new Date().getFullYear(),
-                totalyear = current_year - year;
-            $('#inputAge').val(totalyear);
-        });
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) {
+            Swal.fire({
+                title: 'Berhasil!',
+                text: 'Dokter Baru Ditambahkan!',
+                icon: 'success'
+            });
+        }
+    });
 
-        $('#inputIC').on('keyup', function() {
-            var input = $(this).val(),
-                lastnum = input % 10;
-            if (lastnum % 2 === 0) {
-                $("#inputGenderFemale").prop("checked", true);
-            } else {
-                $("#inputGenderMale").prop("checked", true);
-            }
-        });
+    $('#datepicker').on('changeDate', function() {
+        var date = $(this).datepicker('getDate'),
+            year = date.getFullYear(),
+            current_year = new Date().getFullYear(),
+            totalyear = current_year - year;
+        $('#inputAge').val(totalyear);
+    });
+
+    $('#inputIC').on('keyup', function() {
+        var input = $(this).val(),
+            lastnum = input % 10;
+        if (lastnum % 2 === 0) {
+            $("#inputGenderFemale").prop("checked", true);
+        } else {
+            $("#inputGenderMale").prop("checked", true);
+        }
+    });
     </script>
 </body>
 </html>
 
 <?php
-echo "<script>console.log( $errConfirmPassword );</script>";
-echo "<script>console.log('Halo Nama ku ');</script>";
-
 function generateKodeDokter($conn, $clinic_id) {
-    // Ambil kode dokter terakhir berdasarkan clinic_id
     $query = "SELECT kode_dokter FROM doctors WHERE clinic_id = ? ORDER BY kode_dokter DESC LIMIT 1";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $clinic_id);
@@ -386,89 +285,33 @@ function generateKodeDokter($conn, $clinic_id) {
     $last_kode = $result->fetch_assoc()['kode_dokter'];
 
     if ($last_kode) {
-        // Increment kode dokter terakhir
         $num = (int) substr($last_kode, 1) + 1;
         $new_kode = 'D' . str_pad($num, 3, '0', STR_PAD_LEFT);
     } else {
-        // Jika belum ada kode dokter, mulai dari D001
         $new_kode = 'D001';
     }
 
     return $new_kode;
 }
 
-
 if (isset($_POST["savebtn"])) {
-    if (multi_empty($errFName, $errLName, $errSpec, $errYears, $errSpoke, $errGender, $errEmail, $errContact, $errImage, $errPassword, $errConfirmPassword)) {
-
+    if (multi_empty($errFName, $errLName, $errSpec, $errYears, $errSpoke, $errGender, $errEmail, $errContact, $errPassword, $errConfirmPassword)) {
 
         $kode_dokter = generateKodeDokter($conn, $clinic_id);
-
-        if (isset($_FILES["inputAvatar"]["name"])) {
-            $allowed =  array('gif', 'png', 'jpg');
-            $filename = $_FILES['inputAvatar']['name'];
-            $ext = pathinfo($filename, PATHINFO_EXTENSION);
-            if (!in_array($ext, $allowed)) {
-                echo "<script>Swal.fire('Upss...','Hanya dapat format gambar!','error')</script>";
-                exit();
-            } else {
-                if (!empty($_FILES['inputAvatar']['name'])) {
-                    $folderpath = "../uploads/" . $clinic_id . "/doctor" . "/";
-                    $path = "../uploads/" . $clinic_id . "/doctor" . "/" . $_FILES['inputAvatar']['name'];
-                    $image = $_FILES['inputAvatar']['name'];
-
-                    if (!file_exists($folderpath)) {
-                        mkdir($folderpath, 0777, true);
-                        move_uploaded_file($_FILES['inputAvatar']['tmp_name'], $path);
-                    } else {
-                        move_uploaded_file($_FILES['inputAvatar']['tmp_name'], $path);
-                    }
-                } else {
-                    echo "<script>Swal.fire('Upss...','Anda harus memilih file untuk diunggah!','error')</script>";
-                    exit();
-                }
-            }
-        }
 
         $token = generateCode(6);
         $en_token = md5($token);
 
-        // Hash the password before saving it to the database
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $conn->prepare("INSERT INTO doctors (doctor_avatar, doctor_firstname, doctor_lastname, doctor_speciality, doctor_experience, doctor_desc, doctor_spoke, doctor_gender, doctor_dob, doctor_email, doctor_contact, date_created, clinic_id, doctor_password, kode_dokter) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->bind_param("ssssissssssisss", $image, $fname, $lname, $speciality, $years, $desc, $spoke, $gender, $dob, $email, $contact, $date_created, $clinic_id, $hashedPassword, $kode_dokter);
+        $stmt = $conn->prepare("INSERT INTO doctors (doctor_firstname, doctor_lastname, doctor_speciality, doctor_experience, doctor_desc, doctor_spoke, doctor_gender, doctor_dob, doctor_email, doctor_contact, date_created, clinic_id, doctor_password, kode_dokter) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssssissssssiss", $fname, $lname, $speciality, $years, $desc, $spoke, $gender, $dob, $email, $contact, $date_created, $clinic_id, $hashedPassword, $kode_dokter);
         
         if ($stmt->execute()) {
 
             $last_id = $conn->insert_id;
             mysqli_query($conn,"INSERT INTO treatment_type (treatment_name, doctor_id) VALUES ('Pasien Baru', $last_id) ");
 
-            $selector = bin2hex(random_bytes(8));
-            $validator = random_bytes(32);
-            $link = $_SERVER["SERVER_NAME"] . "/doclab/doctor/activate.php?selector=".$selector."&validator=". bin2hex($validator);
-            $expries = date("U") + 86400; // one day
-
-            $delstmt = $conn->prepare("DELETE FROM doctor_reset WHERE reset_email = ?");
-            $delstmt->bind_param("s", $email);
-            $delstmt->execute();
-
-            $hashedToken = password_hash($validator, PASSWORD_DEFAULT);
-
-            $resetstmt = $conn->prepare("INSERT INTO doctor_reset (reset_email, reset_selector, reset_token, reset_expires, activate_token) VALUE (?,?,?,?,?)");
-            $resetstmt->bind_param("sssss", $email, $selector, $hashedToken, $expries, $en_token);
-            $resetstmt->execute();
-
-            if (sendmail($email, $mail['acc_subject'], $mail['acc_title'], $mail['acc_content'], $mail['acc_button'], $link, $token)) {
-                echo '<script>
-                Swal.fire({ title: "Berhasil!", text: "Dokter Baru Ditambahkan!", type: "success" }).then((result) => {
-                    if (result.value) { window.location.href = "doctor-list.php"; }
-                });
-                </script>';
-            } else {
-                echo 'Ada yang salah';
-            }
-            // Tambahkan entri untuk tabel doctor_availabilities
             for ($day_id = 1; $day_id <= 7; $day_id++) {
                 for ($session_id = 1; $session_id <= 65; $session_id++) {
                     $stmt_availabilities = $conn->prepare("INSERT INTO doctor_availabilities (doctor_id, day_id, session_id, available) VALUES (?, ?, ?, ?)");
@@ -477,7 +320,12 @@ if (isset($_POST["savebtn"])) {
                     $stmt_availabilities->execute();
                 }
             }
+
+            // Redirect after successful insert to prevent double submission
+            header("Location: doctor-list.php?success=1");
+            exit();
         } else {
+            error_log("Error: Failed to insert doctor data. Error: " . $stmt->error);
             echo 'Ada yang salah';
         }
         $stmt->close();

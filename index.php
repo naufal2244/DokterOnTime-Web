@@ -501,32 +501,31 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', end
 						</div>
 					</div>
 				</div>
-				<div class="row slideanim">
-					<div class="col-sm-4">
-						<div class="card">
-							<div class="card-body">
-							<img width="96" height="96" src="https://img.icons8.com/fluency/96/pharmacy-shop.png" alt="pharmacy-shop"/>
-								<h5 class="card-title">Apoteker</h5>
-								<p class="card-text">Kelola dan pantau resep obat dengan mudah. <br>
-								
-								</p>
-								<a href="pharmacist/index.php" class="btn btn-primary">Apoteker</a>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="card">
-							<div class="card-body">
-								<img src="https://img.icons8.com/officexs/80/000000/clinic.png">
-								<h5 class="card-title">Admin Rumah Sakit</h5>
-								<p class="card-text">Atur dan kelola operasional rumah sakit secara efisien untuk memastikan layanan yang optimal
-								</p>
-								<a href="clinic/index.php" class="btn btn-primary">Admin RS</a>
-							</div>
-						</div>
-					</div>
-				
-				</div>
+				<div class="container">
+    <div class="row slideanim justify-content-center">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img width="96" height="96" src="https://img.icons8.com/fluency/96/pharmacy-shop.png" alt="pharmacy-shop"/>
+                    <h5 class="card-title">Apoteker</h5>
+                    <p class="card-text">Kelola dan pantau resep obat dengan mudah.</p>
+                    <a href="pharmacist/index.php" class="btn btn-primary">Apoteker</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="https://img.icons8.com/officexs/80/000000/clinic.png" alt="clinic"/>
+                    <h5 class="card-title">Admin Rumah Sakit</h5>
+                    <p class="card-text">Atur dan kelola operasional rumah sakit secara efisien untuk memastikan layanan yang optimal.</p>
+                    <a href="clinic/index.php" class="btn btn-primary">Admin RS</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 			</div>
 		</section>
 

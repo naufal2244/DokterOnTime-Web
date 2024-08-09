@@ -22,7 +22,7 @@ include('./includes/session.inc.php');
             </div>
 
             <div class="col-md-3">
-                <div class="card">
+                <!-- <div class="card">
                     <div class="card-body">
                         <?php
                         if ($doctor_row["doctor_avatar"] != "") {
@@ -31,7 +31,7 @@ include('./includes/session.inc.php');
                             echo '<img src="./img/empty-avatar.jpg" id="output" class="img-fluid thumbnail" alt="Doctor-Avatar" title="Doctor-Avatar">';
                         }
                         ?>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-md-9">

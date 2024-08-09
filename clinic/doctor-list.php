@@ -8,6 +8,34 @@ include('./includes/session.inc.php');
 
 <head>
 	<?php include CSS_PATH; ?>
+	<style>
+		.card-body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			height: 100%;
+		}
+
+		.fa-user {
+			font-size: 100px; /* Perbesar ukuran ikon */
+			color: #333;
+			display: block;
+			margin: auto;
+		}
+
+		.col-md-4 {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 5px; /* Kurangi padding untuk mengurangi white space */
+		}
+
+		.col-md-8 {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+	</style>
 </head>
 
 <body>
@@ -29,10 +57,10 @@ include('./includes/session.inc.php');
 						<div class="card card-hover mb-3" style="height:200px;overflow:hidden;">
 							<div class="row no-gutters">
 								<div class="col-md-4">
-									<img src="../uploads/<?= $trow["clinic_id"] ?>/doctor/<?= $trow["doctor_avatar"] ?>" class="card-img img-fluid">
+									<i class="fas fa-user"></i>
 								</div>
 								<div class="col-md-8">
-									<div class="card-body d-flex flex-column">
+									<div class="card-body">
 										<h6 class="card-title font-weight-bold"><?= $trow["doctor_firstname"] . ' ' . $trow["doctor_lastname"]; ?></h6>
 										<p class="card-text"><b>
 										<?php
@@ -46,7 +74,6 @@ include('./includes/session.inc.php');
 										<p class="card-text"><?= $trow["doctor_contact"]; ?></p>
 										<div class="mt-3">
 											<a href="doctor-view.php?did=<?= encrypt_url($trow["doctor_id"]) ?>" class="btn btn-sm btn-primary"><i class="fa fa-eye mr-1"></i> Lihat</a>
-											<!-- <a href="doctor-edit.php?cid=<?= encrypt_url($trow["doctor_id"]) ?>" class="btn btn-sm btn-secondary"><i class="fa fa-pen mr-1"></i> Edit</a> -->
 											<a href= "#deleteid<?= $trow['doctor_id'] ?>" data-toggle="modal" class="btn btn-sm btn-danger" id="delete_product" data-id="<?php echo $trow["doctor_id"]; ?>"><i class="fa fa-trash mr-1"></i> Hapus</a>
 										</div>
 									</div>
@@ -103,4 +130,4 @@ if (isset($_POST["deletebtn"])) {
 	}
 	mysqli_close($conn);
 }
-	?>
+?>

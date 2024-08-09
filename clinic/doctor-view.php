@@ -12,6 +12,11 @@ $doctor_row = mysqli_fetch_assoc($result);
 
 <head>
     <?php include CSS_PATH; ?>
+    <style>
+        .text-left {
+            text-align: left !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,26 +24,9 @@ $doctor_row = mysqli_fetch_assoc($result);
     <div class="page-content" id="content">
         <?php include HEADER; ?>
         <!-- Page content -->
-        <div class="row">
-            <!-- <div class="col-12 mt-3 mb-3">
-                <a href="./doctor-edit.php" class="btn btn-primary btn-sm pull-right px-5">Edit Doctor Profile</a>
-            </div> -->
-
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <?php
-                        if ($doctor_row["doctor_avatar"] != "") {
-                            echo '<img src="../uploads/' . $doctor_row["clinic_id"] . '/doctor' . '/' . $doctor_row["doctor_avatar"] . '" id="output" class="img-fluid thumbnail" alt="Doctor-Avatar" title="Doctor-Avatar">';
-                        } else {
-                            echo '<img src="./img/empty-avatar.jpg" id="output" class="img-fluid thumbnail" alt="Doctor-Avatar" title="Doctor-Avatar">';
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="card">
+       
+            <div class="col-md-10 text-left">
+                <div class="card "> <!-- Menambahkan class text-left -->
                     <div class="card-body">
                         <h5 class="font-weight-bold mb-2">Dr. <?php echo $doctor_row["doctor_firstname"] . ' ' . $doctor_row["doctor_lastname"]; ?></h5>
                         <h6>
@@ -53,7 +41,7 @@ $doctor_row = mysqli_fetch_assoc($result);
                 </div>
                 <div class="mt-3">
                     <h5>Tentang</h5>
-                    <div class="card">
+                    <div class="card text-left"> <!-- Menambahkan class text-left -->
                         <div class="card-body">
                             <p><i class="fas fa-vote-yea fa-fw mr-3"></i><?= $doctor_row["doctor_experience"]; ?> Thn Pengalaman</p>
                             <p><i class="fas fa-phone-alt fa-fw mr-3"></i><?= $doctor_row["doctor_contact"]; ?></p>
@@ -65,7 +53,7 @@ $doctor_row = mysqli_fetch_assoc($result);
                     </div>
                 </div>
                 <div>
-                    <div class="card">
+                    <div class="card text-left"> <!-- Menambahkan class text-left -->
                         <div class="card-body">
                             <p><?= $doctor_row["doctor_desc"]; ?></p>
                         </div>
